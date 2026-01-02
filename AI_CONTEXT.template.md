@@ -16,102 +16,117 @@
 
 ## Project Structure
 
-<!-- Choose ONE structure based on project level -->
+<!-- Choose ONE structure based on project level. All use NestJS modular architecture. -->
 
-### Beginner Level (3 Layers - Simple Layered)
+### Beginner Level (Modular 3-Layer)
 
 ```
 src/
-├── controllers/
-│   └── {{entity}}.controller.ts
-├── services/
-│   └── {{entity}}.service.ts
-├── repositories/
-│   └── {{entity}}.repository.ts
-├── entities/
-│   └── {{entity}}.entity.ts
-├── dto/
-│   ├── create-{{entity}}.dto.ts
-│   └── {{entity}}-response.dto.ts
+├── {{module}}/                    # Feature module (e.g., auth/, users/)
+│   ├── {{module}}.module.ts
+│   ├── {{module}}.controller.ts
+│   ├── {{module}}.service.ts
+│   ├── {{module}}.repository.ts   # If needed
+│   ├── entities/
+│   │   └── {{entity}}.entity.ts
+│   └── dto/
+│       ├── create-{{entity}}.dto.ts
+│       └── {{entity}}-response.dto.ts
+├── common/                        # Shared utilities
+│   ├── decorators/
+│   ├── filters/
+│   └── pipes/
+├── config/                        # App configuration
+│   └── database.config.ts
+├── app.module.ts
+└── main.ts
+
+test/
+├── {{module}}.service.spec.ts
+└── {{module}}.e2e-spec.ts
+```
+
+### Intermediate Level (Modular + Clean Architecture)
+
+```
+src/
+├── {{module}}/                    # Feature module with Clean Arch
+│   ├── {{module}}.module.ts
+│   ├── domain/
+│   │   ├── entities/
+│   │   │   └── {{entity}}.entity.ts
+│   │   └── repositories/
+│   │       └── {{entity}}.repository.interface.ts
+│   ├── application/
+│   │   ├── dto/
+│   │   │   ├── create-{{entity}}.dto.ts
+│   │   │   └── {{entity}}-response.dto.ts
+│   │   ├── services/
+│   │   │   └── {{entity}}.service.ts
+│   │   └── use-cases/
+│   │       └── {{use-case}}.use-case.ts
+│   └── infrastructure/
+│       ├── controllers/
+│       │   └── {{module}}.controller.ts
+│       └── persistence/
+│           └── {{entity}}.repository.ts
+├── common/
+│   ├── decorators/
+│   ├── filters/
+│   └── pipes/
+├── config/
+│   └── database.config.ts
+├── app.module.ts
+└── main.ts
+```
+
+### Advanced/Expert Level (Modular + Full DDD)
+
+```
+src/
+├── {{module}}/                    # Feature module with DDD
+│   ├── {{module}}.module.ts
+│   ├── domain/
+│   │   ├── aggregates/
+│   │   │   └── {{entity}}.aggregate.ts
+│   │   ├── entities/
+│   │   │   └── {{entity}}.entity.ts
+│   │   ├── value-objects/
+│   │   │   └── {{value-object}}.vo.ts
+│   │   ├── events/
+│   │   │   └── {{entity}}-created.event.ts
+│   │   └── repositories/
+│   │       └── {{entity}}.repository.interface.ts
+│   ├── application/
+│   │   ├── commands/
+│   │   │   └── create-{{entity}}.command.ts
+│   │   ├── queries/
+│   │   │   └── get-{{entity}}.query.ts
+│   │   ├── dto/
+│   │   │   └── {{entity}}-response.dto.ts
+│   │   └── mappers/
+│   │       └── {{entity}}.mapper.ts
+│   └── infrastructure/
+│       ├── controllers/
+│       │   └── {{module}}.controller.ts
+│       ├── persistence/
+│       │   └── {{entity}}.repository.ts
+│       └── event-handlers/
+│           └── {{entity}}-created.handler.ts
+├── common/
+│   ├── domain/
+│   │   ├── aggregate-root.ts
+│   │   └── domain-event.ts
+│   ├── decorators/
+│   └── exceptions/
 ├── config/
 │   └── database.config.ts
 ├── app.module.ts
 └── main.ts
 
 test/
-├── {{entity}}.service.spec.ts
-└── {{entity}}.controller.spec.ts
-```
-
-### Intermediate Level (4 Layers - Basic Clean Architecture)
-
-```
-src/
-├── domain/
-│   ├── entities/
-│   │   └── {{entity}}.entity.ts
-│   └── repositories/
-│       └── {{entity}}.repository.interface.ts
-├── application/
-│   ├── dto/
-│   │   ├── create-{{entity}}.dto.ts
-│   │   └── {{entity}}-response.dto.ts
-│   ├── services/
-│   │   └── {{entity}}.service.ts
-│   └── use-cases/
-│       └── {{use-case}}.use-case.ts
-├── infrastructure/
-│   ├── controllers/
-│   │   └── {{entity}}.controller.ts
-│   ├── persistence/
-│   │   └── {{entity}}.repository.ts
-│   ├── guards/
-│   └── config/
-│       └── database.config.ts
-├── common/
-│   ├── decorators/
-│   ├── filters/
-│   └── pipes/
-├── app.module.ts
-└── main.ts
-```
-
-### Advanced/Expert Level (5+ Layers - Full Clean Architecture)
-
-```
-src/
-├── domain/
-│   ├── entities/
-│   │   └── {{entity}}.entity.ts
-│   ├── value-objects/
-│   │   └── {{value-object}}.vo.ts
-│   └── repositories/
-│       └── {{entity}}.repository.interface.ts
-├── application/
-│   ├── dto/
-│   │   ├── create-{{entity}}.dto.ts
-│   │   └── {{entity}}-response.dto.ts
-│   ├── services/
-│   │   └── {{entity}}.service.ts
-│   └── use-cases/
-│       └── {{use-case}}.use-case.ts
-├── infrastructure/
-│   ├── controllers/
-│   │   └── {{entity}}.controller.ts
-│   ├── persistence/
-│   │   └── {{entity}}.repository.ts
-│   └── config/
-│       └── database.config.ts
-├── common/
-│   ├── decorators/
-│   ├── exceptions/
-│   └── pipes/
-├── app.module.ts
-└── main.ts
-
-test/
-├── {{entity}}.service.spec.ts
-├── {{entity}}.controller.spec.ts
+├── {{module}}.service.spec.ts
+├── {{module}}.e2e-spec.ts
 └── jest-e2e.json
 ```
 
@@ -403,19 +418,21 @@ Then proceed to: **{{NEXT_PROJECT}}**
 
 ## Quick Reference
 
-**Where does X go?**
+**Where does X go? (All levels use modular structure)**
 
-*Beginner (flat structure):*
-- Business logic → `services/`
-- DTOs → `dto/`
-- Database access → `repositories/`
-- Endpoints → `controllers/`
+*Beginner (Modular 3-Layer):*
+- Business logic → `src/{{module}}/{{module}}.service.ts`
+- DTOs → `src/{{module}}/dto/`
+- Database access → `src/{{module}}/{{module}}.repository.ts`
+- Endpoints → `src/{{module}}/{{module}}.controller.ts`
+- Entities → `src/{{module}}/entities/`
 
-*Intermediate+ (Clean Architecture):*
-- Business logic → `application/services/` or `application/use-cases/`
-- DTOs → `application/dto/`
-- Database access → `infrastructure/persistence/`
-- Endpoints → `infrastructure/controllers/`
+*Intermediate+ (Modular + Clean Architecture):*
+- Business logic → `src/{{module}}/application/services/` or `src/{{module}}/application/use-cases/`
+- DTOs → `src/{{module}}/application/dto/`
+- Database access → `src/{{module}}/infrastructure/persistence/`
+- Endpoints → `src/{{module}}/infrastructure/controllers/`
+- Domain entities → `src/{{module}}/domain/entities/`
 
 **ORM Commands:**
 

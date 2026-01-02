@@ -23,14 +23,14 @@
 ```
 nestjs-progressive-backend/
 ├── projects/
-│   ├── user-auth-api/                 # Beginner (Simple 3-Layer)
+│   ├── user-auth-api/                 # Beginner (Modular 3-Layer)
 │   │   ├── src/
-│   │   │   ├── controllers/
-│   │   │   ├── services/
-│   │   │   ├── repositories/
-│   │   │   ├── entities/
-│   │   │   ├── dto/
+│   │   │   ├── auth/                  # Feature module
+│   │   │   ├── users/                 # Feature module
+│   │   │   ├── common/                # Shared utilities
+│   │   │   ├── config/                # App configuration
 │   │   │   └── app.module.ts
+│   │   ├── prisma/
 │   │   ├── test/
 │   │   ├── package.json
 │   │   ├── tsconfig.json
@@ -106,32 +106,37 @@ Each project uses a specific ORM based on its requirements:
 ```
 user-auth-api/
 ├── src/
-│   ├── controllers/
-│   │   └── auth.controller.ts
-│   ├── services/
-│   │   └── auth.service.ts
-│   ├── repositories/
-│   │   └── user.repository.ts
-│   ├── entities/
-│   │   └── user.entity.ts
-│   ├── dto/
-│   │   ├── create-user.dto.ts
-│   │   ├── login.dto.ts
-│   │   └── user-response.dto.ts
-│   ├── guards/
-│   │   └── jwt.guard.ts
-│   ├── decorators/
-│   │   └── current-user.decorator.ts
-│   ├── config/
-│   │   ├── jwt.config.ts
+│   ├── auth/                          # Auth feature module
+│   │   ├── auth.module.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── dto/
+│   │   │   ├── register.dto.ts
+│   │   │   └── login.dto.ts
+│   │   ├── guards/
+│   │   │   └── jwt-auth.guard.ts
+│   │   └── strategies/
+│   │       └── jwt.strategy.ts
+│   ├── users/                         # Users feature module
+│   │   ├── users.module.ts
+│   │   ├── users.service.ts
+│   │   ├── users.repository.ts
+│   │   ├── entities/
+│   │   │   └── user.entity.ts
+│   │   └── dto/
+│   │       └── user-response.dto.ts
+│   ├── common/                        # Shared utilities
+│   │   └── decorators/
+│   │       └── current-user.decorator.ts
+│   ├── config/                        # App configuration
 │   │   └── database.config.ts
-│   ├── auth.module.ts
-│   └── app.module.ts
+│   ├── app.module.ts
+│   └── main.ts
 ├── prisma/
 │   └── schema.prisma
 ├── test/
 │   ├── auth.service.spec.ts
-│   └── auth.controller.spec.ts
+│   └── auth.e2e-spec.ts
 └── package.json
 ```
 
@@ -1087,89 +1092,94 @@ cp .env.example .env
 
 ### 6. Structure by level
 
-Structure varies by complexity level:
+All levels use **NestJS modular architecture** (feature modules). Complexity increases within modules.
 
-**Beginner Level (Simple 3-Layer):**
+**Beginner Level (Modular 3-Layer):**
 ```
 project-name/
 ├── src/
-│   ├── controllers/           # HTTP layer
-│   │   └── *.controller.ts
-│   ├── services/              # Business logic
-│   │   └── *.service.ts
-│   ├── repositories/          # Data access
-│   │   └── *.repository.ts
-│   ├── entities/              # Database models
-│   │   └── *.entity.ts
-│   ├── dto/                   # Data transfer objects
-│   │   └── *.dto.ts
-│   ├── guards/                # Auth guards
-│   ├── decorators/            # Custom decorators
-│   ├── config/                # Configuration
+│   ├── auth/                  # Feature module
+│   │   ├── auth.module.ts
+│   │   ├── auth.controller.ts
+│   │   ├── auth.service.ts
+│   │   ├── dto/
+│   │   ├── guards/
+│   │   └── strategies/
+│   ├── users/                 # Feature module
+│   │   ├── users.module.ts
+│   │   ├── users.service.ts
+│   │   ├── users.repository.ts
+│   │   ├── entities/
+│   │   └── dto/
+│   ├── common/                # Shared utilities
+│   │   ├── decorators/
+│   │   ├── filters/
+│   │   └── pipes/
+│   ├── config/                # App configuration
 │   ├── app.module.ts
 │   └── main.ts
 ├── prisma/                    # Prisma schema (if using Prisma)
 │   └── schema.prisma
 ├── test/
-│   ├── *.spec.ts
-│   └── jest-e2e.json
 ├── .env.example
 ├── package.json
-├── tsconfig.json
 └── nest-cli.json
 ```
 
-**Intermediate Level (Basic Clean Architecture):**
+**Intermediate Level (Modular + Clean Architecture):**
 ```
 project-name/
 ├── src/
-│   ├── domain/                # Domain layer
-│   │   ├── entities/
-│   │   └── repositories/      # Interfaces only
-│   ├── application/           # Application layer
-│   │   ├── dto/
-│   │   ├── services/
-│   │   └── use-cases/
-│   ├── infrastructure/        # Infrastructure layer
-│   │   ├── controllers/
-│   │   ├── persistence/       # Repository implementations
-│   │   ├── guards/
-│   │   └── config/
-│   ├── common/                # Shared utilities
-│   │   ├── decorators/
-│   │   ├── filters/
-│   │   └── pipes/
+│   ├── products/              # Feature module with Clean Arch
+│   │   ├── products.module.ts
+│   │   ├── domain/
+│   │   │   ├── entities/
+│   │   │   └── repositories/  # Interfaces
+│   │   ├── application/
+│   │   │   ├── dto/
+│   │   │   ├── services/
+│   │   │   └── use-cases/
+│   │   └── infrastructure/
+│   │       ├── controllers/
+│   │       └── persistence/   # Repository implementations
+│   ├── orders/                # Another feature module
+│   │   ├── orders.module.ts
+│   │   ├── domain/
+│   │   ├── application/
+│   │   └── infrastructure/
+│   ├── common/
+│   ├── config/
 │   ├── app.module.ts
 │   └── main.ts
 ├── test/
 └── package.json
 ```
 
-**Advanced/Expert Level (Full Clean Architecture + DDD):**
+**Advanced/Expert Level (Modular + Full DDD):**
 ```
 project-name/
 ├── src/
-│   ├── domain/                # Domain layer (DDD)
-│   │   ├── aggregates/
-│   │   ├── entities/
-│   │   ├── value-objects/
-│   │   ├── events/
-│   │   ├── repositories/
-│   │   └── exceptions/
-│   ├── application/           # Application layer
-│   │   ├── commands/
-│   │   ├── queries/
-│   │   ├── dto/
-│   │   ├── services/
-│   │   ├── mappers/
-│   │   └── events/
-│   ├── infrastructure/        # Infrastructure layer
-│   │   ├── controllers/
-│   │   ├── persistence/
-│   │   ├── external-services/
-│   │   ├── event-handlers/
-│   │   └── config/
+│   ├── payments/              # Feature module with DDD
+│   │   ├── payments.module.ts
+│   │   ├── domain/
+│   │   │   ├── aggregates/
+│   │   │   ├── entities/
+│   │   │   ├── value-objects/
+│   │   │   ├── events/
+│   │   │   └── repositories/
+│   │   ├── application/
+│   │   │   ├── commands/
+│   │   │   ├── queries/
+│   │   │   ├── dto/
+│   │   │   └── mappers/
+│   │   └── infrastructure/
+│   │       ├── controllers/
+│   │       ├── persistence/
+│   │       └── event-handlers/
+│   ├── notifications/         # Another feature module
+│   │   └── ...
 │   ├── common/
+│   ├── config/
 │   ├── app.module.ts
 │   └── main.ts
 ├── test/
@@ -1232,28 +1242,32 @@ project-name/
 - Entities: `*.entity.ts`
 - Interfaces: `*.interface.ts`
 
-**Folders by Level:**
+**Folders (NestJS Modular):**
 
-*Beginner (flat structure):*
+All levels use feature modules. Each module contains its related files:
+
 ```
 src/
-├── controllers/
-├── services/
-├── repositories/
-├── entities/
-├── dto/
-├── guards/
-├── decorators/
-└── config/
+├── feature-a/        # Feature module (e.g., auth/, users/, products/)
+│   ├── feature-a.module.ts
+│   ├── feature-a.controller.ts
+│   ├── feature-a.service.ts
+│   ├── dto/
+│   ├── entities/     # Or domain/ for intermediate+
+│   └── ...
+├── feature-b/        # Another feature module
+├── common/           # Shared across modules
+├── config/           # App-level configuration
+└── app.module.ts
 ```
 
-*Intermediate+ (Clean Architecture):*
+*Intermediate+ adds Clean Architecture layers inside each module:*
 ```
-src/
+src/feature/
+├── feature.module.ts
 ├── domain/           # Entities, repository interfaces
 ├── application/      # DTOs, services, use-cases
-├── infrastructure/   # Controllers, persistence, config
-└── common/           # Decorators, guards, pipes, filters
+└── infrastructure/   # Controllers, persistence
 ```
 
 ### Testing Strategy

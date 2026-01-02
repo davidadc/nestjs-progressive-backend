@@ -312,31 +312,46 @@ Repository Layer (Data Access)
 Database
 ```
 
-### 2. Folder Structure
+### 2. Folder Structure (Modular)
+
+NestJS uses **feature modules** - each feature has its own folder containing all related files.
 
 ```
 src/
-├── dto/
-│   ├── create-user.dto.ts
-│   ├── update-user.dto.ts
-│   └── user-response.dto.ts
-├── entities/
-│   └── user.entity.ts
-├── services/
-│   └── user.service.ts
-├── repositories/
-│   └── user.repository.ts
-├── controllers/
-│   └── user.controller.ts
-├── guards/
-│   └── jwt.guard.ts
-└── app.module.ts
+├── auth/                     # Auth feature module
+│   ├── auth.module.ts
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── dto/
+│   │   ├── register.dto.ts
+│   │   └── login.dto.ts
+│   ├── guards/
+│   │   └── jwt-auth.guard.ts
+│   └── strategies/
+│       └── jwt.strategy.ts
+├── users/                    # Users feature module
+│   ├── users.module.ts
+│   ├── users.service.ts
+│   ├── users.repository.ts
+│   ├── entities/
+│   │   └── user.entity.ts
+│   └── dto/
+│       └── user-response.dto.ts
+├── common/                   # Shared utilities
+│   ├── decorators/
+│   │   └── current-user.decorator.ts
+│   ├── filters/
+│   └── pipes/
+├── config/                   # App configuration
+│   └── database.config.ts
+├── app.module.ts
+└── main.ts
 ```
 
-### 3. Example: User Service (Beginner)
+### 3. Example: Auth Module (Beginner)
 
 ```typescript
-// src/entities/user.entity.ts
+// src/users/entities/user.entity.ts
 @Entity('users')
 export class User {
   @PrimaryGeneratedColumn('uuid')
@@ -364,9 +379,9 @@ export class User {
   deletedAt?: Date;
 }
 
-// src/repositories/user.repository.ts
+// src/users/users.repository.ts
 @Injectable()
-export class UserRepository {
+export class UsersRepository {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   async create(email: string, password: string, name: string): Promise<User> {
@@ -392,26 +407,34 @@ export class UserRepository {
   }
 }
 
-// src/services/user.service.ts
+// src/users/users.module.ts
+@Module({
+  imports: [TypeOrmModule.forFeature([User])],
+  providers: [UsersRepository, UsersService],
+  exports: [UsersRepository, UsersService],
+})
+export class UsersModule {}
+
+// src/auth/auth.service.ts
 @Injectable()
-export class UserService {
+export class AuthService {
   constructor(
-    private userRepository: UserRepository,
-    private passwordService: PasswordService
+    private usersRepository: UsersRepository,
+    private passwordService: PasswordService,
   ) {}
 
   async register(email: string, password: string, name: string): Promise<User> {
-    const existing = await this.userRepository.findByEmail(email);
+    const existing = await this.usersRepository.findByEmail(email);
     if (existing) {
       throw new BadRequestException('Email already registered');
     }
 
     const hashedPassword = await this.passwordService.hash(password);
-    return this.userRepository.create(email, hashedPassword, name);
+    return this.usersRepository.create(email, hashedPassword, name);
   }
 
   async login(email: string, password: string): Promise<User> {
-    const user = await this.userRepository.findByEmail(email);
+    const user = await this.usersRepository.findByEmail(email);
     if (!user) {
       throw new UnauthorizedException('Invalid credentials');
     }
@@ -425,21 +448,29 @@ export class UserService {
   }
 }
 
-// src/controllers/user.controller.ts
-@Controller('users')
-export class UserController {
-  constructor(private userService: UserService) {}
+// src/auth/auth.controller.ts
+@Controller('auth')
+export class AuthController {
+  constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() dto: CreateUserDto) {
-    return this.userService.register(dto.email, dto.password, dto.name);
+  async register(@Body() dto: RegisterDto) {
+    return this.authService.register(dto.email, dto.password, dto.name);
   }
 
   @Post('login')
   async login(@Body() dto: LoginDto) {
-    return this.userService.login(dto.email, dto.password);
+    return this.authService.login(dto.email, dto.password);
   }
 }
+
+// src/auth/auth.module.ts
+@Module({
+  imports: [UsersModule, JwtModule.register({ ... })],
+  controllers: [AuthController],
+  providers: [AuthService, JwtStrategy],
+})
+export class AuthModule {}
 ```
 
 ### 4. Applied Principles
@@ -471,62 +502,61 @@ Infrastructure Layer (Repositories, External Services)
 Database
 ```
 
-### 2. Folder Structure
+### 2. Folder Structure (Modular + Clean Architecture)
+
+Each feature module contains Clean Architecture layers inside.
 
 ```
 src/
-├── domain/
-│   ├── entities/
-│   │   ├── user.entity.ts
-│   │   └── product.entity.ts
-│   ├── repositories/
-│   │   ├── user.repository.interface.ts
-│   │   └── product.repository.interface.ts
-│   └── exceptions/
-│       └── domain.exceptions.ts
-│
-├── application/
-│   ├── dto/
-│   │   ├── create-user.dto.ts
-│   │   └── user-response.dto.ts
-│   ├── services/
-│   │   └── user.service.ts
-│   ├── use-cases/
-│   │   ├── register.use-case.ts
-│   │   └── login.use-case.ts
-│   └── mappers/
-│       └── user.mapper.ts
-│
-├── infrastructure/
-│   ├── controllers/
-│   │   └── user.controller.ts
-│   ├── persistence/
-│   │   ├── typeorm/
-│   │   │   ├── user.entity.ts
-│   │   │   └── user.repository.ts
+├── products/                 # Feature module with Clean Architecture
+│   ├── products.module.ts
+│   ├── domain/
+│   │   ├── entities/
+│   │   │   └── product.entity.ts
+│   │   ├── repositories/
+│   │   │   └── product.repository.interface.ts
+│   │   └── exceptions/
+│   │       └── product.exceptions.ts
+│   ├── application/
+│   │   ├── dto/
+│   │   │   ├── create-product.dto.ts
+│   │   │   └── product-response.dto.ts
+│   │   ├── services/
+│   │   │   └── product.service.ts
+│   │   ├── use-cases/
+│   │   │   └── create-product.use-case.ts
 │   │   └── mappers/
-│   │       └── user.persistence.mapper.ts
-│   ├── guards/
-│   │   └── jwt.guard.ts
-│   ├── config/
-│   │   ├── jwt.config.ts
-│   │   └── database.config.ts
-│   └── services/
-│       └── password.service.ts
+│   │       └── product.mapper.ts
+│   └── infrastructure/
+│       ├── controllers/
+│       │   └── products.controller.ts
+│       └── persistence/
+│           └── product.repository.ts
 │
-├── common/
+├── categories/               # Another feature module
+│   ├── categories.module.ts
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+│
+├── common/                   # Shared utilities
 │   ├── decorators/
 │   ├── filters/
 │   ├── pipes/
 │   └── exceptions/
 │
-└── app.module.ts
+├── config/                   # App configuration
+│   ├── database.config.ts
+│   └── jwt.config.ts
+│
+├── app.module.ts
+└── main.ts
 ```
 
-### 3. Example: Product Use Case (Intermediate)
+### 3. Example: Products Module (Intermediate)
 
 ```typescript
-// src/domain/entities/product.entity.ts
+// src/products/domain/entities/product.entity.ts
 export class Product {
   id: string;
   name: string;
@@ -556,7 +586,7 @@ export class Product {
   }
 }
 
-// src/domain/repositories/product.repository.interface.ts
+// src/products/domain/repositories/product.repository.interface.ts
 export interface IProductRepository {
   save(product: Product): Promise<Product>;
   findById(id: string): Promise<Product | null>;
@@ -565,7 +595,7 @@ export interface IProductRepository {
   delete(id: string): Promise<void>;
 }
 
-// src/application/dto/create-product.dto.ts
+// src/products/application/dto/create-product.dto.ts
 export class CreateProductDto {
   @IsString()
   @MinLength(3)
@@ -591,13 +621,14 @@ export class ProductResponseDto {
   categoryId: string;
 }
 
-// src/application/use-cases/create-product.use-case.ts
+// src/products/application/use-cases/create-product.use-case.ts
 @Injectable()
 export class CreateProductUseCase {
   constructor(
+    @Inject('PRODUCT_REPOSITORY')
     private readonly productRepository: IProductRepository,
     @Inject('CATEGORY_REPOSITORY')
-    private categoryRepository: ICategoryRepository
+    private categoryRepository: ICategoryRepository,
   ) {}
 
   async execute(command: CreateProductCommand): Promise<Product> {
@@ -620,7 +651,7 @@ export class CreateProductUseCase {
   }
 }
 
-// src/application/mappers/product.mapper.ts
+// src/products/application/mappers/product.mapper.ts
 export class ProductMapper {
   static toDomain(raw: any): Product {
     const product = new Product();
@@ -645,11 +676,11 @@ export class ProductMapper {
   }
 }
 
-// src/infrastructure/persistence/typeorm/product.repository.ts
+// src/products/infrastructure/persistence/product.repository.ts
 @Injectable()
 export class ProductRepository implements IProductRepository {
   constructor(
-    @InjectRepository(ProductEntity) private repo: Repository<ProductEntity>
+    @InjectRepository(ProductEntity) private repo: Repository<ProductEntity>,
   ) {}
 
   async save(product: Product): Promise<Product> {
@@ -679,9 +710,9 @@ export class ProductRepository implements IProductRepository {
   }
 }
 
-// src/infrastructure/controllers/product.controller.ts
+// src/products/infrastructure/controllers/products.controller.ts
 @Controller('products')
-export class ProductController {
+export class ProductsController {
   constructor(private readonly createProductUseCase: CreateProductUseCase) {}
 
   @Post()
@@ -690,6 +721,24 @@ export class ProductController {
     return ProductMapper.toResponse(product);
   }
 }
+
+// src/products/products.module.ts
+@Module({
+  imports: [
+    TypeOrmModule.forFeature([ProductEntity]),
+    CategoriesModule,
+  ],
+  controllers: [ProductsController],
+  providers: [
+    CreateProductUseCase,
+    {
+      provide: 'PRODUCT_REPOSITORY',
+      useClass: ProductRepository,
+    },
+  ],
+  exports: ['PRODUCT_REPOSITORY'],
+})
+export class ProductsModule {}
 ```
 
 ### 4. Applied Principles
@@ -727,25 +776,25 @@ Database + External APIs
 #### Domain Events
 
 ```typescript
-// src/domain/events/domain.event.ts
+// src/common/domain/domain.event.ts
 export abstract class DomainEvent {
   public readonly occurredAt: Date = new Date();
   public readonly aggregateId: string;
 }
 
-// src/domain/events/user-registered.event.ts
+// src/users/domain/events/user-registered.event.ts
 export class UserRegisteredEvent extends DomainEvent {
   constructor(
     aggregateId: string,
     public readonly email: string,
-    public readonly name: string
+    public readonly name: string,
   ) {
     super();
     this.aggregateId = aggregateId;
   }
 }
 
-// src/domain/entities/user.aggregate-root.ts
+// src/users/domain/aggregates/user.aggregate-root.ts
 export class User extends AggregateRoot {
   private _email: Email;
   private _password: Password;
@@ -754,7 +803,7 @@ export class User extends AggregateRoot {
   static create(props: CreateUserProps): User {
     const user = new User(props);
     user.addDomainEvent(
-      new UserRegisteredEvent(user.id, user.email.value, user.name)
+      new UserRegisteredEvent(user.id, user.email.value, user.name),
     );
     return user;
   }
@@ -769,7 +818,7 @@ export class User extends AggregateRoot {
 #### Value Objects
 
 ```typescript
-// src/domain/value-objects/email.value-object.ts
+// src/users/domain/value-objects/email.value-object.ts
 export class Email {
   private value: string;
 
@@ -795,85 +844,93 @@ export class Email {
 }
 ```
 
-### 3. Advanced Folder Structure
+### 3. Advanced Folder Structure (Modular + Full DDD)
+
+Each feature module contains complete DDD layers.
 
 ```
 src/
-├── domain/
-│   ├── aggregates/
-│   │   └── user.aggregate-root.ts
-│   ├── value-objects/
-│   │   ├── email.value-object.ts
-│   │   ├── password.value-object.ts
-│   │   └── user-id.value-object.ts
-│   ├── events/
-│   │   ├── domain.event.ts
-│   │   ├── user-registered.event.ts
-│   │   └── user-deleted.event.ts
-│   ├── repositories/
-│   │   └── user.repository.interface.ts
-│   ├── services/
-│   │   └── password-encoder.service.ts
-│   └── exceptions/
-│       └── domain.exceptions.ts
-│
-├── application/
-│   ├── commands/
-│   │   ├── create-user.command.ts
-│   │   └── create-user.command-handler.ts
-│   ├── queries/
-│   │   ├── get-user-by-id.query.ts
-│   │   └── get-user-by-id.query-handler.ts
-│   ├── dto/
-│   │   └── user-response.dto.ts
-│   ├── services/
-│   │   └── user.application-service.ts
-│   ├── events/
-│   │   └── user-registered.event-handler.ts
-│   └── mappers/
-│       └── user.mapper.ts
-│
-├── infrastructure/
-│   ├── controllers/
-│   │   └── user.controller.ts
-│   ├── persistence/
-│   │   ├── typeorm/
-│   │   │   ├── user.entity.ts
-│   │   │   └── user.repository.ts
+├── users/                           # Feature module with DDD
+│   ├── users.module.ts
+│   ├── domain/
+│   │   ├── aggregates/
+│   │   │   └── user.aggregate-root.ts
+│   │   ├── value-objects/
+│   │   │   ├── email.value-object.ts
+│   │   │   ├── password.value-object.ts
+│   │   │   └── user-id.value-object.ts
+│   │   ├── events/
+│   │   │   ├── user-registered.event.ts
+│   │   │   └── user-deleted.event.ts
+│   │   ├── repositories/
+│   │   │   └── user.repository.interface.ts
+│   │   └── exceptions/
+│   │       └── user.exceptions.ts
+│   ├── application/
+│   │   ├── commands/
+│   │   │   ├── create-user.command.ts
+│   │   │   └── create-user.command-handler.ts
+│   │   ├── queries/
+│   │   │   ├── get-user-by-id.query.ts
+│   │   │   └── get-user-by-id.query-handler.ts
+│   │   ├── dto/
+│   │   │   └── user-response.dto.ts
+│   │   ├── event-handlers/
+│   │   │   └── user-registered.event-handler.ts
 │   │   └── mappers/
-│   │       └── user.persistence.mapper.ts
-│   ├── external-services/
-│   │   ├── email-service.ts
-│   │   └── sms-service.ts
-│   ├── event-handlers/
-│   │   └── user-registered.event-handler.ts
-│   └── config/
-│       ├── cqrs.config.ts
-│       └── event-emitter.config.ts
+│   │       └── user.mapper.ts
+│   └── infrastructure/
+│       ├── controllers/
+│       │   └── users.controller.ts
+│       ├── persistence/
+│       │   ├── user.entity.ts
+│       │   └── user.repository.ts
+│       └── external-services/
+│           └── email-sender.service.ts
 │
-└── app.module.ts
+├── payments/                        # Another feature module
+│   ├── payments.module.ts
+│   ├── domain/
+│   ├── application/
+│   └── infrastructure/
+│
+├── common/                          # Shared utilities
+│   ├── domain/
+│   │   ├── aggregate-root.ts
+│   │   └── domain-event.ts
+│   ├── decorators/
+│   ├── filters/
+│   └── exceptions/
+│
+├── config/                          # App configuration
+│   ├── cqrs.config.ts
+│   └── event-emitter.config.ts
+│
+├── app.module.ts
+└── main.ts
 ```
 
-### 4. Example: CQRS + Domain Events (Advanced)
+### 4. Example: Users Module with CQRS (Advanced)
 
 ```typescript
-// src/application/commands/create-user.command.ts
+// src/users/application/commands/create-user.command.ts
 export class CreateUserCommand {
   constructor(
     public readonly email: string,
     public readonly password: string,
-    public readonly name: string
+    public readonly name: string,
   ) {}
 }
 
-// src/application/commands/create-user.command-handler.ts
+// src/users/application/commands/create-user.command-handler.ts
 @CommandHandler(CreateUserCommand)
 export class CreateUserCommandHandler
   implements ICommandHandler<CreateUserCommand>
 {
   constructor(
+    @Inject('USER_REPOSITORY')
     private readonly userRepository: IUserRepository,
-    private readonly eventBus: IEventBus
+    private readonly eventBus: IEventBus,
   ) {}
 
   async execute(command: CreateUserCommand): Promise<User> {
@@ -900,45 +957,51 @@ export class CreateUserCommandHandler
   }
 }
 
-// src/application/queries/get-user-by-id.query.ts
+// src/users/application/queries/get-user-by-id.query.ts
 export class GetUserByIdQuery {
   constructor(public readonly id: string) {}
 }
 
-// src/application/queries/get-user-by-id.query-handler.ts
+// src/users/application/queries/get-user-by-id.query-handler.ts
 @QueryHandler(GetUserByIdQuery)
 export class GetUserByIdQueryHandler
   implements IQueryHandler<GetUserByIdQuery>
 {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    @Inject('USER_REPOSITORY')
+    private readonly userRepository: IUserRepository,
+  ) {}
 
   async execute(query: GetUserByIdQuery): Promise<User | null> {
     return this.userRepository.findById(query.id);
   }
 }
 
-// src/infrastructure/controllers/user.controller.ts
+// src/users/infrastructure/controllers/users.controller.ts
 @Controller('users')
-export class UserController {
-  constructor(private readonly cqrs: CqrsModule) {}
+export class UsersController {
+  constructor(
+    private readonly commandBus: CommandBus,
+    private readonly queryBus: QueryBus,
+  ) {}
 
   @Post()
   async create(@Body() dto: CreateUserDto) {
     const command = new CreateUserCommand(dto.email, dto.password, dto.name);
-    const user = await this.cqrs.commandBus.execute(command);
+    const user = await this.commandBus.execute(command);
     return UserMapper.toResponse(user);
   }
 
   @Get(':id')
   async getById(@Param('id') id: string) {
     const query = new GetUserByIdQuery(id);
-    const user = await this.cqrs.queryBus.execute(query);
+    const user = await this.queryBus.execute(query);
     if (!user) throw new NotFoundException();
     return UserMapper.toResponse(user);
   }
 }
 
-// src/application/events/user-registered.event-handler.ts
+// src/users/application/event-handlers/user-registered.event-handler.ts
 @EventsHandler(UserRegisteredEvent)
 export class UserRegisteredEventHandler
   implements IEventHandler<UserRegisteredEvent>
@@ -949,6 +1012,23 @@ export class UserRegisteredEventHandler
     await this.emailService.sendWelcomeEmail(event.email, event.name);
   }
 }
+
+// src/users/users.module.ts
+@Module({
+  imports: [CqrsModule, TypeOrmModule.forFeature([UserEntity])],
+  controllers: [UsersController],
+  providers: [
+    CreateUserCommandHandler,
+    GetUserByIdQueryHandler,
+    UserRegisteredEventHandler,
+    {
+      provide: 'USER_REPOSITORY',
+      useClass: UserRepository,
+    },
+  ],
+  exports: ['USER_REPOSITORY'],
+})
+export class UsersModule {}
 ```
 
 ### 5. Applied Principles

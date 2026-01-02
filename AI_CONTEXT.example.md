@@ -16,32 +16,35 @@
 
 ## Project Structure
 
-<!-- Beginner Level: Simple 3-Layer Architecture (Flat Structure) -->
+<!-- Beginner Level: Modular 3-Layer Architecture -->
 
 ```
 src/
-├── controllers/
-│   └── auth.controller.ts
-├── services/
-│   └── auth.service.ts
-├── repositories/
-│   └── user.repository.ts
-├── entities/
-│   └── user.entity.ts
-├── dto/
-│   ├── create-user.dto.ts
-│   ├── login.dto.ts
-│   └── user-response.dto.ts
-├── guards/
-│   └── jwt.guard.ts
-├── strategies/
-│   └── jwt.strategy.ts
-├── decorators/
-│   └── current-user.decorator.ts
-├── config/
+├── auth/                          # Auth feature module
+│   ├── auth.module.ts
+│   ├── auth.controller.ts
+│   ├── auth.service.ts
+│   ├── dto/
+│   │   ├── register.dto.ts
+│   │   └── login.dto.ts
+│   ├── guards/
+│   │   └── jwt-auth.guard.ts
+│   └── strategies/
+│       └── jwt.strategy.ts
+├── users/                         # Users feature module
+│   ├── users.module.ts
+│   ├── users.service.ts
+│   ├── users.repository.ts
+│   ├── entities/
+│   │   └── user.entity.ts
+│   └── dto/
+│       └── user-response.dto.ts
+├── common/                        # Shared utilities
+│   └── decorators/
+│       └── current-user.decorator.ts
+├── config/                        # App configuration
 │   ├── jwt.config.ts
 │   └── database.config.ts
-├── auth.module.ts
 ├── app.module.ts
 └── main.ts
 
@@ -50,12 +53,12 @@ prisma/
 
 test/
 ├── auth.service.spec.ts
-├── auth.controller.spec.ts
+├── auth.e2e-spec.ts
 └── jest-e2e.json
 ```
 
-**Note:** Beginner level uses a flat structure without domain/application/infrastructure separation.
-This keeps the learning curve manageable while still following good practices.
+**Note:** Beginner level uses modular structure (NestJS best practice) with flat files inside modules.
+Each feature module contains related controllers, services, and entities together.
 
 ---
 
@@ -96,7 +99,7 @@ Database (PostgreSQL)
 ### User Entity (Prisma Model)
 
 ```typescript
-// src/entities/user.entity.ts (plain class, not ORM-decorated for Prisma)
+// src/users/entities/user.entity.ts (plain class for Prisma)
 export class User {
   id: string;         // UUID
   email: string;      // Unique
@@ -438,7 +441,7 @@ async register(createUserDto: CreateUserDto): Promise<User> {
 ### 1. Create base structure
 
 ```
-"Create the folder and file structure for User Auth API with simple 3-layer architecture"
+"Create the folder and file structure for User Auth API with modular architecture (auth/ and users/ modules)"
 ```
 
 ### 2. Set up Prisma
@@ -447,31 +450,26 @@ async register(createUserDto: CreateUserDto): Promise<User> {
 "Set up Prisma with User model (id, email, password, name, role, timestamps)"
 ```
 
-### 3. Implement entities and DTOs
+### 3. Implement users module
 
 ```
-"Implement:
-- User entity in src/entities/
-- CreateUserDto, LoginDto, UserResponseDto in src/dto/"
+"Implement users module:
+- User entity in src/users/entities/
+- UsersRepository in src/users/ using Prisma
+- UsersService and UsersModule"
 ```
 
-### 4. Implement repository and service
+### 4. Implement auth module
 
 ```
-"Implement:
-- UserRepository in src/repositories/ using Prisma
-- AuthService with register(), login(), validateUser() in src/services/"
-```
-
-### 5. Implement controller and guards
-
-```
-"Implement:
+"Implement auth module:
+- RegisterDto, LoginDto in src/auth/dto/
+- AuthService with register(), login(), validateUser()
 - AuthController with /register, /login, /profile, /logout endpoints
-- JwtGuard and JwtStrategy for protected routes"
+- JwtGuard and JwtStrategy in src/auth/"
 ```
 
-### 6. Add testing
+### 5. Add testing
 
 ```
 "Create unit tests for AuthService and e2e for AuthController
@@ -484,7 +482,8 @@ Minimum 80% coverage"
 
 Upon completing this project you will learn:
 
-- ✅ Layered Architecture in NestJS
+- ✅ NestJS Modular Architecture (feature modules)
+- ✅ Layered Architecture (Controller → Service → Repository)
 - ✅ Authentication with JWT
 - ✅ Password hashing with bcrypt
 - ✅ Repository Pattern for data access
@@ -510,18 +509,19 @@ Then move on to the next project: **Simple CRUD API**
 
 ## Quick Help
 
-**Where does X go?**
+**Where does X go? (Modular structure)**
 
-- Business logic → `services/`
-- HTTP validation → `dto/`
-- Database access → `repositories/`
-- Endpoints → `controllers/`
-- Domain models → `entities/`
+- Auth logic → `src/auth/auth.service.ts`
+- User logic → `src/users/users.service.ts`
+- Auth DTOs → `src/auth/dto/`
+- User entity → `src/users/entities/`
+- Auth endpoints → `src/auth/auth.controller.ts`
+- Shared decorators → `src/common/decorators/`
 
 **How do I do X?**
 
 - Validate input → class-validator in DTO
-- Protect endpoint → @UseGuards(JwtGuard)
+- Protect endpoint → @UseGuards(JwtAuthGuard)
 - Access user → @CurrentUser() decorator
 - Test endpoint → supertest in test/
 
