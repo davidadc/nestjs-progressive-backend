@@ -47,22 +47,31 @@ test/
 
 ```
 src/
-├── controllers/
-│   └── {{entity}}.controller.ts
-├── use-cases/
-│   └── {{use-case}}.use-case.ts
-├── services/
-│   └── {{entity}}.service.ts
 ├── domain/
 │   ├── entities/
 │   │   └── {{entity}}.entity.ts
 │   └── repositories/
 │       └── {{entity}}.repository.interface.ts
-├── repositories/
-│   └── {{entity}}.repository.ts
-├── dto/
-│   ├── create-{{entity}}.dto.ts
-│   └── {{entity}}-response.dto.ts
+├── application/
+│   ├── dto/
+│   │   ├── create-{{entity}}.dto.ts
+│   │   └── {{entity}}-response.dto.ts
+│   ├── services/
+│   │   └── {{entity}}.service.ts
+│   └── use-cases/
+│       └── {{use-case}}.use-case.ts
+├── infrastructure/
+│   ├── controllers/
+│   │   └── {{entity}}.controller.ts
+│   ├── persistence/
+│   │   └── {{entity}}.repository.ts
+│   ├── guards/
+│   └── config/
+│       └── database.config.ts
+├── common/
+│   ├── decorators/
+│   ├── filters/
+│   └── pipes/
 ├── app.module.ts
 └── main.ts
 ```
@@ -395,8 +404,16 @@ Then proceed to: **{{NEXT_PROJECT}}**
 ## Quick Reference
 
 **Where does X go?**
-- Business logic → `domain/` or `application/`
-- HTTP validation → DTOs in `application/`
+
+*Beginner (flat structure):*
+- Business logic → `services/`
+- DTOs → `dto/`
+- Database access → `repositories/`
+- Endpoints → `controllers/`
+
+*Intermediate+ (Clean Architecture):*
+- Business logic → `application/services/` or `application/use-cases/`
+- DTOs → `application/dto/`
 - Database access → `infrastructure/persistence/`
 - Endpoints → `infrastructure/controllers/`
 

@@ -1,21 +1,22 @@
-# AI_CONTEXT.md - Context for Claude Code
+# AI_CONTEXT.md - User Authentication API
 
 **This file should be copied to the root of each NestJS project to guide Claude.**
 
 ---
 
-## 📋 Project Information
+## Project Information
 
 **Name:** User Authentication API
 **Level:** Beginner
+**ORM:** Prisma
 **Description:** Basic authentication system with registration and login
 **Stack:** NestJS + TypeScript + PostgreSQL + Prisma + JWT
 
 ---
 
-## 🏗️ Project Structure
+## Project Structure
 
-<!-- Beginner Level: Simple 3-Layer Architecture -->
+<!-- Beginner Level: Simple 3-Layer Architecture (Flat Structure) -->
 
 ```
 src/
@@ -33,15 +34,19 @@ src/
 │   └── user-response.dto.ts
 ├── guards/
 │   └── jwt.guard.ts
+├── strategies/
+│   └── jwt.strategy.ts
 ├── decorators/
-│   └── user.decorator.ts
-├── exceptions/
-│   └── auth.exceptions.ts
+│   └── current-user.decorator.ts
 ├── config/
 │   ├── jwt.config.ts
 │   └── database.config.ts
+├── auth.module.ts
 ├── app.module.ts
 └── main.ts
+
+prisma/
+└── schema.prisma
 
 test/
 ├── auth.service.spec.ts
@@ -49,51 +54,75 @@ test/
 └── jest-e2e.json
 ```
 
+**Note:** Beginner level uses a flat structure without domain/application/infrastructure separation.
+This keeps the learning curve manageable while still following good practices.
+
 ---
 
-## 🎯 Patterns and Principles
+## Patterns and Principles
 
-### Architecture (Beginner - 3 Layers)
+### Architecture (Beginner - Simple 3-Layer)
 
 - **Layered Architecture:** Controllers → Services → Repositories
 - **Repository Pattern:** Persistence abstraction
 - **Dependency Injection:** NestJS IoC container
-- **SOLID Principles:** Single Responsibility, Open/Closed, etc.
+- **No domain separation:** Entities are ORM models directly
+
+### Applicable Patterns (Beginner Level)
+
+- Repository Pattern (data access abstraction)
+- Factory Pattern (object creation)
+- Singleton Pattern (NestJS services)
+- Decorator Pattern (NestJS decorators)
 
 ### Flow Pattern
 
 ```
 HTTP Request
     ↓
-Controller (validates request, authorization)
+Controller (validates request via DTOs, applies guards)
     ↓
-Service (business logic)
+Service (business logic, calls repository)
     ↓
-Repository (data access)
+Repository (data access via Prisma)
     ↓
-Database
+Database (PostgreSQL)
 ```
 
 ---
 
-## 📝 Entities and DTOs
+## Entities and DTOs
 
-### User Entity (Domain)
+### User Entity (Prisma Model)
 
 ```typescript
+// src/entities/user.entity.ts (plain class, not ORM-decorated for Prisma)
 export class User {
-  id: string; // UUID
-  email: string; // Unique
-  password: string; // Hashed
-  name: string;
-  role: 'user' | 'admin'; // Default 'user'
+  id: string;         // UUID
+  email: string;      // Unique
+  password: string;   // Hashed with bcrypt
+  name: string | null;
+  role: Role;         // USER | ADMIN (default: USER)
   createdAt: Date;
   updatedAt: Date;
-  deletedAt?: Date; // Soft delete
+  deletedAt: Date | null;  // Soft delete
+}
 
-  // Domain methods
-  isPasswordValid(password: string): Promise<boolean>;
-  getPublicData(): Omit<User, 'password'>;
+// prisma/schema.prisma
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  password  String
+  name      String?
+  role      Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  deletedAt DateTime?
+}
+
+enum Role {
+  USER
+  ADMIN
 }
 ```
 
@@ -121,7 +150,7 @@ export class User {
 
 ---
 
-## 🔐 Security Requirements
+## Security Requirements
 
 ### Authentication
 
@@ -146,7 +175,7 @@ export class User {
 
 ---
 
-## 🔌 Endpoints
+## Endpoints
 
 ### POST /auth/register
 
@@ -256,7 +285,7 @@ export class User {
 
 ---
 
-## 🧪 Testing Strategy
+## Testing Strategy
 
 ### Unit Tests (80% minimum coverage)
 
@@ -317,7 +346,7 @@ describe('Auth Endpoints', () => {
 
 ---
 
-## 📦 Main Dependencies
+## Main Dependencies
 
 ```json
 {
@@ -347,7 +376,7 @@ describe('Auth Endpoints', () => {
 
 ---
 
-## ⚙️ Configuration
+## Configuration
 
 ### JWT Config (.env)
 
@@ -369,7 +398,7 @@ DATABASE_NAME=practice_db
 
 ---
 
-## 📚 Code Conventions
+## Code Conventions
 
 ### Naming Conventions
 
@@ -404,15 +433,21 @@ async register(createUserDto: CreateUserDto): Promise<User> {
 
 ---
 
-## 🔄 Typical Workflow with Claude Code
+## Typical Workflow with Claude Code
 
 ### 1. Create base structure
 
 ```
-"Create the folder and file structure for this NestJS project with 3-layer architecture"
+"Create the folder and file structure for User Auth API with simple 3-layer architecture"
 ```
 
-### 2. Implement entities and DTOs
+### 2. Set up Prisma
+
+```
+"Set up Prisma with User model (id, email, password, name, role, timestamps)"
+```
+
+### 3. Implement entities and DTOs
 
 ```
 "Implement:
@@ -420,39 +455,32 @@ async register(createUserDto: CreateUserDto): Promise<User> {
 - CreateUserDto, LoginDto, UserResponseDto in src/dto/"
 ```
 
-### 3. Implement services and repositories
+### 4. Implement repository and service
 
 ```
 "Implement:
-- UserRepository in src/repositories/
-- AuthService with register(), login(), validateUser() methods in src/services/"
+- UserRepository in src/repositories/ using Prisma
+- AuthService with register(), login(), validateUser() in src/services/"
 ```
 
-### 4. Implement controllers and guards
+### 5. Implement controller and guards
 
 ```
 "Implement:
-- AuthController with /register, /login, /profile endpoints
-- JwtGuard for protected routes
-- JwtConfig and DatabaseConfig"
+- AuthController with /register, /login, /profile, /logout endpoints
+- JwtGuard and JwtStrategy for protected routes"
 ```
 
-### 5. Add testing
+### 6. Add testing
 
 ```
 "Create unit tests for AuthService and e2e for AuthController
 Minimum 80% coverage"
 ```
 
-### 6. Documentation
-
-```
-"Generate Swagger documentation for authentication endpoints"
-```
-
 ---
 
-## 🎓 Learning Points
+## Learning Points
 
 Upon completing this project you will learn:
 
@@ -467,7 +495,7 @@ Upon completing this project you will learn:
 
 ---
 
-## 🚀 Next Steps
+## Next Steps
 
 Once completed:
 
@@ -480,7 +508,7 @@ Then move on to the next project: **Simple CRUD API**
 
 ---
 
-## 📞 Quick Help
+## Quick Help
 
 **Where does X go?**
 

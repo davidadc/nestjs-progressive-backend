@@ -23,11 +23,13 @@
 ```
 nestjs-progressive-backend/
 ├── projects/
-│   ├── user-auth-api/                 # Beginner
+│   ├── user-auth-api/                 # Beginner (Simple 3-Layer)
 │   │   ├── src/
-│   │   │   ├── domain/
-│   │   │   ├── application/
-│   │   │   ├── infrastructure/
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   ├── repositories/
+│   │   │   ├── entities/
+│   │   │   ├── dto/
 │   │   │   └── app.module.ts
 │   │   ├── test/
 │   │   ├── package.json
@@ -104,31 +106,29 @@ Each project uses a specific ORM based on its requirements:
 ```
 user-auth-api/
 ├── src/
-│   ├── domain/
-│   │   ├── entities/
-│   │   │   └── user.entity.ts
-│   │   └── repositories/
-│   │       └── user.repository.interface.ts
-│   ├── application/
-│   │   ├── dto/
-│   │   │   ├── create-user.dto.ts
-│   │   │   ├── login.dto.ts
-│   │   │   └── user-response.dto.ts
-│   │   ├── services/
-│   │   │   ├── auth.service.ts
-│   │   │   └── user.service.ts
-│   │   └── use-cases/
-│   │       ├── register.use-case.ts
-│   │       └── login.use-case.ts
-│   ├── infrastructure/
-│   │   ├── persistence/
-│   │   │   └── user.repository.ts
-│   │   ├── controllers/
-│   │   │   └── auth.controller.ts
-│   │   └── config/
-│   │       ├── jwt.config.ts
-│   │       └── database.config.ts
+│   ├── controllers/
+│   │   └── auth.controller.ts
+│   ├── services/
+│   │   └── auth.service.ts
+│   ├── repositories/
+│   │   └── user.repository.ts
+│   ├── entities/
+│   │   └── user.entity.ts
+│   ├── dto/
+│   │   ├── create-user.dto.ts
+│   │   ├── login.dto.ts
+│   │   └── user-response.dto.ts
+│   ├── guards/
+│   │   └── jwt.guard.ts
+│   ├── decorators/
+│   │   └── current-user.decorator.ts
+│   ├── config/
+│   │   ├── jwt.config.ts
+│   │   └── database.config.ts
+│   ├── auth.module.ts
 │   └── app.module.ts
+├── prisma/
+│   └── schema.prisma
 ├── test/
 │   ├── auth.service.spec.ts
 │   └── auth.controller.spec.ts
@@ -812,118 +812,99 @@ Tenant Context { organizationId, userId }
 
 ## Architecture and Patterns
 
-### Clean Architecture Principles in NestJS
+### Architecture by Level
 
-Each project independently implements the following layers:
+Architecture complexity increases progressively:
 
-#### 1. **Domain Layer** (Entities and Interfaces)
+#### Beginner Level (3-Layer)
 
-```typescript
-// src/domain/entities/user.entity.ts
-export class User {
-  id: string;
-  email: string;
-  password: string;
-  name: string;
+Simple layered architecture without domain separation:
 
-  isPasswordValid(password: string): boolean {
-    // Domain logic
-  }
-}
-
-// src/domain/repositories/user.repository.interface.ts
-export interface IUserRepository {
-  save(user: User): Promise<User>;
-  findById(id: string): Promise<User | null>;
-  findByEmail(email: string): Promise<User | null>;
-}
+```
+Controller → Service → Repository → Database
 ```
 
-#### 2. **Application Layer** (Use Cases and Services)
-
 ```typescript
-// src/application/use-cases/register.use-case.ts
+// src/services/auth.service.ts
 @Injectable()
-export class RegisterUseCase {
+export class AuthService {
   constructor(
-    private readonly userRepository: IUserRepository,
-    private readonly passwordService: PasswordService
+    private userRepository: UserRepository,
+    private jwtService: JwtService,
   ) {}
 
-  async execute(command: RegisterCommand): Promise<User> {
-    const existingUser = await this.userRepository.findByEmail(command.email);
-    if (existingUser) {
-      throw new EmailAlreadyExistsException();
+  async register(dto: CreateUserDto): Promise<User> {
+    const existing = await this.userRepository.findByEmail(dto.email);
+    if (existing) {
+      throw new BadRequestException('Email already registered');
     }
-
-    const hashedPassword = await this.passwordService.hash(command.password);
-    const user = new User({
-      email: command.email,
-      password: hashedPassword,
-    });
-
-    return this.userRepository.save(user);
+    const hashedPassword = await bcrypt.hash(dto.password, 10);
+    return this.userRepository.create({ ...dto, password: hashedPassword });
   }
 }
-```
 
-#### 3. **Infrastructure Layer** (Controllers, Repositories, External Services)
-
-```typescript
-// src/infrastructure/controllers/auth.controller.ts
+// src/controllers/auth.controller.ts
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly registerUseCase: RegisterUseCase) {}
+  constructor(private authService: AuthService) {}
 
   @Post('register')
-  async register(@Body() dto: RegisterDto) {
-    return this.registerUseCase.execute(dto);
-  }
-}
-
-// src/infrastructure/persistence/user.repository.ts
-@Injectable()
-export class UserRepository implements IUserRepository {
-  constructor(
-    @InjectRepository(UserEntity) private repo: Repository<UserEntity>
-  ) {}
-
-  async save(user: User): Promise<User> {
-    const entity = UserEntity.fromDomain(user);
-    await this.repo.save(entity);
-    return entity.toDomain();
+  async register(@Body() dto: CreateUserDto) {
+    return this.authService.register(dto);
   }
 }
 ```
+
+#### Intermediate Level (4-Layer Clean Architecture)
+
+Introduces domain layer with entity separation:
+
+```
+Controller → UseCase/Service → Domain (Entities) → Repository
+```
+
+#### Advanced/Expert Level (Full Clean Architecture + DDD)
+
+Full separation with DDD patterns:
+
+```
+Controller → Command/Query Handler → Domain (Aggregates, Value Objects) → Repository
+```
+
+See ARCHITECTURE.md for detailed examples of each level.
 
 ### Applicable Patterns by Level
 
 **Beginner:**
 
-- Basic MVC
 - Repository pattern
-- DTOs
+- Factory pattern
+- Singleton pattern
+- Decorator pattern
 
 **Intermediate:**
 
-- CQRS pattern
-- Domain Events
-- Value Objects
-- Aggregate Root
+- Strategy pattern
+- Observer pattern
+- Adapter pattern
+- Builder pattern
+- Facade pattern
 
 **Advanced:**
 
-- Complete Domain-Driven Design
-- Event Sourcing
-- Saga pattern
-- Anti-Corruption Layer
+- Mediator pattern
+- State pattern
+- Template Method pattern
+- Domain Events
+- Value Objects
 
 **Expert:**
 
-- Event-driven architecture
-- Microservices patterns
-- CQRS + Event Sourcing
-- Distributed transactions
+- CQRS pattern
+- Event Sourcing
+- Saga pattern
+- Circuit Breaker
+- API Gateway
 
 ---
 
@@ -1104,62 +1085,95 @@ cp .env.example .env
 # Edit .env with local values
 ```
 
-### 6. Structure within each project
+### 6. Structure by level
 
-Each NestJS project will have this structure:
+Structure varies by complexity level:
 
+**Beginner Level (Simple 3-Layer):**
 ```
-user-auth-api/
+project-name/
 ├── src/
-│   ├── domain/                    # Entities and interfaces
-│   │   ├── entities/
-│   │   │   └── user.entity.ts
-│   │   └── repositories/
-│   │       └── user.repository.interface.ts
-│   │
-│   ├── application/               # Use cases and services
-│   │   ├── dto/
-│   │   │   ├── create-user.dto.ts
-│   │   │   ├── login.dto.ts
-│   │   │   └── user-response.dto.ts
-│   │   ├── services/
-│   │   │   └── auth.service.ts
-│   │   └── use-cases/
-│   │       ├── register.use-case.ts
-│   │       └── login.use-case.ts
-│   │
-│   ├── infrastructure/            # Controllers and persistence
-│   │   ├── controllers/
-│   │   │   └── auth.controller.ts
-│   │   ├── persistence/
-│   │   │   └── user.repository.ts
-│   │   ├── guards/
-│   │   │   └── jwt.guard.ts
-│   │   └── config/
-│   │       ├── jwt.config.ts
-│   │       └── database.config.ts
-│   │
-│   ├── common/                    # Shared within the project
-│   │   ├── decorators/
-│   │   ├── filters/
-│   │   ├── pipes/
-│   │   └── exceptions/
-│   │
+│   ├── controllers/           # HTTP layer
+│   │   └── *.controller.ts
+│   ├── services/              # Business logic
+│   │   └── *.service.ts
+│   ├── repositories/          # Data access
+│   │   └── *.repository.ts
+│   ├── entities/              # Database models
+│   │   └── *.entity.ts
+│   ├── dto/                   # Data transfer objects
+│   │   └── *.dto.ts
+│   ├── guards/                # Auth guards
+│   ├── decorators/            # Custom decorators
+│   ├── config/                # Configuration
 │   ├── app.module.ts
 │   └── main.ts
-│
+├── prisma/                    # Prisma schema (if using Prisma)
+│   └── schema.prisma
 ├── test/
-│   ├── auth.service.spec.ts
-│   ├── auth.controller.spec.ts
+│   ├── *.spec.ts
 │   └── jest-e2e.json
-│
 ├── .env.example
-├── .eslintrc.js
-├── .prettierrc
 ├── package.json
 ├── tsconfig.json
-├── nest-cli.json
-└── README.md
+└── nest-cli.json
+```
+
+**Intermediate Level (Basic Clean Architecture):**
+```
+project-name/
+├── src/
+│   ├── domain/                # Domain layer
+│   │   ├── entities/
+│   │   └── repositories/      # Interfaces only
+│   ├── application/           # Application layer
+│   │   ├── dto/
+│   │   ├── services/
+│   │   └── use-cases/
+│   ├── infrastructure/        # Infrastructure layer
+│   │   ├── controllers/
+│   │   ├── persistence/       # Repository implementations
+│   │   ├── guards/
+│   │   └── config/
+│   ├── common/                # Shared utilities
+│   │   ├── decorators/
+│   │   ├── filters/
+│   │   └── pipes/
+│   ├── app.module.ts
+│   └── main.ts
+├── test/
+└── package.json
+```
+
+**Advanced/Expert Level (Full Clean Architecture + DDD):**
+```
+project-name/
+├── src/
+│   ├── domain/                # Domain layer (DDD)
+│   │   ├── aggregates/
+│   │   ├── entities/
+│   │   ├── value-objects/
+│   │   ├── events/
+│   │   ├── repositories/
+│   │   └── exceptions/
+│   ├── application/           # Application layer
+│   │   ├── commands/
+│   │   ├── queries/
+│   │   ├── dto/
+│   │   ├── services/
+│   │   ├── mappers/
+│   │   └── events/
+│   ├── infrastructure/        # Infrastructure layer
+│   │   ├── controllers/
+│   │   ├── persistence/
+│   │   ├── external-services/
+│   │   ├── event-handlers/
+│   │   └── config/
+│   ├── common/
+│   ├── app.module.ts
+│   └── main.ts
+├── test/
+└── package.json
 ```
 
 ---
@@ -1218,29 +1232,28 @@ user-auth-api/
 - Entities: `*.entity.ts`
 - Interfaces: `*.interface.ts`
 
-**Folders:**
+**Folders by Level:**
 
+*Beginner (flat structure):*
 ```
 src/
-├── domain/
-│   ├── entities/
-│   ├── repositories/
-│   └── value-objects/
-├── application/
-│   ├── dto/
-│   ├── services/
-│   ├── use-cases/
-│   └── mappers/
-├── infrastructure/
-│   ├── controllers/
-│   ├── persistence/
-│   ├── external-services/
-│   └── config/
-└── common/
-    ├── decorators/
-    ├── guards/
-    ├── pipes/
-    └── filters/
+├── controllers/
+├── services/
+├── repositories/
+├── entities/
+├── dto/
+├── guards/
+├── decorators/
+└── config/
+```
+
+*Intermediate+ (Clean Architecture):*
+```
+src/
+├── domain/           # Entities, repository interfaces
+├── application/      # DTOs, services, use-cases
+├── infrastructure/   # Controllers, persistence, config
+└── common/           # Decorators, guards, pipes, filters
 ```
 
 ### Testing Strategy
