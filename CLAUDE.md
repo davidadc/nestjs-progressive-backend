@@ -37,11 +37,16 @@ projects/
 
 ### Docker (shared services)
 ```bash
-docker-compose up -d              # Start PostgreSQL, Redis, pgAdmin, MailHog
+docker-compose up -d              # Start PostgreSQL, Redis, pgAdmin, MailHog, Redis Commander
 docker-compose down               # Stop services
 docker-compose down -v            # Reset databases
 docker-compose logs -f postgres   # View logs
 ```
+
+**Service URLs:**
+- pgAdmin: http://localhost:5050 (admin@example.com / admin)
+- MailHog: http://localhost:8025
+- Redis Commander: http://localhost:8081
 
 ### Per-project commands (run from project directory)
 ```bash
@@ -137,6 +142,8 @@ src/
 - `ARCHITECTURE.md` - Detailed architecture patterns (17 design patterns with examples)
 - `API_CONVENTIONS.md` - REST conventions by level, RFC 7807 implementation
 - `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` - Real payment system example evolving through all levels
+- `DOCUMENTATION_INDEX.md` - Quick navigation index for all documentation
+- `AI_CONTEXT.template.md` - Template for creating per-project AI context files
 - `AI_CONTEXT.md` (per project) - Project-specific context for Claude Code
 
 ## Environment Variables
@@ -145,8 +152,8 @@ Each project uses `.env` (copy from `.env.example`):
 ```bash
 DATABASE_HOST=localhost
 DATABASE_PORT=5432
-DATABASE_USER=dev
-DATABASE_PASSWORD=dev
+DATABASE_USER=admin
+DATABASE_PASSWORD=admin
 DATABASE_NAME=practice_db
 JWT_SECRET=your-secret-key
 JWT_EXPIRATION=900
