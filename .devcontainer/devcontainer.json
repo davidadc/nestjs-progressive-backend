@@ -1,0 +1,73 @@
+{
+    "name": "NestJS Projects Workspace",
+    "image": "mcr.microsoft.com/devcontainers/base:debian",
+    "remoteUser": "vscode",
+    "features": {
+        "ghcr.io/devcontainers/features/node:1": {
+            "version": "lts"
+        },
+        "ghcr.io/devcontainers/features/docker-in-docker:2": {
+            "moby": false,
+            "version": "28.5.2"
+        }
+    },
+    "containerEnv": {
+        "WORKSPACE_FOLDER": "${containerWorkspaceFolder}",
+        "DEVPOD_WORKSPACE_FOLDER": "${containerWorkspaceFolder}",
+        "DOCKER_API_VERSION": "1.44"
+    },
+    "forwardPorts": [3000, 5432, 5555, 6379, 5050, 1025, 8025, 8081],
+    "portsAttributes": {
+        "3000": {
+            "label": "NestJS App",
+            "onAutoForward": "notify"
+        },
+        "5432": {
+            "label": "PostgreSQL",
+            "onAutoForward": "notify"
+        },
+        "5555": {
+            "label": "Prisma Studio",
+            "onAutoForward": "notify"
+        },
+        "6379": {
+            "label": "Redis",
+            "onAutoForward": "silent"
+        },
+        "5050": {
+            "label": "pgAdmin",
+            "onAutoForward": "notify"
+        },
+        "1025": {
+            "label": "MailHog SMTP",
+            "onAutoForward": "silent"
+        },
+        "8025": {
+            "label": "MailHog UI",
+            "onAutoForward": "notify"
+        },
+        "8081": {
+            "label": "Redis Commander",
+            "onAutoForward": "notify"
+        }
+    },
+    "postCreateCommand": "bash .devcontainer/post-create.sh",
+    "customizations": {
+        "vscode": {
+            "extensions": [
+                "dbaeumer.vscode-eslint",
+                "esbenp.prettier-vscode",
+                "eamodio.gitlens",
+                "editorconfig.editorconfig",
+                "prisma.prisma",
+                "ms-vscode.vscode-typescript-next",
+                "firsttris.vscode-jest-runner"
+            ],
+            "settings": {
+                "terminal.integrated.cwd": "${containerWorkspaceFolder}",
+                "terminal.integrated.shellIntegration.enabled": true,
+                "workbench.startupEditor": "none"
+            }
+        }
+    }
+}
