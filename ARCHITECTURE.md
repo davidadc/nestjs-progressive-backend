@@ -1296,9 +1296,9 @@ Design patterns are reusable solutions to common problems. Each level incorporat
 **Solution:** Abstract data access in a dedicated class
 
 ```typescript
-// src/repositories/user.repository.ts
+// src/users/users.repository.ts
 @Injectable()
-export class UserRepository {
+export class UsersRepository {
   constructor(@InjectRepository(User) private repo: Repository<User>) {}
 
   async create(user: User): Promise<User> {
@@ -1323,14 +1323,14 @@ export class UserRepository {
   }
 }
 
-// src/services/user.service.ts
+// src/users/users.service.ts
 @Injectable()
-export class UserService {
-  constructor(private userRepository: UserRepository) {}
+export class UsersService {
+  constructor(private usersRepository: UsersRepository) {}
 
   async register(email: string, password: string): Promise<User> {
     const user = new User({ email, password });
-    return this.userRepository.create(user);
+    return this.usersRepository.create(user);
   }
 }
 ```

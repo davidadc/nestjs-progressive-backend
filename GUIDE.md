@@ -830,25 +830,25 @@ Controller → Service → Repository → Database
 ```
 
 ```typescript
-// src/services/auth.service.ts
+// src/auth/auth.service.ts
 @Injectable()
 export class AuthService {
   constructor(
-    private userRepository: UserRepository,
+    private usersRepository: UsersRepository,
     private jwtService: JwtService,
   ) {}
 
   async register(dto: CreateUserDto): Promise<User> {
-    const existing = await this.userRepository.findByEmail(dto.email);
+    const existing = await this.usersRepository.findByEmail(dto.email);
     if (existing) {
       throw new BadRequestException('Email already registered');
     }
     const hashedPassword = await bcrypt.hash(dto.password, 10);
-    return this.userRepository.create({ ...dto, password: hashedPassword });
+    return this.usersRepository.create({ ...dto, password: hashedPassword });
   }
 }
 
-// src/controllers/auth.controller.ts
+// src/auth/auth.controller.ts
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
