@@ -35,29 +35,17 @@ if [ ! -d "projects" ]; then
     mkdir -p projects
 fi
 
-# Start PostgreSQL container if not running
-echo "Setting up PostgreSQL..."
-if ! docker ps -q -f name=nestjs-postgres | grep -q .; then
-    if docker ps -aq -f name=nestjs-postgres | grep -q .; then
-        echo "  Starting existing PostgreSQL container..."
-        docker start nestjs-postgres
-    else
-        echo "  Creating new PostgreSQL container..."
-        docker run -d \
-            --name nestjs-postgres \
-            -e POSTGRES_USER=postgres \
-            -e POSTGRES_PASSWORD=postgres \
-            -e POSTGRES_DB=nestjs_dev \
-            -p 5432:5432 \
-            postgres:17-alpine
-    fi
-else
-    echo "  PostgreSQL already running"
-fi
+# Start all services via docker-compose
+echo "Starting services via docker-compose..."
+docker-compose up -d
 
-# Wait for PostgreSQL to be ready
+# Wait for PostgreSQL to be healthy
 echo "Waiting for PostgreSQL to be ready..."
-sleep 5
+until docker exec nestjs-postgres pg_isready -U admin -d postgres > /dev/null 2>&1; do
+    echo "  Waiting for PostgreSQL..."
+    sleep 2
+done
+echo "  PostgreSQL is ready!"
 
 echo ""
 echo "Development environment setup complete!"
@@ -66,15 +54,19 @@ echo "Quick Start:"
 echo "  - Create new project:  cd projects && nest new my-project"
 echo "  - Claude Code:         claude"
 echo ""
-echo "PostgreSQL:"
-echo "  - Host:      localhost"
-echo "  - Port:      5432"
-echo "  - User:      postgres"
-echo "  - Password:  postgres"
-echo "  - Database:  nestjs_dev"
+echo "Services running:"
+echo "  - PostgreSQL:        localhost:5432 (admin/admin, postgres)"
+echo "  - Redis:             localhost:6379"
+echo "  - pgAdmin:           http://localhost:5050 (admin@example.com/admin)"
+echo "  - MailHog:           http://localhost:8025"
+echo "  - Redis Commander:   http://localhost:8081"
 echo ""
 echo "Ports available:"
-echo "  - 3000-3003: NestJS applications"
+echo "  - 3000:      NestJS application"
 echo "  - 5432:      PostgreSQL"
 echo "  - 5555:      Prisma Studio"
+echo "  - 6379:      Redis"
+echo "  - 5050:      pgAdmin"
+echo "  - 8025:      MailHog UI"
+echo "  - 8081:      Redis Commander"
 echo ""
