@@ -97,7 +97,7 @@ pnpm install
 docker-compose up -d postgres
 
 # Run migrations
-npx prisma migrate dev
+pnpm exec prisma migrate dev
 
 # Start development server
 pnpm run start:dev

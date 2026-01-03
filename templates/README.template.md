@@ -62,8 +62,8 @@ cp .env.example .env
 
 <!-- Prisma -->
 ```bash
-npx prisma generate
-npx prisma migrate dev
+pnpm exec prisma generate
+pnpm exec prisma migrate dev
 ```
 
 <!-- TypeORM -->
@@ -73,7 +73,7 @@ pnpm run typeorm migration:run
 
 <!-- Drizzle -->
 ```bash
-npx drizzle-kit migrate
+pnpm exec drizzle-kit migrate
 ```
 
 ### 5. Run Development Server
@@ -105,11 +105,11 @@ The API will be available at `http://localhost:3000`
 <!-- Prisma -->
 | Command | Description |
 |---------|-------------|
-| `npx prisma generate` | Generate Prisma client |
-| `npx prisma migrate dev` | Run migrations (dev) |
-| `npx prisma migrate deploy` | Run migrations (prod) |
-| `npx prisma studio` | Open Prisma Studio |
-| `npx prisma db seed` | Seed database |
+| `pnpm exec prisma generate` | Generate Prisma client |
+| `pnpm exec prisma migrate dev` | Run migrations (dev) |
+| `pnpm exec prisma migrate deploy` | Run migrations (prod) |
+| `pnpm exec prisma studio` | Open Prisma Studio |
+| `pnpm exec prisma db seed` | Seed database |
 
 <!-- TypeORM -->
 | Command | Description |
@@ -121,9 +121,9 @@ The API will be available at `http://localhost:3000`
 <!-- Drizzle -->
 | Command | Description |
 |---------|-------------|
-| `npx drizzle-kit generate` | Generate migrations |
-| `npx drizzle-kit migrate` | Run migrations |
-| `npx drizzle-kit studio` | Open Drizzle Studio |
+| `pnpm exec drizzle-kit generate` | Generate migrations |
+| `pnpm exec drizzle-kit migrate` | Run migrations |
+| `pnpm exec drizzle-kit studio` | Open Drizzle Studio |
 
 ---
 
@@ -265,7 +265,7 @@ PORT=3001 pnpm run start:dev
 <!-- Prisma -->
 ```bash
 # Reset database (WARNING: deletes all data)
-npx prisma migrate reset
+pnpm exec prisma migrate reset
 ```
 
 <!-- TypeORM -->

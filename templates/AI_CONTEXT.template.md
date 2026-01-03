@@ -438,9 +438,9 @@ Then proceed to: **{{NEXT_PROJECT}}**
 
 <!-- Prisma -->
 ```bash
-npx prisma generate
-npx prisma migrate dev --name {{migration_name}}
-npx prisma studio
+pnpm exec prisma generate
+pnpm exec prisma migrate dev --name {{migration_name}}
+pnpm exec prisma studio
 ```
 
 <!-- TypeORM -->
@@ -451,9 +451,9 @@ pnpm run typeorm migration:run
 
 <!-- Drizzle -->
 ```bash
-npx drizzle-kit generate
-npx drizzle-kit migrate
-npx drizzle-kit studio
+pnpm exec drizzle-kit generate
+pnpm exec drizzle-kit migrate
+pnpm exec drizzle-kit studio
 ```
 
 ---
