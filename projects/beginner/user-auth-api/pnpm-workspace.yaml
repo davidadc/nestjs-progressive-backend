@@ -1,0 +1,1 @@
+onlyBuiltDependencies: '["bcrypt", "prisma", "@prisma/engines", "@nestjs/core"]'
