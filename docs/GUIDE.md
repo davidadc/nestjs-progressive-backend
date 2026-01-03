@@ -1482,7 +1482,7 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Swagger
   - [x] Usage examples
 
-### Notes App Backend
+### Notes App Backend 🟨
 
 - [ ] **Entities:** User and Note with relationships
 - [ ] **Endpoints:**
