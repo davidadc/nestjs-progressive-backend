@@ -138,24 +138,32 @@ src/
 
 ## Documentation Reference
 
-- `GUIDE.md` - Full project descriptions and setup
-- `ARCHITECTURE.md` - Detailed architecture patterns (17 design patterns with examples)
-- `API_CONVENTIONS.md` - REST conventions by level, RFC 7807 implementation
-- `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` - Real payment system example evolving through all levels
-- `DOCUMENTATION_INDEX.md` - Quick navigation index for all documentation
-- `AI_CONTEXT.template.md` - Template for creating per-project AI context files
+### docs/ folder
+- `docs/GUIDE.md` - Full project descriptions and setup
+- `docs/ARCHITECTURE.md` - Detailed architecture patterns (17 design patterns with examples)
+- `docs/API_CONVENTIONS.md` - REST conventions by level, RFC 7807 implementation
+- `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` - Real payment system example evolving through all levels
+- `docs/DOCUMENTATION_INDEX.md` - Quick navigation index for all documentation
+
+### templates/ folder
+- `templates/AI_CONTEXT.template.md` - Template for creating per-project AI context files
+- `templates/README.template.md` - Template for per-project README files
+- `templates/PROGRESS.template.md` - Template for tracking implementation progress and planification
+
+### Per-project files
 - `AI_CONTEXT.md` (per project) - Project-specific context for Claude Code
+- `PROGRESS.md` (per project) - Implementation checklist and progress tracking
 
 ## Recommended Path for Starting a New Project
 
 When the user wants to start a new project, follow this documentation path:
 
-### Step 1: Project Selection (GUIDE.md)
+### Step 1: Project Selection (docs/GUIDE.md)
 - Review available projects by level (Beginner → Expert)
 - Each project includes: description, ORM, entities, endpoints, requirements
 - Help user choose based on their experience level
 
-### Step 2: Architecture (ARCHITECTURE.md)
+### Step 2: Architecture (docs/ARCHITECTURE.md)
 Consult the section matching the project level:
 | Level | Architecture | Key Patterns |
 |-------|-------------|--------------|
@@ -164,14 +172,14 @@ Consult the section matching the project level:
 | Advanced | 5+ Layer DDD + CQRS | + Mediator, State, Domain Events |
 | Expert | Distributed + Event Sourcing | + Saga, Circuit Breaker |
 
-### Step 3: API Conventions (API_CONVENTIONS.md)
+### Step 3: API Conventions (docs/API_CONVENTIONS.md)
 Consult the section matching the project level:
 - **Beginner:** Basic REST (URLs, pagination, simple errors)
 - **Intermediate:** + Versioning, rate limiting, Swagger, response envelopes
 - **Advanced:** RFC 7807 Problem Details (MANDATORY)
 - **Expert:** + Webhooks, async operations, distributed tracing
 
-### Step 4: Real Examples (DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md)
+### Step 4: Real Examples (docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md)
 - Shows a Payment System evolving from Beginner to Expert
 - Demonstrates when and why to introduce each pattern
 - Reference working code for implementation guidance
@@ -179,10 +187,17 @@ Consult the section matching the project level:
 ### Step 5: Project Setup
 Copy templates to the project folder:
 ```bash
-cp AI_CONTEXT.template.md projects/{level}/{project}/AI_CONTEXT.md
-cp README.template.md projects/{level}/{project}/README.md
+cp templates/AI_CONTEXT.template.md projects/{level}/{project}/AI_CONTEXT.md
+cp templates/README.template.md projects/{level}/{project}/README.md
+cp templates/PROGRESS.template.md projects/{level}/{project}/PROGRESS.md
 ```
 Then customize all `{{PLACEHOLDER}}` values.
+
+**PROGRESS.md Purpose:**
+- Serves as implementation planification before starting
+- Tracks completion status of each phase
+- Documents endpoints, entities, and folder structure
+- Must be reviewed and approved by user before implementation begins
 
 ### Step 6: Implementation Workflow
 Follow the phases from the project's `AI_CONTEXT.md`:
@@ -196,11 +211,12 @@ Follow the phases from the project's `AI_CONTEXT.md`:
 ### Quick Decision Guide
 
 **"What document should I check?"**
-- Project overview/selection → `GUIDE.md`
-- Patterns for my level → `ARCHITECTURE.md`
-- Endpoint design → `API_CONVENTIONS.md`
-- Code examples → `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
-- Navigate docs → `DOCUMENTATION_INDEX.md`
+- Project overview/selection → `docs/GUIDE.md`
+- Patterns for my level → `docs/ARCHITECTURE.md`
+- Endpoint design → `docs/API_CONVENTIONS.md`
+- Code examples → `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
+- Navigate docs → `docs/DOCUMENTATION_INDEX.md`
+- Templates → `templates/` folder
 
 **"When must I use RFC 7807?"**
 - Advanced and Expert levels (MANDATORY)

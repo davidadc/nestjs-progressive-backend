@@ -134,12 +134,12 @@
 
 ---
 
-### **6. Templates** - Per-Project Documentation
+### **6. Templates** (in `templates/` folder)
 
 **For whom:** Developers starting a new project
 **When to use:** When setting up a project
 
-#### AI_CONTEXT.template.md
+#### templates/AI_CONTEXT.template.md
 Template for Claude Code context. Contains placeholders for:
 - Project information and stack
 - Folder structure
@@ -149,7 +149,7 @@ Template for Claude Code context. Contains placeholders for:
 - Testing strategy
 - Workflow prompts
 
-#### README.template.md
+#### templates/README.template.md
 Template for project README. Contains placeholders for:
 - Setup instructions
 - Available scripts (with ORM-specific commands)
@@ -157,15 +157,24 @@ Template for project README. Contains placeholders for:
 - Environment variables
 - Troubleshooting
 
-#### AI_CONTEXT.example.md
+#### templates/PROGRESS.template.md
+Template for implementation progress tracking. Contains:
+- Implementation phases checklist
+- Endpoints table
+- Entity definitions
+- Folder structure
+- Design decisions
+
+#### templates/AI_CONTEXT.example.md
 Filled example (User Auth API) showing how to customize the template.
 
 **Usage:**
 
 ```bash
-# Copy templates to your project
-cp AI_CONTEXT.template.md projects/beginner/user-auth-api/AI_CONTEXT.md
-cp README.template.md projects/beginner/user-auth-api/README.md
+# Copy templates to your project (from monorepo root)
+cp templates/AI_CONTEXT.template.md projects/beginner/user-auth-api/AI_CONTEXT.md
+cp templates/README.template.md projects/beginner/user-auth-api/README.md
+cp templates/PROGRESS.template.md projects/beginner/user-auth-api/PROGRESS.md
 
 # Edit placeholders with project-specific details
 # Then run Claude Code from the project directory
@@ -177,18 +186,20 @@ cp README.template.md projects/beginner/user-auth-api/README.md
 
 ### **Scenario 1: Start New Project**
 
-1. Read: `GUIDE.md` → Choose level and project
-2. Consult: `ARCHITECTURE.md` → Read section corresponding to the level
-3. Copy templates to project folder:
-   - `AI_CONTEXT.template.md` → `projects/{level}/{project}/AI_CONTEXT.md`
-   - `README.template.md` → `projects/{level}/{project}/README.md`
+1. Read: `docs/GUIDE.md` → Choose level and project
+2. Consult: `docs/ARCHITECTURE.md` → Read section corresponding to the level
+3. Copy templates to project folder (from monorepo root):
+   - `templates/AI_CONTEXT.template.md` → `projects/{level}/{project}/AI_CONTEXT.md`
+   - `templates/README.template.md` → `projects/{level}/{project}/README.md`
+   - `templates/PROGRESS.template.md` → `projects/{level}/{project}/PROGRESS.md`
 4. Customize: Replace placeholders with project-specific details
-5. Start: Follow `README.md` Quick Start
-6. Code: Run `claude code` from project directory
+5. Review: Get PROGRESS.md approved before implementation
+6. Start: Follow `README.md` Quick Start
+7. Code: Run `claude code` from project directory
 
 ### **Scenario 2: Implement Endpoint**
 
-1. Read: `API_CONVENTIONS.md` → Section for your level
+1. Read: `docs/API_CONVENTIONS.md` → Section for your level
 2. Design: URL, methods, status codes
 3. If Advanced+: Implement RFC 7807 with `ProblemDetailsFactory`
 4. Validate: Against conventions for your level
@@ -196,24 +207,24 @@ cp README.template.md projects/beginner/user-auth-api/README.md
 ### **Scenario 3: Solve Architectural Problem**
 
 1. Identify the problem
-2. Consult: `ARCHITECTURE.md` → "Design Patterns" section
-3. Study: `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` → Real example
+2. Consult: `docs/ARCHITECTURE.md` → "Design Patterns" section
+3. Study: `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` → Real example
 4. Implement: Adapting to the context
 
 ### **Scenario 4: Learn a Pattern**
 
 1. Choose pattern (e.g.: Strategy)
-2. Read: `ARCHITECTURE.md` → "Design Patterns" section of the corresponding level
-3. Example: `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` → Real implementation
+2. Read: `docs/ARCHITECTURE.md` → "Design Patterns" section of the corresponding level
+3. Example: `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md` → Real implementation
 4. Practice: Implement in your project
 
 ### **Scenario 5: Scale to Next Level**
 
 1. Analyze: What problems do you have?
-2. Consult: `ARCHITECTURE.md` → Next level
+2. Consult: `docs/ARCHITECTURE.md` → Next level
 3. Refactor: Introduce new patterns
 4. Validate: Tests pass
-5. Document: Update `AI_CONTEXT.md`
+5. Document: Update `AI_CONTEXT.md` and `PROGRESS.md`
 
 ---
 
@@ -222,11 +233,11 @@ cp README.template.md projects/beginner/user-auth-api/README.md
 ```
 START
   │
-  ├─→ GUIDE.md (Which project to do?)
+  ├─→ docs/GUIDE.md (Which project to do?)
   │
   ├─→ README.md (Quick setup)
   │
-  ├─→ ARCHITECTURE.md
+  ├─→ docs/ARCHITECTURE.md
   │    ├─→ SOLID/DRY Principles
   │    ├─→ Beginner Level (3 layers)
   │    ├─→ Intermediate Level (4 layers)
@@ -234,12 +245,17 @@ START
   │    ├─→ Expert Level (Microservices)
   │    └─→ DESIGN PATTERNS (17 patterns)
   │
-  ├─→ DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md (See patterns in action)
+  ├─→ docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md (See patterns in action)
   │
-  ├─→ API_CONVENTIONS.md (REST Endpoints)
+  ├─→ docs/API_CONVENTIONS.md (REST Endpoints)
   │    └─→ RFC 7807 from Advanced
   │
-  └─→ AI_CONTEXT.md (For Claude Code)
+  ├─→ templates/ (Copy to project)
+  │    ├─→ AI_CONTEXT.template.md
+  │    ├─→ README.template.md
+  │    └─→ PROGRESS.template.md
+  │
+  └─→ Project files (AI_CONTEXT.md, PROGRESS.md)
 ```
 
 ---
@@ -358,24 +374,29 @@ Final:     ARCHITECTURE.md (Expert) + Event Sourcing
 
 ```
 nestjs-progressive-backend/
-├── GUIDE.md                              # Main guide
-├── README.md                             # For cloning
-├── CLAUDE.md                             # Claude Code instructions
-├── ARCHITECTURE.md                       # Architecture + patterns reference
-├── API_CONVENTIONS.md                    # REST conventions
-├── DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md # Progressive example
-├── DOCUMENTATION_INDEX.md                # This index
+├── docs/                                 # All documentation
+│   ├── GUIDE.md                          # Main guide
+│   ├── ARCHITECTURE.md                   # Architecture + patterns reference
+│   ├── API_CONVENTIONS.md                # REST conventions
+│   ├── DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md # Progressive example
+│   └── DOCUMENTATION_INDEX.md            # This index
 │
-├── AI_CONTEXT.template.md                # Template for per-project AI context
-├── README.template.md                    # Template for per-project README
-├── AI_CONTEXT.example.md                 # Filled example (User Auth)
+├── templates/                            # All templates
+│   ├── AI_CONTEXT.template.md            # Template for per-project AI context
+│   ├── AI_CONTEXT.example.md             # Filled example (User Auth)
+│   ├── README.template.md                # Template for per-project README
+│   └── PROGRESS.template.md              # Template for progress tracking
 │
-└── projects/
-    └── beginner/
-        └── user-auth-api/
-            ├── README.md                 # Project-specific README
-            ├── AI_CONTEXT.md             # Project-specific AI context
-            └── src/
+├── projects/
+│   └── beginner/
+│       └── user-auth-api/
+│           ├── README.md                 # Project-specific README
+│           ├── AI_CONTEXT.md             # Project-specific AI context
+│           ├── PROGRESS.md               # Implementation progress
+│           └── src/
+│
+├── README.md                             # Monorepo overview
+└── CLAUDE.md                             # Claude Code instructions
 ```
 
 ---

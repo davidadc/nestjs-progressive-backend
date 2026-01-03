@@ -88,6 +88,17 @@ pnpm run start:dev
 
 ```
 nestjs-progressive-backend/
+├── docs/                        # All documentation
+│   ├── GUIDE.md
+│   ├── ARCHITECTURE.md
+│   ├── API_CONVENTIONS.md
+│   ├── DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md
+│   └── DOCUMENTATION_INDEX.md
+├── templates/                   # All templates
+│   ├── AI_CONTEXT.template.md
+│   ├── AI_CONTEXT.example.md
+│   ├── README.template.md
+│   └── PROGRESS.template.md
 ├── projects/
 │   ├── beginner/
 │   │   ├── user-auth-api/
@@ -109,21 +120,27 @@ nestjs-progressive-backend/
 │       ├── streaming-backend/
 │       ├── saas-multi-tenant/
 │       └── recommendation-engine/
+├── scripts/                     # Utility scripts
 ├── docker-compose.yml
-├── README.md (this file)
-└── GUIDE.md (detailed documentation)
+├── README.md                    # This file
+└── CLAUDE.md                    # AI instructions
 ```
 
 ---
 
 ## Documentation
 
-- **[GUIDE.md](./GUIDE.md)** - Complete documentation for all 16 projects
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Patterns and architecture decisions (17 patterns)
-- **[API_CONVENTIONS.md](./API_CONVENTIONS.md)** - REST conventions by level (RFC 7807 for Advanced+)
-- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Quick navigation index
-- **[DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md](./DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md)** - Real payment system example
+- **[GUIDE.md](./docs/GUIDE.md)** - Complete documentation for all 16 projects
+- **[ARCHITECTURE.md](./docs/ARCHITECTURE.md)** - Patterns and architecture decisions (17 patterns)
+- **[API_CONVENTIONS.md](./docs/API_CONVENTIONS.md)** - REST conventions by level (RFC 7807 for Advanced+)
+- **[DOCUMENTATION_INDEX.md](./docs/DOCUMENTATION_INDEX.md)** - Quick navigation index
+- **[DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md](./docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md)** - Real payment system example
 - **[CLAUDE.md](./CLAUDE.md)** - Instructions for Claude Code
+
+### Templates
+- **[AI_CONTEXT.template.md](./templates/AI_CONTEXT.template.md)** - Template for per-project AI context
+- **[README.template.md](./templates/README.template.md)** - Template for per-project README
+- **[PROGRESS.template.md](./templates/PROGRESS.template.md)** - Template for implementation progress tracking
 
 ---
 
@@ -132,13 +149,13 @@ nestjs-progressive-backend/
 Follow this step-by-step workflow when starting any of the 16 projects:
 
 ### Step 1: Choose Your Project
-**Read:** `GUIDE.md`
+**Read:** `docs/GUIDE.md`
 - Review the 16 projects organized by level (Beginner → Expert)
 - Each project includes description, entities, endpoints, and requirements
 - Check the ORM assignment (Prisma, TypeORM, or Drizzle)
 
 ### Step 2: Understand the Architecture
-**Read:** `ARCHITECTURE.md` (section for your level)
+**Read:** `docs/ARCHITECTURE.md` (section for your level)
 - **Beginner:** 3-Layer (Controller → Service → Repository)
 - **Intermediate:** 4-Layer Clean Architecture
 - **Advanced:** 5+ Layer with DDD, CQRS
@@ -153,14 +170,14 @@ Review the design patterns for your level:
 | Expert | + CQRS, Event Sourcing, Circuit Breaker, Saga |
 
 ### Step 3: Learn API Conventions
-**Read:** `API_CONVENTIONS.md` (section for your level)
+**Read:** `docs/API_CONVENTIONS.md` (section for your level)
 - URL structure, HTTP methods, status codes
 - Request/response formats
 - Error handling approach
 - **Advanced+:** RFC 7807 Problem Details (MANDATORY)
 
 ### Step 4: Study Real Examples
-**Read:** `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
+**Read:** `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
 - See how a Payment System evolves from Beginner to Expert
 - Understand when and why to introduce each pattern
 - Reference working code for each level
@@ -171,17 +188,21 @@ Review the design patterns for your level:
 # Navigate to your project directory
 cd projects/{level}/{project-name}
 
-# Copy the AI context template
-cp ../../AI_CONTEXT.template.md ./AI_CONTEXT.md
-
-# Copy the README template
-cp ../../README.template.md ./README.md
+# Copy all templates (from project directory)
+cp ../../../templates/AI_CONTEXT.template.md ./AI_CONTEXT.md
+cp ../../../templates/README.template.md ./README.md
+cp ../../../templates/PROGRESS.template.md ./PROGRESS.md
 ```
 
 **Customize the templates:**
 - Replace all `{{PLACEHOLDER}}` values with project-specific details
 - Remove sections that don't apply to your level
 - Add project-specific endpoints and entities
+
+**PROGRESS.md serves as:**
+- Implementation planification (must be approved before coding)
+- Progress tracking checklist
+- Technical reference (endpoints, entities, folder structure)
 
 ### Step 6: Start Developing
 **Use your project's `AI_CONTEXT.md` as a guide:**
@@ -198,17 +219,22 @@ cp ../../README.template.md ./README.md
 ```
 DOCUMENTATION FLOW:
 
-GUIDE.md                    → "What project should I build?"
+docs/GUIDE.md                    → "What project should I build?"
         ↓
-ARCHITECTURE.md             → "What patterns should I use?"
+docs/ARCHITECTURE.md             → "What patterns should I use?"
         ↓
-API_CONVENTIONS.md          → "How should I design endpoints?"
+docs/API_CONVENTIONS.md          → "How should I design endpoints?"
         ↓
-DESIGN_PATTERNS_EXAMPLE.md  → "Show me real code examples"
+docs/DESIGN_PATTERNS_...         → "Show me real code examples"
         ↓
-AI_CONTEXT.template.md      → "Set up my project context"
+templates/ (copy to project):
+  - AI_CONTEXT.template.md       → "Set up my project context"
+  - README.template.md           → "Document my project"
+  - PROGRESS.template.md         → "Plan my implementation"
         ↓
-Project's AI_CONTEXT.md     → "Guide my implementation"
+Project's PROGRESS.md            → "Get approval, then track progress"
+        ↓
+Project's AI_CONTEXT.md          → "Guide my implementation"
 ```
 
 ---
@@ -312,7 +338,7 @@ docker-compose up -d
 | **TypeORM** | 6 projects | Complex domains, DDD, enterprise patterns |
 | **Drizzle** | 4 projects | Performance-critical, SQL control |
 
-See [GUIDE.md](./GUIDE.md) for specific ORM assignments per project.
+See [GUIDE.md](./docs/GUIDE.md) for specific ORM assignments per project.
 
 ### DevOps
 
