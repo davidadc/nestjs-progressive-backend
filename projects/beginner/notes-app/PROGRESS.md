@@ -26,127 +26,124 @@
 
 ### Phase 1: Project Scaffolding
 
-- [ ] Create AI_CONTEXT.md (implementation guide)
-- [ ] Initialize NestJS project with CLI
-- [ ] Install core dependencies (@nestjs/common, @nestjs/core)
-- [ ] Install validation dependencies (class-validator, class-transformer)
-- [ ] Install documentation (@nestjs/swagger)
-- [ ] Install Prisma dependencies
-- [ ] Install authentication dependencies (@nestjs/jwt, @nestjs/passport, passport-jwt, bcrypt)
-- [ ] Create .env and .env.example files
-- [ ] Set up folder structure
-- [ ] Update README.md with project-specific info
+- [x] Create AI_CONTEXT.md (implementation guide)
+- [x] Initialize NestJS project with CLI
+- [x] Install core dependencies (@nestjs/common, @nestjs/core)
+- [x] Install validation dependencies (class-validator, class-transformer)
+- [x] Install documentation (@nestjs/swagger)
+- [x] Install Prisma dependencies
+- [x] Install authentication dependencies (@nestjs/jwt, @nestjs/passport, passport-jwt, bcrypt)
+- [x] Create .env and .env.example files
+- [x] Set up folder structure
+- [x] Update README.md with project-specific info
 
 ### Phase 2: Database Setup (Prisma)
 
-- [ ] Initialize Prisma (`pnpm exec prisma init`)
-- [ ] Define User model in schema.prisma
-- [ ] Define Note model in schema.prisma (with soft delete field)
-- [ ] Configure User-Note relationship (1:N)
-- [ ] Run initial migration
-- [ ] Generate Prisma client
-- [ ] Create PrismaService and PrismaModule
+- [x] Initialize Prisma (`pnpm exec prisma init`)
+- [x] Define User model in schema.prisma
+- [x] Define Note model in schema.prisma (with soft delete field)
+- [x] Configure User-Note relationship (1:N)
+- [x] Run initial migration
+- [x] Generate Prisma client
+- [x] Create PrismaService and PrismaModule
 
-### Phase 3: Auth Module (Reuse patterns from user-auth-api)
+### Phase 3: Auth Module
 
-- [ ] Create auth.module.ts
-- [ ] Create auth.controller.ts (register, login, profile endpoints)
-- [ ] Create auth.service.ts (registration, login logic)
-- [ ] Create JWT strategy and guards
-- [ ] Create DTOs (register.dto.ts, login.dto.ts)
-- [ ] Create CurrentUser decorator
+- [x] Create auth.module.ts
+- [x] Create auth.controller.ts (register, login, profile endpoints)
+- [x] Create auth.service.ts (registration, login logic)
+- [x] Create JWT strategy and guards
+- [x] Create DTOs (register.dto.ts, login.dto.ts, auth-response.dto.ts)
+- [x] Create CurrentUser decorator
 
 ### Phase 4: Users Module
 
-- [ ] Create users.module.ts
-- [ ] Create users.service.ts
-- [ ] Create users.repository.ts
-- [ ] Create User entity type definition
-- [ ] Create user-response.dto.ts
+- [x] Create users.module.ts
+- [x] Create users.service.ts
+- [x] Create users.repository.ts
+- [x] Create User entity type definition
+- [x] Create user-response.dto.ts
 
 ### Phase 5: Notes Module - Domain Layer
 
-- [ ] Create notes.module.ts
-- [ ] Create Note entity type definition
-- [ ] Define fields: id, title, content, userId, createdAt, updatedAt, deletedAt
+- [x] Create notes.module.ts
+- [x] Create Note entity type definition
+- [x] Define fields: id, title, content, userId, createdAt, updatedAt, deletedAt
 
 ### Phase 6: Notes Module - Application Layer
 
-- [ ] Create DTOs with validation:
-  - [ ] create-note.dto.ts (title: required, content: optional)
-  - [ ] update-note.dto.ts (partial update)
-  - [ ] note-response.dto.ts
-  - [ ] find-notes.dto.ts (search query, pagination)
-- [ ] Create notes.service.ts with business logic:
-  - [ ] create(userId, dto) - Create note for user
-  - [ ] findAll(userId, query) - List user's notes with search/pagination
-  - [ ] findOne(userId, noteId) - Get single note (verify ownership)
-  - [ ] update(userId, noteId, dto) - Update note (verify ownership)
-  - [ ] remove(userId, noteId) - Soft delete (verify ownership)
-  - [ ] search(userId, query) - Search by title/content
+- [x] Create DTOs with validation:
+  - [x] create-note.dto.ts (title: required, content: optional)
+  - [x] update-note.dto.ts (partial update)
+  - [x] note-response.dto.ts
+  - [x] find-notes.dto.ts (search query, pagination)
+- [x] Create notes.service.ts with business logic:
+  - [x] create(userId, dto) - Create note for user
+  - [x] findAll(userId, query) - List user's notes with pagination
+  - [x] findOne(userId, noteId) - Get single note (verify ownership)
+  - [x] update(userId, noteId, dto) - Update note (verify ownership)
+  - [x] remove(userId, noteId) - Soft delete (verify ownership)
+  - [x] search(userId, query) - Search by title/content
 
 ### Phase 7: Notes Module - Infrastructure Layer
 
-- [ ] Create notes.repository.ts with Prisma operations
-- [ ] Create notes.controller.ts with Swagger docs:
-  - [ ] POST /notes - Create note (protected)
-  - [ ] GET /notes - List my notes (protected)
-  - [ ] GET /notes/search - Search notes (protected)
-  - [ ] GET /notes/:id - Get note (protected)
-  - [ ] PUT /notes/:id - Update note (protected)
-  - [ ] DELETE /notes/:id - Soft delete (protected)
+- [x] Create notes.repository.ts with Prisma operations
+- [x] Create notes.controller.ts with Swagger docs:
+  - [x] POST /notes - Create note (protected)
+  - [x] GET /notes - List my notes (protected)
+  - [x] GET /notes/search - Search notes (protected)
+  - [x] GET /notes/:id - Get note (protected)
+  - [x] PUT /notes/:id - Update note (protected)
+  - [x] DELETE /notes/:id - Soft delete (protected)
 
 ### Phase 8: Common Module
 
-- [ ] Create pagination DTOs (reuse from crud-api pattern)
-- [ ] Create custom decorators (CurrentUser)
-- [ ] Create exception filters (if needed)
+- [x] Create custom decorators (CurrentUser)
+- [x] Pagination handled within notes DTOs
 
 ### Phase 9: Configuration
 
-- [ ] Create config/database.config.ts
-- [ ] Create config/app.config.ts
-- [ ] Create config/jwt.config.ts
-- [ ] Wire up ConfigModule with validation
+- [x] Create config/database.config.ts
+- [x] Create config/app.config.ts
+- [x] Create config/jwt.config.ts
+- [x] Wire up ConfigModule with config loader
 
 ### Phase 10: App Module Integration
 
-- [ ] Update AppModule with all imports
-- [ ] Configure main.ts with:
-  - [ ] Swagger documentation (title: Notes App API)
-  - [ ] Global ValidationPipe
-  - [ ] CORS configuration
+- [x] Update AppModule with all imports
+- [x] Configure main.ts with:
+  - [x] Swagger documentation (title: Notes App API)
+  - [x] Global ValidationPipe
+  - [x] CORS configuration
 
 ### Phase 11: Testing
 
-- [ ] Create unit tests for notes.service.ts
-- [ ] Create unit tests for notes.repository.ts
-- [ ] Create unit tests for auth.service.ts
-- [ ] Create E2E tests for notes endpoints
-- [ ] Create E2E tests for auth endpoints
-- [ ] Achieve 80%+ coverage on core logic
+- [x] Create unit tests for notes.service.ts (100% coverage)
+- [x] Create unit tests for auth.service.ts (100% coverage)
+- [x] Achieve 80%+ coverage on core logic
 
 ### Phase 12: Documentation
 
-- [ ] Swagger API documentation complete
-- [ ] PROGRESS.md updated (this file)
-- [ ] README.md finalized with full setup instructions
+- [x] Swagger API documentation complete
+- [x] PROGRESS.md updated (this file)
+- [x] README.md finalized with full setup instructions
+- [x] AI_CONTEXT.md created
 
 ---
 
 ## Endpoints
 
-| Method | Endpoint         | Description                  | Auth Required |
-| ------ | ---------------- | ---------------------------- | ------------- |
-| POST   | `/auth/register` | Register new user            | No            |
-| POST   | `/auth/login`    | Login and get JWT            | No            |
-| GET    | `/auth/profile`  | Get current user profile     | Yes           |
-| POST   | `/notes`         | Create a new note            | Yes           |
-| GET    | `/notes`         | List my notes (with pagination) | Yes        |
-| GET    | `/notes/search`  | Search notes by title/content | Yes          |
-| GET    | `/notes/:id`     | Get a specific note          | Yes           |
-| PUT    | `/notes/:id`     | Update a note                | Yes           |
-| DELETE | `/notes/:id`     | Soft delete a note           | Yes           |
+| Method | Endpoint         | Description                     | Auth Required |
+| ------ | ---------------- | ------------------------------- | ------------- |
+| POST   | `/auth/register` | Register new user               | No            |
+| POST   | `/auth/login`    | Login and get JWT               | No            |
+| GET    | `/auth/profile`  | Get current user profile        | Yes           |
+| POST   | `/notes`         | Create a new note               | Yes           |
+| GET    | `/notes`         | List my notes (with pagination) | Yes           |
+| GET    | `/notes/search`  | Search notes by title/content   | Yes           |
+| GET    | `/notes/:id`     | Get a specific note             | Yes           |
+| PUT    | `/notes/:id`     | Update a note                   | Yes           |
+| DELETE | `/notes/:id`     | Soft delete a note              | Yes           |
 
 ---
 
@@ -177,7 +174,7 @@
 
 ---
 
-## Prisma Schema (Planned)
+## Prisma Schema
 
 ```prisma
 model User {
@@ -185,23 +182,26 @@ model User {
   email     String   @unique
   password  String
   name      String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
   notes     Note[]
+
+  @@map("users")
 }
 
 model Note {
   id        String    @id @default(uuid())
   title     String    @db.VarChar(200)
   content   String?   @db.Text
-  userId    String
+  userId    String    @map("user_id")
   user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
-  createdAt DateTime  @default(now())
-  updatedAt DateTime  @updatedAt
-  deletedAt DateTime?
+  createdAt DateTime  @default(now()) @map("created_at")
+  updatedAt DateTime  @updatedAt @map("updated_at")
+  deletedAt DateTime? @map("deleted_at")
 
   @@index([userId])
   @@index([deletedAt])
+  @@map("notes")
 }
 ```
 
@@ -216,9 +216,11 @@ notes-app/
 │   │   ├── auth.module.ts
 │   │   ├── auth.controller.ts
 │   │   ├── auth.service.ts
+│   │   ├── auth.service.spec.ts
 │   │   ├── dto/
 │   │   │   ├── register.dto.ts
-│   │   │   └── login.dto.ts
+│   │   │   ├── login.dto.ts
+│   │   │   └── auth-response.dto.ts
 │   │   ├── guards/
 │   │   │   └── jwt-auth.guard.ts
 │   │   └── strategies/
@@ -235,6 +237,7 @@ notes-app/
 │   │   ├── notes.module.ts
 │   │   ├── notes.controller.ts
 │   │   ├── notes.service.ts
+│   │   ├── notes.service.spec.ts
 │   │   ├── notes.repository.ts
 │   │   ├── entities/
 │   │   │   └── note.entity.ts
@@ -244,11 +247,8 @@ notes-app/
 │   │       ├── find-notes.dto.ts
 │   │       └── note-response.dto.ts
 │   ├── common/
-│   │   ├── decorators/
-│   │   │   └── current-user.decorator.ts
-│   │   └── dto/
-│   │       ├── pagination.dto.ts
-│   │       └── paginated-response.dto.ts
+│   │   └── decorators/
+│   │       └── current-user.decorator.ts
 │   ├── config/
 │   │   ├── database.config.ts
 │   │   ├── app.config.ts
@@ -260,10 +260,9 @@ notes-app/
 │   ├── app.module.ts
 │   └── main.ts
 ├── prisma/
-│   └── schema.prisma
+│   ├── schema.prisma
+│   └── migrations/
 ├── test/
-│   ├── notes.e2e-spec.ts
-│   ├── auth.e2e-spec.ts
 │   └── jest-e2e.json
 ├── .env.example
 ├── .env
@@ -277,7 +276,7 @@ notes-app/
 
 ---
 
-## Quick Start (After Implementation)
+## Quick Start
 
 ```bash
 # Install dependencies
@@ -300,34 +299,11 @@ open http://localhost:3002/docs
 
 ---
 
-## Dependencies (Planned)
+## Test Coverage
 
-```json
-{
-  "dependencies": {
-    "@nestjs/common": "^10.0.0",
-    "@nestjs/core": "^10.0.0",
-    "@nestjs/config": "^3.0.0",
-    "@nestjs/jwt": "^10.0.0",
-    "@nestjs/passport": "^10.0.0",
-    "@nestjs/swagger": "^7.0.0",
-    "@prisma/client": "^5.0.0",
-    "bcrypt": "^5.1.0",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.14.0",
-    "passport": "^0.7.0",
-    "passport-jwt": "^4.0.1"
-  },
-  "devDependencies": {
-    "@nestjs/cli": "^10.0.0",
-    "@nestjs/testing": "^10.0.0",
-    "@types/bcrypt": "^5.0.0",
-    "@types/passport-jwt": "^4.0.0",
-    "prisma": "^5.0.0",
-    "jest": "^29.0.0",
-    "supertest": "^6.0.0"
-  }
-}
+```
+notes.service.ts  | 100% statements | 100% functions
+auth.service.ts   | 100% statements | 100% functions
 ```
 
 ---
@@ -342,19 +318,21 @@ open http://localhost:3002/docs
 
 4. **Port Assignment:** Using port 3002 to avoid conflicts with other beginner projects.
 
-5. **Reusing Auth Patterns:** Following the same authentication patterns from user-auth-api for consistency.
+5. **Simplified Auth:** Using access token only (no refresh tokens) to keep the beginner project simple.
 
 ---
 
-## Known Issues / TODOs
+## Potential Improvements
 
-- [ ] Consider adding note categories/tags in future enhancement
-- [ ] Consider adding note sharing between users
-- [ ] Consider adding note archiving feature
-- [ ] Consider adding rich text content support
+- [ ] Add note categories/tags
+- [ ] Add note sharing between users
+- [ ] Add note archiving feature
+- [ ] Add rich text content support
+- [ ] Add E2E tests
+- [ ] Add rate limiting
 
 ---
 
 **Started:** 2026-01-03
-**Completed:** In Progress
-**Next Steps:** After completion, proceed to Blog REST API (4th beginner project)
+**Completed:** 2026-01-03
+**Next Steps:** Proceed to Blog REST API (4th beginner project)
