@@ -368,6 +368,7 @@ describe('Auth Endpoints', () => {
 ```
 
 **Dev Dependencies:**
+
 ```json
 {
   "prisma": "^5.0.0"

@@ -138,6 +138,7 @@ nestjs-progressive-backend/
 - **[CLAUDE.md](./CLAUDE.md)** - Instructions for Claude Code
 
 ### Templates
+
 - **[AI_CONTEXT.template.md](./templates/AI_CONTEXT.template.md)** - Template for per-project AI context
 - **[README.template.md](./templates/README.template.md)** - Template for per-project README
 - **[PROGRESS.template.md](./templates/PROGRESS.template.md)** - Template for implementation progress tracking
@@ -149,13 +150,17 @@ nestjs-progressive-backend/
 Follow this step-by-step workflow when starting any of the 16 projects:
 
 ### Step 1: Choose Your Project
+
 **Read:** `docs/GUIDE.md`
+
 - Review the 16 projects organized by level (Beginner → Expert)
 - Each project includes description, entities, endpoints, and requirements
 - Check the ORM assignment (Prisma, TypeORM, or Drizzle)
 
 ### Step 2: Understand the Architecture
+
 **Read:** `docs/ARCHITECTURE.md` (section for your level)
+
 - **Beginner:** 3-Layer (Controller → Service → Repository)
 - **Intermediate:** 4-Layer Clean Architecture
 - **Advanced:** 5+ Layer with DDD, CQRS
@@ -170,20 +175,26 @@ Review the design patterns for your level:
 | Expert | + CQRS, Event Sourcing, Circuit Breaker, Saga |
 
 ### Step 3: Learn API Conventions
+
 **Read:** `docs/API_CONVENTIONS.md` (section for your level)
+
 - URL structure, HTTP methods, status codes
 - Request/response formats
 - Error handling approach
 - **Advanced+:** RFC 7807 Problem Details (MANDATORY)
 
 ### Step 4: Study Real Examples
+
 **Read:** `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
+
 - See how a Payment System evolves from Beginner to Expert
 - Understand when and why to introduce each pattern
 - Reference working code for each level
 
 ### Step 5: Set Up Your Project
+
 **Copy templates to your project folder:**
+
 ```bash
 # Navigate to your project directory
 cd projects/{level}/{project-name}
@@ -195,16 +206,19 @@ cp ../../../templates/PROGRESS.template.md ./PROGRESS.md
 ```
 
 **Customize the templates:**
+
 - Replace all `{{PLACEHOLDER}}` values with project-specific details
 - Remove sections that don't apply to your level
 - Add project-specific endpoints and entities
 
 **PROGRESS.md serves as:**
+
 - Implementation planification (must be approved before coding)
 - Progress tracking checklist
 - Technical reference (endpoints, entities, folder structure)
 
 ### Step 6: Start Developing
+
 **Use your project's `AI_CONTEXT.md` as a guide:**
 
 1. **Setup:** Create folder structure, configure database
@@ -332,11 +346,11 @@ docker-compose up -d
 
 ### ORM Distribution
 
-| ORM | Projects | Best For |
-|-----|----------|----------|
-| **Prisma** | 5 projects | Rapid development, type safety, beginners |
+| ORM         | Projects   | Best For                                  |
+| ----------- | ---------- | ----------------------------------------- |
+| **Prisma**  | 5 projects | Rapid development, type safety, beginners |
 | **TypeORM** | 6 projects | Complex domains, DDD, enterprise patterns |
-| **Drizzle** | 4 projects | Performance-critical, SQL control |
+| **Drizzle** | 4 projects | Performance-critical, SQL control         |
 
 See [GUIDE.md](./docs/GUIDE.md) for specific ORM assignments per project.
 

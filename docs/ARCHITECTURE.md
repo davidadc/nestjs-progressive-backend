@@ -628,7 +628,7 @@ export class CreateProductUseCase {
     @Inject('PRODUCT_REPOSITORY')
     private readonly productRepository: IProductRepository,
     @Inject('CATEGORY_REPOSITORY')
-    private categoryRepository: ICategoryRepository,
+    private categoryRepository: ICategoryRepository
   ) {}
 
   async execute(command: CreateProductCommand): Promise<Product> {
@@ -680,7 +680,7 @@ export class ProductMapper {
 @Injectable()
 export class ProductRepository implements IProductRepository {
   constructor(
-    @InjectRepository(ProductEntity) private repo: Repository<ProductEntity>,
+    @InjectRepository(ProductEntity) private repo: Repository<ProductEntity>
   ) {}
 
   async save(product: Product): Promise<Product> {
@@ -724,10 +724,7 @@ export class ProductsController {
 
 // src/products/products.module.ts
 @Module({
-  imports: [
-    TypeOrmModule.forFeature([ProductEntity]),
-    CategoriesModule,
-  ],
+  imports: [TypeOrmModule.forFeature([ProductEntity]), CategoriesModule],
   controllers: [ProductsController],
   providers: [
     CreateProductUseCase,
@@ -787,7 +784,7 @@ export class UserRegisteredEvent extends DomainEvent {
   constructor(
     aggregateId: string,
     public readonly email: string,
-    public readonly name: string,
+    public readonly name: string
   ) {
     super();
     this.aggregateId = aggregateId;
@@ -803,7 +800,7 @@ export class User extends AggregateRoot {
   static create(props: CreateUserProps): User {
     const user = new User(props);
     user.addDomainEvent(
-      new UserRegisteredEvent(user.id, user.email.value, user.name),
+      new UserRegisteredEvent(user.id, user.email.value, user.name)
     );
     return user;
   }
@@ -918,7 +915,7 @@ export class CreateUserCommand {
   constructor(
     public readonly email: string,
     public readonly password: string,
-    public readonly name: string,
+    public readonly name: string
   ) {}
 }
 
@@ -930,7 +927,7 @@ export class CreateUserCommandHandler
   constructor(
     @Inject('USER_REPOSITORY')
     private readonly userRepository: IUserRepository,
-    private readonly eventBus: IEventBus,
+    private readonly eventBus: IEventBus
   ) {}
 
   async execute(command: CreateUserCommand): Promise<User> {
@@ -969,7 +966,7 @@ export class GetUserByIdQueryHandler
 {
   constructor(
     @Inject('USER_REPOSITORY')
-    private readonly userRepository: IUserRepository,
+    private readonly userRepository: IUserRepository
   ) {}
 
   async execute(query: GetUserByIdQuery): Promise<User | null> {
@@ -982,7 +979,7 @@ export class GetUserByIdQueryHandler
 export class UsersController {
   constructor(
     private readonly commandBus: CommandBus,
-    private readonly queryBus: QueryBus,
+    private readonly queryBus: QueryBus
   ) {}
 
   @Post()
@@ -2624,17 +2621,17 @@ describe('Product API E2E', () => {
 
 ## Comparative Summary
 
-| Aspect                | Beginner  | Intermediate       | Advanced          | Expert           |
-| --------------------- | --------- | ------------------ | ----------------- | ---------------- |
-| **Layers**            | 3         | 4                  | 5+                | Distributed      |
-| **Entities**          | ORM Models | Domain + ORM      | Aggregates        | Event Sourced    |
-| **Business Logic**    | Services  | Use Cases          | CQRS              | Event-Driven     |
-| **Validation**        | DTO       | DTO + Domain       | Value Objects     | Event Validation |
-| **Testing**           | Unit      | Unit + Integration | Unit + Int + E2E  | Complete         |
-| **Scalability**       | Local     | Monolith           | Scaled monolith   | Distributed      |
-| **Complexity**        | Low       | Medium             | High              | Very High        |
-| **Patterns**          | 4         | 10                 | 13                | 17               |
-| **Learning time**     | 1 week    | 2 weeks            | 1 month           | 2-3 months       |
+| Aspect             | Beginner   | Intermediate       | Advanced         | Expert           |
+| ------------------ | ---------- | ------------------ | ---------------- | ---------------- |
+| **Layers**         | 3          | 4                  | 5+               | Distributed      |
+| **Entities**       | ORM Models | Domain + ORM       | Aggregates       | Event Sourced    |
+| **Business Logic** | Services   | Use Cases          | CQRS             | Event-Driven     |
+| **Validation**     | DTO        | DTO + Domain       | Value Objects    | Event Validation |
+| **Testing**        | Unit       | Unit + Integration | Unit + Int + E2E | Complete         |
+| **Scalability**    | Local      | Monolith           | Scaled monolith  | Distributed      |
+| **Complexity**     | Low        | Medium             | High             | Very High        |
+| **Patterns**       | 4          | 10                 | 13               | 17               |
+| **Learning time**  | 1 week     | 2 weeks            | 1 month          | 2-3 months       |
 
 ---
 

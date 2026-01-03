@@ -79,11 +79,11 @@ nestjs-progressive-backend/
 
 Each project uses a specific ORM based on its requirements:
 
-| ORM | Projects | Why |
-|-----|----------|-----|
-| **Prisma** | User Auth, CRUD, Notes, Task Management, File Upload | Great DX, type safety, rapid development |
+| ORM         | Projects                                              | Why                                                |
+| ----------- | ----------------------------------------------------- | -------------------------------------------------- |
+| **Prisma**  | User Auth, CRUD, Notes, Task Management, File Upload  | Great DX, type safety, rapid development           |
 | **TypeORM** | Blog, E-commerce, Social Media, Payments, Admin, SaaS | Complex domains, DDD patterns, enterprise features |
-| **Drizzle** | Chat, Notifications, Streaming, Recommendations | Performance-critical, lightweight, SQL control |
+| **Drizzle** | Chat, Notifications, Streaming, Recommendations       | Performance-critical, lightweight, SQL control     |
 
 ---
 
@@ -835,7 +835,7 @@ Controller → Service → Repository → Database
 export class AuthService {
   constructor(
     private usersRepository: UsersRepository,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async register(dto: CreateUserDto): Promise<User> {
@@ -1095,6 +1095,7 @@ cp .env.example .env
 All levels use **NestJS modular architecture** (feature modules). Complexity increases within modules.
 
 **Beginner Level (Modular 3-Layer):**
+
 ```
 project-name/
 ├── src/
@@ -1127,6 +1128,7 @@ project-name/
 ```
 
 **Intermediate Level (Modular + Clean Architecture):**
+
 ```
 project-name/
 ├── src/
@@ -1156,6 +1158,7 @@ project-name/
 ```
 
 **Advanced/Expert Level (Modular + Full DDD):**
+
 ```
 project-name/
 ├── src/
@@ -1261,7 +1264,8 @@ src/
 └── app.module.ts
 ```
 
-*Intermediate+ adds Clean Architecture layers inside each module:*
+_Intermediate+ adds Clean Architecture layers inside each module:_
+
 ```
 src/feature/
 ├── feature.module.ts

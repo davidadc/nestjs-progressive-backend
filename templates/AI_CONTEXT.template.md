@@ -137,26 +137,31 @@ test/
 <!-- Select appropriate level -->
 
 ### Beginner (3 layers)
+
 ```
 Controller → Service → Repository → Database
 ```
 
 ### Intermediate (4 layers)
+
 ```
 Controller → UseCase/Service → Domain → Repository
 ```
 
 ### Advanced (5+ layers with DDD)
+
 ```
 Controller → Command/Query Handler → Domain (Aggregates) → Repository
 ```
 
 **Patterns Used:**
+
 - {{PATTERN_1}}
 - {{PATTERN_2}}
 - {{PATTERN_3}}
 
 **Flow:**
+
 ```
 HTTP Request
     ↓
@@ -188,9 +193,11 @@ export class {{EntityName}} {
 ### DTOs
 
 **Create{{EntityName}}Dto** (input)
+
 - {{field}}: {{type}} ({{validations}})
 
 **{{EntityName}}ResponseDto** (output)
+
 - {{field}}: {{type}}
 
 ---
@@ -198,22 +205,29 @@ export class {{EntityName}} {
 ## Security Requirements
 
 ### Authentication
+
 <!-- Remove if not applicable -->
+
 - [ ] JWT tokens
 - [ ] Password hashing (bcrypt)
 - [ ] Rate limiting
 
 ### Authorization
+
 <!-- Remove if not applicable -->
+
 - [ ] Role-based access (RBAC)
 - [ ] Resource ownership validation
 
 ### Validation
+
 - [ ] DTOs with class-validator
 - [ ] Input sanitization
 
 ### Error Handling
+
 <!-- For Advanced+, use RFC 7807 -->
+
 - [ ] Consistent error responses
 - [ ] No stack traces in production
 - [ ] Security event logging
@@ -227,6 +241,7 @@ export class {{EntityName}} {
 **Description:** {{description}}
 
 **Request:**
+
 ```json
 {
   "field": "value"
@@ -234,6 +249,7 @@ export class {{EntityName}} {
 ```
 
 **Success ({{STATUS_CODE}}):**
+
 ```json
 {
   "field": "value"
@@ -241,6 +257,7 @@ export class {{EntityName}} {
 ```
 
 **Error ({{ERROR_CODE}}):**
+
 ```json
 {
   "statusCode": {{ERROR_CODE}},
@@ -290,6 +307,7 @@ describe('{{Resource}} Endpoints', () => {
 ## Dependencies
 
 ### Core
+
 ```json
 {
   "@nestjs/common": "^10.0.0",
@@ -302,6 +320,7 @@ describe('{{Resource}} Endpoints', () => {
 ### ORM-Specific
 
 <!-- Prisma -->
+
 ```json
 {
   "@prisma/client": "^5.0.0"
@@ -310,6 +329,7 @@ describe('{{Resource}} Endpoints', () => {
 ```
 
 <!-- TypeORM -->
+
 ```json
 {
   "typeorm": "^0.3.0",
@@ -319,6 +339,7 @@ describe('{{Resource}} Endpoints', () => {
 ```
 
 <!-- Drizzle -->
+
 ```json
 {
   "drizzle-orm": "^0.29.0",
@@ -328,6 +349,7 @@ describe('{{Resource}} Endpoints', () => {
 ```
 
 ### Project-Specific
+
 ```json
 {
   // Add project-specific dependencies
@@ -354,6 +376,7 @@ DATABASE_NAME={{database_name}}
 ## Code Conventions
 
 ### Naming
+
 - Controllers: `*.controller.ts`
 - Services: `*.service.ts`
 - Repositories: `*.repository.ts`
@@ -362,6 +385,7 @@ DATABASE_NAME={{database_name}}
 - Use Cases: `*.use-case.ts`
 
 ### Style
+
 - Strict TypeScript
 - Prettier + ESLint
 - 2 spaces indentation
@@ -371,26 +395,31 @@ DATABASE_NAME={{database_name}}
 ## Workflow with Claude Code
 
 ### 1. Setup
+
 ```
 "Create the folder and file structure for {{PROJECT_NAME}} with {{ARCHITECTURE_LEVEL}} architecture"
 ```
 
 ### 2. Domain Layer
+
 ```
 "Implement {{EntityName}} entity and I{{EntityName}}Repository interface"
 ```
 
 ### 3. Application Layer
+
 ```
 "Implement DTOs, {{ServiceName}}, and use cases for {{feature}}"
 ```
 
 ### 4. Infrastructure Layer
+
 ```
 "Implement {{ControllerName}} with endpoints and {{EntityName}}Repository"
 ```
 
 ### 5. Testing
+
 ```
 "Create unit tests for {{ServiceName}} and e2e tests for {{ControllerName}}"
 ```
@@ -400,6 +429,7 @@ DATABASE_NAME={{database_name}}
 ## Learning Goals
 
 Upon completing this project:
+
 - [ ] {{LEARNING_GOAL_1}}
 - [ ] {{LEARNING_GOAL_2}}
 - [ ] {{LEARNING_GOAL_3}}
@@ -409,6 +439,7 @@ Upon completing this project:
 ## Next Steps
 
 After completion:
+
 1. {{ENHANCEMENT_1}}
 2. {{ENHANCEMENT_2}}
 
@@ -420,14 +451,16 @@ Then proceed to: **{{NEXT_PROJECT}}**
 
 **Where does X go? (All levels use modular structure)**
 
-*Beginner (Modular 3-Layer):*
+_Beginner (Modular 3-Layer):_
+
 - Business logic → `src/{{module}}/{{module}}.service.ts`
 - DTOs → `src/{{module}}/dto/`
 - Database access → `src/{{module}}/{{module}}.repository.ts`
 - Endpoints → `src/{{module}}/{{module}}.controller.ts`
 - Entities → `src/{{module}}/entities/`
 
-*Intermediate+ (Modular + Clean Architecture):*
+_Intermediate+ (Modular + Clean Architecture):_
+
 - Business logic → `src/{{module}}/application/services/` or `src/{{module}}/application/use-cases/`
 - DTOs → `src/{{module}}/application/dto/`
 - Database access → `src/{{module}}/infrastructure/persistence/`
@@ -437,6 +470,7 @@ Then proceed to: **{{NEXT_PROJECT}}**
 **ORM Commands:**
 
 <!-- Prisma -->
+
 ```bash
 pnpm exec prisma generate
 pnpm exec prisma migrate dev --name {{migration_name}}
@@ -444,12 +478,14 @@ pnpm exec prisma studio
 ```
 
 <!-- TypeORM -->
+
 ```bash
 pnpm run typeorm migration:generate -- --name {{MigrationName}}
 pnpm run typeorm migration:run
 ```
 
 <!-- Drizzle -->
+
 ```bash
 pnpm exec drizzle-kit generate
 pnpm exec drizzle-kit migrate

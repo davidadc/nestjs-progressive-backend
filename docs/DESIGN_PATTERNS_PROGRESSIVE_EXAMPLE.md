@@ -819,16 +819,16 @@ export class GetPaymentStatusAtTimeQueryHandler {
 > **Note:** The patterns listed here are those used in this specific example (Payment System).
 > For the total patterns available per level, see ARCHITECTURE.md.
 
-| Aspect                        | Beginner  | Intermediate | Advanced | Expert    |
-| ------------------------------ | --------- | ------------ | -------- | --------- |
-| **Lines of code**           | 80        | 250          | 450      | 700+      |
-| **Patterns (in this example)** | 0         | 4            | 7        | 11        |
-| **Testability**               | Medium     | High         | Very High | Maximum    |
-| **Maintainability**             | Low      | Medium        | High     | Very High  |
-| **Scalability**              | Low      | Medium        | High     | Maximum    |
-| **Complexity**                | Low      | Medium        | High     | Very High  |
-| **Debugging**                  | Difficult   | Medium        | Easy    | Trivial   |
-| **Business changes**         | Difficult | Medium       | Easy  | Trivial |
+| Aspect                         | Beginner  | Intermediate | Advanced  | Expert    |
+| ------------------------------ | --------- | ------------ | --------- | --------- |
+| **Lines of code**              | 80        | 250          | 450       | 700+      |
+| **Patterns (in this example)** | 0         | 4            | 7         | 11        |
+| **Testability**                | Medium    | High         | Very High | Maximum   |
+| **Maintainability**            | Low       | Medium       | High      | Very High |
+| **Scalability**                | Low       | Medium       | High      | Maximum   |
+| **Complexity**                 | Low       | Medium       | High      | Very High |
+| **Debugging**                  | Difficult | Medium       | Easy      | Trivial   |
+| **Business changes**           | Difficult | Medium       | Easy      | Trivial   |
 
 ---
 
