@@ -140,7 +140,9 @@
 **When to use:** When setting up a project
 
 #### templates/AI_CONTEXT.template.md
+
 Template for Claude Code context. Contains placeholders for:
+
 - Project information and stack
 - Folder structure
 - Entities and DTOs
@@ -150,7 +152,9 @@ Template for Claude Code context. Contains placeholders for:
 - Workflow prompts
 
 #### templates/README.template.md
+
 Template for project README. Contains placeholders for:
+
 - Setup instructions
 - Available scripts (with ORM-specific commands)
 - API endpoints
@@ -158,7 +162,9 @@ Template for project README. Contains placeholders for:
 - Troubleshooting
 
 #### templates/PROGRESS.template.md
+
 Template for implementation progress tracking. Contains:
+
 - Implementation phases checklist
 - Endpoints table
 - Entity definitions
@@ -166,6 +172,7 @@ Template for implementation progress tracking. Contains:
 - Design decisions
 
 #### templates/AI_CONTEXT.example.md
+
 Filled example (User Auth API) showing how to customize the template.
 
 **Usage:**
@@ -283,19 +290,19 @@ START
 
 #### **Advanced Level** (Social, Payments, Notifications, Admin)
 
-| Document                               | Sections                                       | Patterns                           |
-| -------------------------------------- | ---------------------------------------------- | ---------------------------------- |
-| ARCHITECTURE.md                        | "Advanced Level Architecture"                  | CQRS, Domain Events, Value Objects |
-| API_CONVENTIONS.md                     | **"Advanced Level - RFC 7807"** MANDATORY      | ProblemDetails                     |
-| DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md | "ADVANCED"                                     | CQRS, RFC 7807                     |
+| Document                               | Sections                                  | Patterns                           |
+| -------------------------------------- | ----------------------------------------- | ---------------------------------- |
+| ARCHITECTURE.md                        | "Advanced Level Architecture"             | CQRS, Domain Events, Value Objects |
+| API_CONVENTIONS.md                     | **"Advanced Level - RFC 7807"** MANDATORY | ProblemDetails                     |
+| DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md | "ADVANCED"                                | CQRS, RFC 7807                     |
 
 #### **Expert Level** (Microservices, Streaming, SaaS, Recommendations)
 
-| Document                               | Sections                    | Patterns                  |
-| -------------------------------------- | --------------------------- | ------------------------- |
-| ARCHITECTURE.md                        | "Expert Level Architecture" | Event Sourcing, Sagas     |
-| API_CONVENTIONS.md                     | "Expert Level Conventions"  | Webhooks, Tracing         |
-| DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md | "EXPERT"                    | Event Sourcing, Sagas     |
+| Document                               | Sections                    | Patterns              |
+| -------------------------------------- | --------------------------- | --------------------- |
+| ARCHITECTURE.md                        | "Expert Level Architecture" | Event Sourcing, Sagas |
+| API_CONVENTIONS.md                     | "Expert Level Conventions"  | Webhooks, Tracing     |
+| DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md | "EXPERT"                    | Event Sourcing, Sagas |
 
 ---
 

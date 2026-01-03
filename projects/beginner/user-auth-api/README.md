@@ -80,7 +80,7 @@ Default values should work with Docker setup.
 ### 4. Run database migrations
 
 ```bash
-npx prisma migrate dev
+pnpm exec prisma migrate dev
 ```
 
 ### 5. Start the server
@@ -149,8 +149,8 @@ pnpm run test:watch        # Watch mode
 pnpm run test:cov          # Coverage report
 
 # Database
-npx prisma migrate dev     # Run migrations
-npx prisma studio          # Open Prisma Studio
+pnpm exec prisma migrate dev     # Run migrations
+pnpm exec prisma studio          # Open Prisma Studio
 
 # Build
 pnpm run build             # Production build

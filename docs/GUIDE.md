@@ -79,11 +79,11 @@ nestjs-progressive-backend/
 
 Each project uses a specific ORM based on its requirements:
 
-| ORM | Projects | Why |
-|-----|----------|-----|
-| **Prisma** | User Auth, CRUD, Notes, Task Management, File Upload | Great DX, type safety, rapid development |
+| ORM         | Projects                                              | Why                                                |
+| ----------- | ----------------------------------------------------- | -------------------------------------------------- |
+| **Prisma**  | User Auth, CRUD, Notes, Task Management, File Upload  | Great DX, type safety, rapid development           |
 | **TypeORM** | Blog, E-commerce, Social Media, Payments, Admin, SaaS | Complex domains, DDD patterns, enterprise features |
-| **Drizzle** | Chat, Notifications, Streaming, Recommendations | Performance-critical, lightweight, SQL control |
+| **Drizzle** | Chat, Notifications, Streaming, Recommendations       | Performance-critical, lightweight, SQL control     |
 
 ---
 
@@ -835,7 +835,7 @@ Controller → Service → Repository → Database
 export class AuthService {
   constructor(
     private usersRepository: UsersRepository,
-    private jwtService: JwtService,
+    private jwtService: JwtService
   ) {}
 
   async register(dto: CreateUserDto): Promise<User> {
@@ -1095,6 +1095,7 @@ cp .env.example .env
 All levels use **NestJS modular architecture** (feature modules). Complexity increases within modules.
 
 **Beginner Level (Modular 3-Layer):**
+
 ```
 project-name/
 ├── src/
@@ -1127,6 +1128,7 @@ project-name/
 ```
 
 **Intermediate Level (Modular + Clean Architecture):**
+
 ```
 project-name/
 ├── src/
@@ -1156,6 +1158,7 @@ project-name/
 ```
 
 **Advanced/Expert Level (Modular + Full DDD):**
+
 ```
 project-name/
 ├── src/
@@ -1261,7 +1264,8 @@ src/
 └── app.module.ts
 ```
 
-*Intermediate+ adds Clean Architecture layers inside each module:*
+_Intermediate+ adds Clean Architecture layers inside each module:_
+
 ```
 src/feature/
 ├── feature.module.ts
@@ -1429,54 +1433,54 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ## Project Checklist
 
-### User Authentication API
+### User Authentication API ✅
 
-- [ ] **Entities:** User entity with hashed password
-- [ ] **Endpoints:**
-  - [ ] POST /auth/register
-  - [ ] POST /auth/login
-  - [ ] GET /auth/profile
-  - [ ] POST /auth/logout
-  - [ ] POST /auth/refresh-token
-- [ ] **Validations:**
-  - [ ] Valid and unique email
-  - [ ] Minimum 8 character password
-  - [ ] Password and confirmation match
-- [ ] **Security:**
-  - [ ] JWT tokens with expiration
-  - [ ] Password hashing with bcrypt
-  - [ ] Rate limiting on login
-  - [ ] HTTPS enforced (docs)
-- [ ] **Testing:**
-  - [ ] Successful registration tests
-  - [ ] Duplicate email tests
-  - [ ] Invalid credentials login tests
-  - [ ] Token refresh tests
-- [ ] **Documentation:**
-  - [ ] Swagger/OpenAPI
-  - [ ] README with setup instructions
-  - [ ] Request examples
+- [x] **Entities:** User entity with hashed password
+- [x] **Endpoints:**
+  - [x] POST /auth/register
+  - [x] POST /auth/login
+  - [x] GET /auth/profile
+  - [x] POST /auth/logout
+  - [x] POST /auth/refresh-token
+- [x] **Validations:**
+  - [x] Valid and unique email
+  - [x] Minimum 8 character password
+  - [x] Password and confirmation match
+- [x] **Security:**
+  - [x] JWT tokens with expiration
+  - [x] Password hashing with bcrypt
+  - [x] Rate limiting on login
+  - [x] HTTPS enforced (docs)
+- [x] **Testing:**
+  - [x] Successful registration tests
+  - [x] Duplicate email tests
+  - [x] Invalid credentials login tests
+  - [x] Token refresh tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI
+  - [x] README with setup instructions
+  - [x] Request examples
 
-### Simple CRUD API
+### Simple CRUD API ✅
 
-- [ ] **Entity:** Generic model (Book, Movie, etc)
-- [ ] **Endpoints:**
-  - [ ] GET /items (with pagination and filters)
-  - [ ] GET /items/:id
-  - [ ] POST /items
-  - [ ] PUT /items/:id
-  - [ ] PATCH /items/:id
-  - [ ] DELETE /items/:id
-- [ ] **Validations:**
-  - [ ] DTOs with required field validation
-  - [ ] Correct data types
-- [ ] **Testing:**
-  - [ ] Complete CRUD tests
-  - [ ] Pagination tests
-  - [ ] Not found (404) tests
-- [ ] **Documentation:**
-  - [ ] Swagger
-  - [ ] Usage examples
+- [x] **Entity:** Generic model (Book, Movie, etc)
+- [x] **Endpoints:**
+  - [x] GET /items (with pagination and filters)
+  - [x] GET /items/:id
+  - [x] POST /items
+  - [x] PUT /items/:id
+  - [x] PATCH /items/:id
+  - [x] DELETE /items/:id
+- [x] **Validations:**
+  - [x] DTOs with required field validation
+  - [x] Correct data types
+- [x] **Testing:**
+  - [x] Complete CRUD tests
+  - [x] Pagination tests
+  - [x] Not found (404) tests
+- [x] **Documentation:**
+  - [x] Swagger
+  - [x] Usage examples
 
 ### Notes App Backend
 
@@ -1548,5 +1552,5 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ---
 
-**Last updated:** 2026-01-02
+**Last updated:** 2026-01-03
 **Suggested next review:** After completing Beginner Level

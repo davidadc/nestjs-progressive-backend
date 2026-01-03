@@ -156,8 +156,8 @@ pnpm run test              # Run unit tests
 pnpm run test:cov          # Run with coverage
 
 # Database
-npx prisma migrate dev     # Run migrations
-npx prisma studio          # Open Prisma Studio
+pnpm exec prisma migrate dev     # Run migrations
+pnpm exec prisma studio          # Open Prisma Studio
 
 # Build
 pnpm run build             # Production build

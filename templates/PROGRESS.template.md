@@ -12,6 +12,7 @@
 **Description:** {{Brief description of what this project does}}
 
 **Technical Requirements:**
+
 - {{Requirement 1}}
 - {{Requirement 2}}
 - {{Requirement 3}}
@@ -21,6 +22,7 @@
 ## Implementation Status
 
 ### Phase 1: Project Scaffolding
+
 - [ ] Initialize NestJS project with CLI
 - [ ] Install core dependencies
 - [ ] Install validation dependencies (class-validator, class-transformer)
@@ -29,30 +31,36 @@
 - [ ] Set up folder structure
 
 ### Phase 2: Database Setup
+
 <!-- For Prisma -->
+
 - [ ] Initialize Prisma
 - [ ] Define models in schema.prisma
 - [ ] Run initial migration
 - [ ] Generate Prisma client
 
 <!-- For TypeORM -->
+
 - [ ] Configure TypeORM module
 - [ ] Create entities
 - [ ] Generate initial migration
 - [ ] Run migrations
 
 <!-- For Drizzle -->
+
 - [ ] Configure Drizzle
 - [ ] Define schema
 - [ ] Run migrations
 
 ### Phase 3: Domain Layer
+
 - [ ] Create entity type definitions
 - [ ] Create repository interfaces (if using Repository pattern)
 - [ ] Define value objects (Advanced+)
 - [ ] Define domain events (Advanced+)
 
 ### Phase 4: Application Layer
+
 - [ ] Create DTOs with validation
 - [ ] Create response DTOs
 - [ ] Create service(s) with business logic
@@ -60,6 +68,7 @@
 - [ ] Create mappers (entity <-> DTO)
 
 ### Phase 5: Infrastructure Layer
+
 - [ ] Create repository implementations
 - [ ] Create controller(s) with Swagger docs
 - [ ] Create guards (if needed)
@@ -67,16 +76,19 @@
 - [ ] Create filters (if needed)
 
 ### Phase 6: Common Module
+
 - [ ] Create custom decorators
 - [ ] Create pipes
 - [ ] Create exception filters
 
 ### Phase 7: Configuration
+
 - [ ] Create configuration files
 - [ ] Wire up ConfigModule
 - [ ] Set up environment validation
 
 ### Phase 8: App Module Integration
+
 - [ ] Update AppModule with all imports
 - [ ] Configure main.ts with:
   - [ ] Swagger documentation
@@ -84,12 +96,14 @@
   - [ ] CORS (if needed)
 
 ### Phase 9: Testing
+
 - [ ] Create unit tests for services
 - [ ] Create unit tests for use-cases (if applicable)
 - [ ] Create E2E tests
 - [ ] Achieve 80%+ coverage on core logic
 
 ### Phase 10: Documentation
+
 - [ ] Swagger API documentation complete
 - [ ] PROGRESS.md updated (this file)
 - [ ] AI_CONTEXT.md created
@@ -99,9 +113,9 @@
 
 ## Endpoints
 
-| Method | Endpoint | Description | Auth Required |
-|--------|----------|-------------|---------------|
-| {{METHOD}} | `{{/path}}` | {{Description}} | {{Yes/No}} |
+| Method     | Endpoint    | Description     | Auth Required |
+| ---------- | ----------- | --------------- | ------------- |
+| {{METHOD}} | `{{/path}}` | {{Description}} | {{Yes/No}}    |
 
 ---
 
@@ -156,7 +170,7 @@ pnpm install
 docker-compose up -d postgres
 
 # Run migrations
-{{npx prisma migrate dev | pnpm run typeorm migration:run | pnpm run db:migrate}}
+{{pnpm exec prisma migrate dev | pnpm run typeorm migration:run | pnpm run db:migrate}}
 
 # Start development server
 pnpm run start:dev

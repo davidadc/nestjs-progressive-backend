@@ -61,19 +61,22 @@ cp .env.example .env
 ### 4. Setup Database
 
 <!-- Prisma -->
+
 ```bash
-npx prisma generate
-npx prisma migrate dev
+pnpm exec prisma generate
+pnpm exec prisma migrate dev
 ```
 
 <!-- TypeORM -->
+
 ```bash
 pnpm run typeorm migration:run
 ```
 
 <!-- Drizzle -->
+
 ```bash
-npx drizzle-kit migrate
+pnpm exec drizzle-kit migrate
 ```
 
 ### 5. Run Development Server
@@ -88,42 +91,45 @@ The API will be available at `http://localhost:3000`
 
 ## Available Scripts
 
-| Command | Description |
-|---------|-------------|
-| `pnpm run start:dev` | Start in development mode (watch) |
-| `pnpm run start` | Start in production mode |
-| `pnpm run build` | Build for production |
-| `pnpm run test` | Run unit tests |
-| `pnpm run test:watch` | Run tests in watch mode |
-| `pnpm run test:cov` | Run tests with coverage |
-| `pnpm run test:e2e` | Run E2E tests |
-| `pnpm run lint` | Run ESLint |
-| `pnpm run format` | Format with Prettier |
+| Command               | Description                       |
+| --------------------- | --------------------------------- |
+| `pnpm run start:dev`  | Start in development mode (watch) |
+| `pnpm run start`      | Start in production mode          |
+| `pnpm run build`      | Build for production              |
+| `pnpm run test`       | Run unit tests                    |
+| `pnpm run test:watch` | Run tests in watch mode           |
+| `pnpm run test:cov`   | Run tests with coverage           |
+| `pnpm run test:e2e`   | Run E2E tests                     |
+| `pnpm run lint`       | Run ESLint                        |
+| `pnpm run format`     | Format with Prettier              |
 
 ### Database Commands
 
 <!-- Prisma -->
-| Command | Description |
-|---------|-------------|
-| `npx prisma generate` | Generate Prisma client |
-| `npx prisma migrate dev` | Run migrations (dev) |
-| `npx prisma migrate deploy` | Run migrations (prod) |
-| `npx prisma studio` | Open Prisma Studio |
-| `npx prisma db seed` | Seed database |
+
+| Command                           | Description            |
+| --------------------------------- | ---------------------- |
+| `pnpm exec prisma generate`       | Generate Prisma client |
+| `pnpm exec prisma migrate dev`    | Run migrations (dev)   |
+| `pnpm exec prisma migrate deploy` | Run migrations (prod)  |
+| `pnpm exec prisma studio`         | Open Prisma Studio     |
+| `pnpm exec prisma db seed`        | Seed database          |
 
 <!-- TypeORM -->
-| Command | Description |
-|---------|-------------|
-| `pnpm run typeorm migration:generate -- --name Name` | Generate migration |
-| `pnpm run typeorm migration:run` | Run migrations |
-| `pnpm run typeorm migration:revert` | Revert last migration |
+
+| Command                                              | Description           |
+| ---------------------------------------------------- | --------------------- |
+| `pnpm run typeorm migration:generate -- --name Name` | Generate migration    |
+| `pnpm run typeorm migration:run`                     | Run migrations        |
+| `pnpm run typeorm migration:revert`                  | Revert last migration |
 
 <!-- Drizzle -->
-| Command | Description |
-|---------|-------------|
-| `npx drizzle-kit generate` | Generate migrations |
-| `npx drizzle-kit migrate` | Run migrations |
-| `npx drizzle-kit studio` | Open Drizzle Studio |
+
+| Command                          | Description         |
+| -------------------------------- | ------------------- |
+| `pnpm exec drizzle-kit generate` | Generate migrations |
+| `pnpm exec drizzle-kit migrate`  | Run migrations      |
+| `pnpm exec drizzle-kit studio`   | Open Drizzle Studio |
 
 ---
 
@@ -149,8 +155,8 @@ prisma/               # Prisma schema and migrations (if using Prisma)
 
 ## API Endpoints
 
-| Method | Endpoint | Description | Auth |
-|--------|----------|-------------|------|
+| Method       | Endpoint        | Description     | Auth       |
+| ------------ | --------------- | --------------- | ---------- |
 | `{{METHOD}}` | `/{{resource}}` | {{description}} | {{Yes/No}} |
 
 ### Example Request
@@ -173,14 +179,15 @@ curl -X {{METHOD}} http://localhost:3000/{{resource}} \
 
 ## Environment Variables
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DATABASE_HOST` | PostgreSQL host | `localhost` |
-| `DATABASE_PORT` | PostgreSQL port | `5432` |
-| `DATABASE_USER` | Database user | `dev` |
-| `DATABASE_PASSWORD` | Database password | `dev` |
-| `DATABASE_NAME` | Database name | `{{database_name}}` |
-| `PORT` | Application port | `3000` |
+| Variable            | Description       | Default             |
+| ------------------- | ----------------- | ------------------- |
+| `DATABASE_HOST`     | PostgreSQL host   | `localhost`         |
+| `DATABASE_PORT`     | PostgreSQL port   | `5432`              |
+| `DATABASE_USER`     | Database user     | `dev`               |
+| `DATABASE_PASSWORD` | Database password | `dev`               |
+| `DATABASE_NAME`     | Database name     | `{{database_name}}` |
+| `PORT`              | Application port  | `3000`              |
+
 <!-- Add project-specific variables -->
 
 ---
@@ -263,12 +270,14 @@ PORT=3001 pnpm run start:dev
 ### Migration Issues
 
 <!-- Prisma -->
+
 ```bash
 # Reset database (WARNING: deletes all data)
-npx prisma migrate reset
+pnpm exec prisma migrate reset
 ```
 
 <!-- TypeORM -->
+
 ```bash
 # Revert last migration
 pnpm run typeorm migration:revert

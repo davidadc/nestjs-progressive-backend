@@ -20,15 +20,15 @@
 
 ### HTTP Methods
 
-| Method      | Usage                              | Idempotency                           |
-| ----------- | ---------------------------------- | ------------------------------------- |
-| **GET**     | Get resource (does not modify)     | Yes                                   |
-| **POST**    | Create resource                    | No                                    |
-| **PUT**     | Replace entire resource            | Yes                                   |
-| **PATCH**   | Partially update                   | Yes (if implemented correctly)        |
-| **DELETE**  | Delete resource                    | Yes                                   |
-| **HEAD**    | Like GET but without body          | Yes                                   |
-| **OPTIONS** | Describe communication options     | Yes                                   |
+| Method      | Usage                          | Idempotency                    |
+| ----------- | ------------------------------ | ------------------------------ |
+| **GET**     | Get resource (does not modify) | Yes                            |
+| **POST**    | Create resource                | No                             |
+| **PUT**     | Replace entire resource        | Yes                            |
+| **PATCH**   | Partially update               | Yes (if implemented correctly) |
+| **DELETE**  | Delete resource                | Yes                            |
+| **HEAD**    | Like GET but without body      | Yes                            |
+| **OPTIONS** | Describe communication options | Yes                            |
 
 ### Basic Status Codes
 
@@ -1397,17 +1397,17 @@ export class ProblemDetailsExceptionFilter implements ExceptionFilter {
 
 ## Comparative Summary
 
-| Aspect              | Beginner       | Intermediate    | Advanced          | Expert              |
-| ------------------- | -------------- | --------------- | ----------------- | ------------------- |
-| **URL Structure**   | Basic REST     | + versioning    | + fields          | + GraphQL           |
-| **Response Format** | Simple JSON    | JSON envelope   | RFC 7807          | + Webhooks          |
-| **Error Handling**  | Try-catch      | Filters         | Problem Details   | Distributed tracing |
-| **Validation**      | DTOs           | Advanced        | Strict validation | Custom rules        |
-| **Documentation**   | README         | Swagger         | Complete OpenAPI  | AsyncAPI            |
-| **Caching**         | None           | Basic           | Headers           | Redis + CDN         |
-| **Rate Limiting**   | None           | Basic           | Per endpoint      | Dynamic             |
-| **Security**        | CORS           | + Headers       | + Request ID      | + Tracing           |
-| **Async Ops**       | Synchronous    | -               | Webhooks          | Event-driven        |
+| Aspect              | Beginner    | Intermediate  | Advanced          | Expert              |
+| ------------------- | ----------- | ------------- | ----------------- | ------------------- |
+| **URL Structure**   | Basic REST  | + versioning  | + fields          | + GraphQL           |
+| **Response Format** | Simple JSON | JSON envelope | RFC 7807          | + Webhooks          |
+| **Error Handling**  | Try-catch   | Filters       | Problem Details   | Distributed tracing |
+| **Validation**      | DTOs        | Advanced      | Strict validation | Custom rules        |
+| **Documentation**   | README      | Swagger       | Complete OpenAPI  | AsyncAPI            |
+| **Caching**         | None        | Basic         | Headers           | Redis + CDN         |
+| **Rate Limiting**   | None        | Basic         | Per endpoint      | Dynamic             |
+| **Security**        | CORS        | + Headers     | + Request ID      | + Tracing           |
+| **Async Ops**       | Synchronous | -             | Webhooks          | Event-driven        |
 
 ---
 
