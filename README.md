@@ -15,7 +15,7 @@ Collection of 16 progressive NestJS backend projects, from Beginner to Expert le
 | --------------------------- | ------ | --------- | --- |
 | **User Authentication API** | ✅     | 5         | ✅  |
 | **Simple CRUD API**         | ✅     | 6         | ✅  |
-| **Notes App Backend**       | ⬜     | 6         | ✅  |
+| **Notes App Backend**       | ✅     | 9         | ✅  |
 | **Blog REST API**           | ⬜     | 8         | ✅  |
 
 ### Intermediate Level
@@ -305,7 +305,7 @@ docker-compose up -d
 
 - [x] User Authentication API
 - [x] Simple CRUD API
-- [ ] Notes App Backend
+- [x] Notes App Backend
 - [ ] Blog REST API
 
 ### Phase 2: Intermediate Level
