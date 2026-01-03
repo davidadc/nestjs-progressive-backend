@@ -146,6 +146,65 @@ src/
 - `AI_CONTEXT.template.md` - Template for creating per-project AI context files
 - `AI_CONTEXT.md` (per project) - Project-specific context for Claude Code
 
+## Recommended Path for Starting a New Project
+
+When the user wants to start a new project, follow this documentation path:
+
+### Step 1: Project Selection (GUIDE.md)
+- Review available projects by level (Beginner → Expert)
+- Each project includes: description, ORM, entities, endpoints, requirements
+- Help user choose based on their experience level
+
+### Step 2: Architecture (ARCHITECTURE.md)
+Consult the section matching the project level:
+| Level | Architecture | Key Patterns |
+|-------|-------------|--------------|
+| Beginner | 3-Layer (Controller → Service → Repository) | Repository, Factory, Decorator |
+| Intermediate | 4-Layer Clean Architecture | + Strategy, Observer, Adapter, Builder |
+| Advanced | 5+ Layer DDD + CQRS | + Mediator, State, Domain Events |
+| Expert | Distributed + Event Sourcing | + Saga, Circuit Breaker |
+
+### Step 3: API Conventions (API_CONVENTIONS.md)
+Consult the section matching the project level:
+- **Beginner:** Basic REST (URLs, pagination, simple errors)
+- **Intermediate:** + Versioning, rate limiting, Swagger, response envelopes
+- **Advanced:** RFC 7807 Problem Details (MANDATORY)
+- **Expert:** + Webhooks, async operations, distributed tracing
+
+### Step 4: Real Examples (DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md)
+- Shows a Payment System evolving from Beginner to Expert
+- Demonstrates when and why to introduce each pattern
+- Reference working code for implementation guidance
+
+### Step 5: Project Setup
+Copy templates to the project folder:
+```bash
+cp AI_CONTEXT.template.md projects/{level}/{project}/AI_CONTEXT.md
+cp README.template.md projects/{level}/{project}/README.md
+```
+Then customize all `{{PLACEHOLDER}}` values.
+
+### Step 6: Implementation Workflow
+Follow the phases from the project's `AI_CONTEXT.md`:
+1. **Setup:** Folder structure, database config
+2. **Domain:** Entities, repository interfaces
+3. **Application:** DTOs, services, use-cases
+4. **Infrastructure:** Controllers, repositories
+5. **Testing:** Unit (80%+), E2E
+6. **Documentation:** Swagger
+
+### Quick Decision Guide
+
+**"What document should I check?"**
+- Project overview/selection → `GUIDE.md`
+- Patterns for my level → `ARCHITECTURE.md`
+- Endpoint design → `API_CONVENTIONS.md`
+- Code examples → `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
+- Navigate docs → `DOCUMENTATION_INDEX.md`
+
+**"When must I use RFC 7807?"**
+- Advanced and Expert levels (MANDATORY)
+
 ## Environment Variables
 
 Each project uses `.env` (copy from `.env.example`):

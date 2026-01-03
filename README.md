@@ -118,9 +118,98 @@ nestjs-progressive-backend/
 
 ## Documentation
 
-- **[GUIDE.md](./GUIDE.md)** - Complete documentation for all projects
-- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Patterns and architecture decisions
-- **[API_CONVENTIONS.md](./API_CONVENTIONS.md)** - API standards
+- **[GUIDE.md](./GUIDE.md)** - Complete documentation for all 16 projects
+- **[ARCHITECTURE.md](./ARCHITECTURE.md)** - Patterns and architecture decisions (17 patterns)
+- **[API_CONVENTIONS.md](./API_CONVENTIONS.md)** - REST conventions by level (RFC 7807 for Advanced+)
+- **[DOCUMENTATION_INDEX.md](./DOCUMENTATION_INDEX.md)** - Quick navigation index
+- **[DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md](./DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md)** - Real payment system example
+- **[CLAUDE.md](./CLAUDE.md)** - Instructions for Claude Code
+
+---
+
+## Starting a New Project - Recommended Path
+
+Follow this step-by-step workflow when starting any of the 16 projects:
+
+### Step 1: Choose Your Project
+**Read:** `GUIDE.md`
+- Review the 16 projects organized by level (Beginner → Expert)
+- Each project includes description, entities, endpoints, and requirements
+- Check the ORM assignment (Prisma, TypeORM, or Drizzle)
+
+### Step 2: Understand the Architecture
+**Read:** `ARCHITECTURE.md` (section for your level)
+- **Beginner:** 3-Layer (Controller → Service → Repository)
+- **Intermediate:** 4-Layer Clean Architecture
+- **Advanced:** 5+ Layer with DDD, CQRS
+- **Expert:** Distributed (Event Sourcing, Sagas)
+
+Review the design patterns for your level:
+| Level | Patterns |
+|-------|----------|
+| Beginner | Repository, Factory, Singleton, Decorator |
+| Intermediate | + Strategy, Observer, Adapter, Builder, Facade |
+| Advanced | + Mediator, State, Template Method, Domain Events |
+| Expert | + CQRS, Event Sourcing, Circuit Breaker, Saga |
+
+### Step 3: Learn API Conventions
+**Read:** `API_CONVENTIONS.md` (section for your level)
+- URL structure, HTTP methods, status codes
+- Request/response formats
+- Error handling approach
+- **Advanced+:** RFC 7807 Problem Details (MANDATORY)
+
+### Step 4: Study Real Examples
+**Read:** `DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
+- See how a Payment System evolves from Beginner to Expert
+- Understand when and why to introduce each pattern
+- Reference working code for each level
+
+### Step 5: Set Up Your Project
+**Copy templates to your project folder:**
+```bash
+# Navigate to your project directory
+cd projects/{level}/{project-name}
+
+# Copy the AI context template
+cp ../../AI_CONTEXT.template.md ./AI_CONTEXT.md
+
+# Copy the README template
+cp ../../README.template.md ./README.md
+```
+
+**Customize the templates:**
+- Replace all `{{PLACEHOLDER}}` values with project-specific details
+- Remove sections that don't apply to your level
+- Add project-specific endpoints and entities
+
+### Step 6: Start Developing
+**Use your project's `AI_CONTEXT.md` as a guide:**
+
+1. **Setup:** Create folder structure, configure database
+2. **Domain Layer:** Entities, repository interfaces
+3. **Application Layer:** DTOs, services, use-cases
+4. **Infrastructure Layer:** Controllers, repositories, config
+5. **Testing:** Unit tests (80%+ coverage), E2E tests
+6. **Documentation:** Swagger/OpenAPI
+
+### Quick Reference
+
+```
+DOCUMENTATION FLOW:
+
+GUIDE.md                    → "What project should I build?"
+        ↓
+ARCHITECTURE.md             → "What patterns should I use?"
+        ↓
+API_CONVENTIONS.md          → "How should I design endpoints?"
+        ↓
+DESIGN_PATTERNS_EXAMPLE.md  → "Show me real code examples"
+        ↓
+AI_CONTEXT.template.md      → "Set up my project context"
+        ↓
+Project's AI_CONTEXT.md     → "Guide my implementation"
+```
 
 ---
 
