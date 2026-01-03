@@ -1482,17 +1482,17 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Swagger
   - [x] Usage examples
 
-### Notes App Backend 🟨
+### Notes App Backend ✅
 
-- [ ] **Entities:** User and Note with relationships
-- [ ] **Endpoints:**
-  - [ ] Complete notes CRUD
-  - [ ] Search by title/content
-  - [ ] Soft delete
-- [ ] **Features:**
-  - [ ] Only view own notes
-  - [ ] Automatic timestamps
-- [ ] **Testing:** 80%+ coverage
+- [x] **Entities:** User and Note with relationships
+- [x] **Endpoints:**
+  - [x] Complete notes CRUD
+  - [x] Search by title/content
+  - [x] Soft delete
+- [x] **Features:**
+  - [x] Only view own notes
+  - [x] Automatic timestamps
+- [x] **Testing:** 100% service coverage (20 tests)
 
 ### Blog REST API
 
