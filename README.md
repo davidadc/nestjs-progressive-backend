@@ -14,7 +14,7 @@ Collection of 16 progressive NestJS backend projects, from Beginner to Expert le
 | Project                     | Status | Endpoints | DB  |
 | --------------------------- | ------ | --------- | --- |
 | **User Authentication API** | ⬜     | 5         | ✅  |
-| **Simple CRUD API**         | ⬜     | 6         | ✅  |
+| **Simple CRUD API**         | ✅     | 6         | ✅  |
 | **Notes App Backend**       | ⬜     | 6         | ✅  |
 | **Blog REST API**           | ⬜     | 8         | ✅  |
 
@@ -290,7 +290,7 @@ docker-compose up -d
 ### Phase 1: Fundamentals (Beginner)
 
 - [ ] User Authentication API
-- [ ] Simple CRUD API
+- [x] Simple CRUD API
 - [ ] Notes App Backend
 - [ ] Blog REST API
 
@@ -513,6 +513,6 @@ MIT - Free for educational and personal use
 
 ---
 
-**Last updated:** 2026-01-02
+**Last updated:** 2026-01-03
 **Maintainer:** David
 **Contributions:** Welcome
