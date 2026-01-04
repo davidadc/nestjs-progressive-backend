@@ -148,6 +148,54 @@ See `.env.example` for all configuration options.
 
 ---
 
+## Potential Improvements
+
+Future enhancements that could be added to this project:
+
+### Content Features
+- Post tags (many-to-many relationship)
+- Draft/preview functionality for posts
+- Rich text content support (Markdown or HTML)
+- Featured images for posts
+- Post scheduling (publish at future date)
+- Related posts suggestions
+- Reading time estimation
+
+### Comments & Interaction
+- Comment moderation (approve/reject)
+- Nested/threaded comments (replies)
+- Comment editing and deletion by author
+- Like/upvote system for posts and comments
+- Report inappropriate content
+
+### Search & Discovery
+- Full-text search with PostgreSQL
+- Search highlighting in results
+- Filter posts by date range
+- Popular/trending posts
+- Author profiles with post listing
+
+### Authentication & Security
+- Refresh tokens for extended sessions
+- Password reset via email
+- Email verification on registration
+- Rate limiting on endpoints
+- Account lockout after failed attempts
+
+### Performance
+- Redis caching for posts and categories
+- Database indexing optimization
+- Response compression
+- Image optimization and CDN support
+
+### API Enhancements
+- API versioning (v1, v2)
+- RSS feed generation
+- Webhook notifications for new posts
+- GraphQL alternative endpoint
+
+---
+
 ## License
 
 MIT
