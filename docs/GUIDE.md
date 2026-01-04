@@ -1494,7 +1494,7 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Automatic timestamps
 - [x] **Testing:** 100% service coverage (20 tests)
 
-### Blog REST API
+### Blog REST API ✅
 
 - [x] **Entities:** User, Post, Comment, Category
 - [x] **Endpoints:**
@@ -1507,6 +1507,33 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Anyone can comment
   - [x] Soft delete for posts
 - [x] **Testing:** 100% service coverage (43 unit + 26 E2E tests)
+
+### E-commerce Backend ✅
+
+- [x] **Entities:** User, Product, Category, Cart, CartItem, Order, OrderItem, Review
+- [x] **Endpoints:**
+  - [x] Auth (register, login, profile)
+  - [x] Address management (CRUD + set default)
+  - [x] Products (CRUD with filters, search, pagination)
+  - [x] Categories (CRUD)
+  - [x] Cart (add, update, remove, clear)
+  - [x] Orders (create from cart, list, view)
+  - [x] Reviews (CRUD per product)
+- [x] **Features:**
+  - [x] JWT authentication with roles (customer, admin)
+  - [x] Role-based access control
+  - [x] Stock validation on orders
+  - [x] Soft deletes for products
+  - [x] Response envelopes
+  - [x] API versioning (/api/v1)
+- [x] **Testing:**
+  - [x] Unit tests: 76 tests (100% service coverage)
+  - [x] E2E tests: 63 tests
+  - [x] API integration tests: 54 tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI at /docs
+  - [x] README with setup instructions
+  - [x] AI_CONTEXT.md for Claude Code
 
 ---
 
@@ -1552,5 +1579,5 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ---
 
-**Last updated:** 2026-01-03
-**Suggested next review:** After completing Beginner Level
+**Last updated:** 2026-01-04
+**Suggested next review:** After completing Intermediate Level
