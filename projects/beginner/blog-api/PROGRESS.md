@@ -116,7 +116,7 @@
 - [x] Create unit tests for CategoriesService
 - [x] Create unit tests for PostsService
 - [x] Create unit tests for CommentsService
-- [ ] Create E2E tests for critical flows
+- [x] Create E2E tests for critical flows
 - [x] Achieve 100% coverage on core service logic
 
 ### Phase 10: Final Documentation
