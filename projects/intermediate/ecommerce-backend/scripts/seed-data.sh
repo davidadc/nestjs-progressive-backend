@@ -45,6 +45,11 @@ run_sql() {
     docker exec $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -c "$1"
 }
 
+# Function to get a single value from SQL query
+get_sql_value() {
+    docker exec $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME -t -A -c "$1"
+}
+
 # Function to execute SQL file via docker
 run_sql_file() {
     docker exec -i $CONTAINER_NAME psql -U $DB_USER -d $DB_NAME < "$1"
@@ -90,51 +95,92 @@ print_success "User seeding deferred to API tests"
 print_header "SEEDING CATEGORIES"
 
 run_sql "
-INSERT INTO categories (id, name, description, \"createdAt\", \"updatedAt\") VALUES
-    ('cat-electronics', 'Electronics', 'Electronic devices and gadgets', NOW(), NOW()),
-    ('cat-clothing', 'Clothing', 'Fashion and apparel', NOW(), NOW()),
-    ('cat-books', 'Books', 'Books and educational materials', NOW(), NOW()),
-    ('cat-home', 'Home & Garden', 'Home decor and garden supplies', NOW(), NOW()),
-    ('cat-sports', 'Sports & Outdoors', 'Sports equipment and outdoor gear', NOW(), NOW())
-ON CONFLICT (id) DO NOTHING;
+INSERT INTO categories (name, slug, description) VALUES
+    ('Electronics', 'electronics', 'Electronic devices and gadgets'),
+    ('Clothing', 'clothing', 'Fashion and apparel'),
+    ('Books', 'books', 'Books and educational materials'),
+    ('Home & Garden', 'home-garden', 'Home decor and garden supplies'),
+    ('Sports & Outdoors', 'sports-outdoors', 'Sports equipment and outdoor gear')
+ON CONFLICT (slug) DO NOTHING;
 "
 print_success "5 categories seeded"
+
+# Get category IDs for products
+CAT_ELECTRONICS=$(get_sql_value "SELECT id FROM categories WHERE slug='electronics';")
+CAT_CLOTHING=$(get_sql_value "SELECT id FROM categories WHERE slug='clothing';")
+CAT_BOOKS=$(get_sql_value "SELECT id FROM categories WHERE slug='books';")
+CAT_HOME=$(get_sql_value "SELECT id FROM categories WHERE slug='home-garden';")
+CAT_SPORTS=$(get_sql_value "SELECT id FROM categories WHERE slug='sports-outdoors';")
 
 # ============================================
 # SEED PRODUCTS
 # ============================================
 print_header "SEEDING PRODUCTS"
 
-run_sql "
-INSERT INTO products (id, name, description, price, stock, sku, \"isActive\", \"categoryId\", \"createdAt\", \"updatedAt\") VALUES
-    -- Electronics
-    ('prod-laptop', 'MacBook Pro 14\"', 'Apple MacBook Pro with M3 chip, 16GB RAM, 512GB SSD', 1999.99, 50, 'ELEC-MBP14-001', true, 'cat-electronics', NOW(), NOW()),
-    ('prod-phone', 'iPhone 15 Pro', 'Apple iPhone 15 Pro, 256GB, Natural Titanium', 1199.99, 100, 'ELEC-IP15P-001', true, 'cat-electronics', NOW(), NOW()),
-    ('prod-headphones', 'Sony WH-1000XM5', 'Premium noise-canceling wireless headphones', 349.99, 75, 'ELEC-SNYWH5-001', true, 'cat-electronics', NOW(), NOW()),
-    ('prod-tablet', 'iPad Air', 'Apple iPad Air, 256GB, Space Gray', 749.99, 60, 'ELEC-IPAIR-001', true, 'cat-electronics', NOW(), NOW()),
+if [ -n "$CAT_ELECTRONICS" ]; then
+    run_sql "
+    INSERT INTO products (name, description, price, stock, category_id, is_active) VALUES
+        -- Electronics
+        ('MacBook Pro 14', 'Apple MacBook Pro with M3 chip, 16GB RAM, 512GB SSD', 1999.99, 50, '$CAT_ELECTRONICS', true),
+        ('iPhone 15 Pro', 'Apple iPhone 15 Pro, 256GB, Natural Titanium', 1199.99, 100, '$CAT_ELECTRONICS', true),
+        ('Sony WH-1000XM5', 'Premium noise-canceling wireless headphones', 349.99, 75, '$CAT_ELECTRONICS', true),
+        ('iPad Air', 'Apple iPad Air, 256GB, Space Gray', 749.99, 60, '$CAT_ELECTRONICS', true),
+        ('Discontinued Item', 'This product is no longer available', 9.99, 0, '$CAT_ELECTRONICS', false)
+    ON CONFLICT DO NOTHING;
+    "
+    print_success "5 electronics products seeded"
+else
+    print_error "Electronics category not found"
+fi
 
-    -- Clothing
-    ('prod-tshirt', 'Classic Cotton T-Shirt', '100% organic cotton, available in multiple colors', 29.99, 200, 'CLTH-TSHRT-001', true, 'cat-clothing', NOW(), NOW()),
-    ('prod-jeans', 'Slim Fit Jeans', 'Premium denim jeans, comfortable stretch fit', 79.99, 150, 'CLTH-JEANS-001', true, 'cat-clothing', NOW(), NOW()),
-    ('prod-jacket', 'Winter Parka', 'Waterproof winter jacket with faux fur hood', 199.99, 40, 'CLTH-PARKA-001', true, 'cat-clothing', NOW(), NOW()),
+if [ -n "$CAT_CLOTHING" ]; then
+    run_sql "
+    INSERT INTO products (name, description, price, stock, category_id, is_active) VALUES
+        ('Classic Cotton T-Shirt', '100% organic cotton, available in multiple colors', 29.99, 200, '$CAT_CLOTHING', true),
+        ('Slim Fit Jeans', 'Premium denim jeans, comfortable stretch fit', 79.99, 150, '$CAT_CLOTHING', true),
+        ('Winter Parka', 'Waterproof winter jacket with faux fur hood', 199.99, 40, '$CAT_CLOTHING', true)
+    ON CONFLICT DO NOTHING;
+    "
+    print_success "3 clothing products seeded"
+else
+    print_error "Clothing category not found"
+fi
 
-    -- Books
-    ('prod-book1', 'Clean Code', 'A Handbook of Agile Software Craftsmanship by Robert C. Martin', 44.99, 100, 'BOOK-CLEAN-001', true, 'cat-books', NOW(), NOW()),
-    ('prod-book2', 'Design Patterns', 'Elements of Reusable Object-Oriented Software', 54.99, 80, 'BOOK-DESGN-001', true, 'cat-books', NOW(), NOW()),
+if [ -n "$CAT_BOOKS" ]; then
+    run_sql "
+    INSERT INTO products (name, description, price, stock, category_id, is_active) VALUES
+        ('Clean Code', 'A Handbook of Agile Software Craftsmanship by Robert C. Martin', 44.99, 100, '$CAT_BOOKS', true),
+        ('Design Patterns', 'Elements of Reusable Object-Oriented Software', 54.99, 80, '$CAT_BOOKS', true)
+    ON CONFLICT DO NOTHING;
+    "
+    print_success "2 book products seeded"
+else
+    print_error "Books category not found"
+fi
 
-    -- Home & Garden
-    ('prod-lamp', 'Smart LED Desk Lamp', 'Adjustable brightness and color temperature', 69.99, 90, 'HOME-LAMP-001', true, 'cat-home', NOW(), NOW()),
-    ('prod-plant', 'Indoor Plant Set', 'Set of 3 low-maintenance indoor plants', 49.99, 30, 'HOME-PLANT-001', true, 'cat-home', NOW(), NOW()),
+if [ -n "$CAT_HOME" ]; then
+    run_sql "
+    INSERT INTO products (name, description, price, stock, category_id, is_active) VALUES
+        ('Smart LED Desk Lamp', 'Adjustable brightness and color temperature', 69.99, 90, '$CAT_HOME', true),
+        ('Indoor Plant Set', 'Set of 3 low-maintenance indoor plants', 49.99, 30, '$CAT_HOME', true)
+    ON CONFLICT DO NOTHING;
+    "
+    print_success "2 home products seeded"
+else
+    print_error "Home category not found"
+fi
 
-    -- Sports
-    ('prod-yoga', 'Yoga Mat Premium', 'Non-slip yoga mat, 6mm thickness', 39.99, 120, 'SPRT-YOGA-001', true, 'cat-sports', NOW(), NOW()),
-    ('prod-dumbell', 'Adjustable Dumbbell Set', 'Adjustable weight from 5-50 lbs', 299.99, 25, 'SPRT-DUMB-001', true, 'cat-sports', NOW(), NOW()),
-
-    -- Inactive product for testing
-    ('prod-old', 'Discontinued Item', 'This product is no longer available', 9.99, 0, 'DISC-OLD-001', false, 'cat-electronics', NOW(), NOW())
-ON CONFLICT (id) DO NOTHING;
-"
-print_success "14 products seeded"
+if [ -n "$CAT_SPORTS" ]; then
+    run_sql "
+    INSERT INTO products (name, description, price, stock, category_id, is_active) VALUES
+        ('Yoga Mat Premium', 'Non-slip yoga mat, 6mm thickness', 39.99, 120, '$CAT_SPORTS', true),
+        ('Adjustable Dumbbell Set', 'Adjustable weight from 5-50 lbs', 299.99, 25, '$CAT_SPORTS', true)
+    ON CONFLICT DO NOTHING;
+    "
+    print_success "2 sports products seeded"
+else
+    print_error "Sports category not found"
+fi
 
 # ============================================
 # SUMMARY
