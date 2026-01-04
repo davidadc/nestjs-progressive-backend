@@ -28,24 +28,24 @@
 
 ### Phase 1: Project Scaffolding
 
-- [ ] Initialize NestJS project with CLI
-- [ ] Install core dependencies (@nestjs/common, @nestjs/core, @nestjs/platform-express)
-- [ ] Install validation dependencies (class-validator, class-transformer)
-- [ ] Install authentication (@nestjs/passport, @nestjs/jwt, passport-jwt, bcrypt)
-- [ ] Install documentation (@nestjs/swagger)
-- [ ] Install throttling (@nestjs/throttler)
-- [ ] Create .env and .env.example files
-- [ ] Set up folder structure (4-layer Clean Architecture)
+- [x] Initialize NestJS project with CLI
+- [x] Install core dependencies (@nestjs/common, @nestjs/core, @nestjs/platform-express)
+- [x] Install validation dependencies (class-validator, class-transformer)
+- [x] Install authentication (@nestjs/passport, @nestjs/jwt, passport-jwt, bcrypt)
+- [x] Install documentation (@nestjs/swagger)
+- [x] Install throttling (@nestjs/throttler)
+- [x] Create .env and .env.example files
+- [x] Set up folder structure (4-layer Clean Architecture)
 
 ### Phase 2: Database Setup (Prisma)
 
-- [ ] Initialize Prisma (`pnpm exec prisma init`)
-- [ ] Define User model in schema.prisma
-- [ ] Define Project model with User relations
-- [ ] Define Task model with Project/User relations
-- [ ] Define TaskComment model
+- [x] Initialize Prisma (`pnpm exec prisma init`)
+- [x] Define User model in schema.prisma
+- [x] Define Project model with User relations
+- [x] Define Task model with Project/User relations
+- [x] Define TaskComment model
 - [ ] Run initial migration (`pnpm exec prisma migrate dev --name init`)
-- [ ] Generate Prisma client
+- [x] Generate Prisma client
 
 ### Phase 3: Domain Layer
 
