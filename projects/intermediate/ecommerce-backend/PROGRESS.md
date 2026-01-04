@@ -205,9 +205,39 @@
 ### Phase 10: Documentation
 
 - [ ] Swagger API documentation complete
-- [ ] PROGRESS.md updated (this file)
+- [x] PROGRESS.md updated (this file)
 - [ ] AI_CONTEXT.md created
 - [ ] README.md updated
+
+### Phase 11: Manual/Automated API Testing
+
+- [x] Create scripts directory
+- [x] Create seed-data.sh for test data population
+  - [x] Seed categories (5 categories)
+  - [x] Seed products (14 products across categories)
+  - [x] Database cleanup function
+- [x] Create test-api.sh for endpoint testing
+  - [x] Health check verification
+  - [x] Auth endpoints (register, login, profile, invalid login, unauthorized access)
+  - [x] Category endpoints (list, get by ID, admin protection)
+  - [x] Product endpoints (list, pagination, sorting, filtering, search, get by ID, 404 handling)
+  - [x] Cart endpoints (get, add item, update quantity, verify, clear)
+  - [x] Order endpoints (list, create from cart, get by ID, pagination)
+  - [x] Review endpoints (get product reviews, create, update)
+  - [x] Test summary with pass/fail/skip counters
+- [x] Make scripts executable
+
+**Usage:**
+```bash
+# 1. Start the server
+pnpm run start:dev
+
+# 2. Seed the database with test data
+./scripts/seed-data.sh
+
+# 3. Run API tests
+./scripts/test-api.sh
+```
 
 ---
 
@@ -544,6 +574,10 @@ ecommerce-backend/
 │   ├── reviews.e2e-spec.ts
 │   └── jest-e2e.json
 │
+├── scripts/
+│   ├── seed-data.sh                # Database seeding script
+│   └── test-api.sh                 # API integration test script
+│
 ├── .env.example
 ├── .gitignore
 ├── package.json
@@ -566,13 +600,19 @@ pnpm install
 docker-compose up -d postgres
 
 # Run migrations
-pnpm run typeorm migration:run
+pnpm run migration:run
 
 # Start development server
 pnpm run start:dev
 
 # Access Swagger docs
-open http://localhost:3000/api
+open http://localhost:3000/docs
+
+# Seed test data (in new terminal)
+./scripts/seed-data.sh
+
+# Run API tests
+./scripts/test-api.sh
 ```
 
 ---
