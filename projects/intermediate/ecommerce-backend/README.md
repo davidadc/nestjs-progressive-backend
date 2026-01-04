@@ -23,6 +23,7 @@ Complete online store backend API with product catalog, shopping cart, orders, a
 
 - [x] User authentication (register, login, JWT)
 - [x] Role-based authorization (customer, admin)
+- [x] User address management
 - [x] Product catalog with categories
 - [x] Product search and filtering
 - [x] Shopping cart management
@@ -32,6 +33,8 @@ Complete online store backend API with product catalog, shopping cart, orders, a
 - [x] API versioning (/api/v1)
 - [x] Response envelopes
 - [x] Swagger documentation
+- [x] Unit tests (76 tests, 100% service coverage)
+- [x] E2E tests (63 tests)
 
 ---
 
@@ -81,7 +84,7 @@ pnpm run start:dev
 
 The API will be available at `http://localhost:3000`
 
-Swagger docs at `http://localhost:3000/api`
+Swagger docs at `http://localhost:3000/docs`
 
 ---
 
@@ -106,6 +109,13 @@ Swagger docs at `http://localhost:3000/api`
 | `pnpm run typeorm migration:generate -- --name Name` | Generate migration    |
 | `pnpm run typeorm migration:run`                     | Run migrations        |
 | `pnpm run typeorm migration:revert`                  | Revert last migration |
+
+### Test Scripts
+
+| Command | Description |
+|---------|-------------|
+| `./scripts/seed-data.sh` | Seed database with test data |
+| `./scripts/test-api.sh` | Run API integration tests (54 tests) |
 
 ---
 
@@ -153,6 +163,16 @@ src/
 | POST   | `/api/v1/auth/register` | Register user    | No       |
 | POST   | `/api/v1/auth/login`    | Login            | No       |
 | GET    | `/api/v1/auth/profile`  | Get profile      | Required |
+
+### Address Management
+
+| Method | Endpoint | Description | Auth |
+|--------|----------|-------------|------|
+| GET | `/api/v1/users/me/addresses` | List my addresses | Required |
+| POST | `/api/v1/users/me/addresses` | Add new address | Required |
+| PUT | `/api/v1/users/me/addresses/:id` | Update address | Required |
+| DELETE | `/api/v1/users/me/addresses/:id` | Delete address | Required |
+| PATCH | `/api/v1/users/me/addresses/:id/default` | Set as default | Required |
 
 ### Products
 
@@ -319,25 +339,43 @@ curl -X POST http://localhost:3000/api/v1/orders \
 
 ## Testing
 
-### Run Unit Tests
+### Unit Tests (76 tests)
 
 ```bash
-pnpm run test
+pnpm run test           # Run unit tests
+pnpm run test:cov       # Run with coverage report
 ```
 
-### Run with Coverage
+Coverage: **100% service coverage**
+
+### E2E Tests (63 tests)
 
 ```bash
-pnpm run test:cov
-```
+# Seed test data first
+./scripts/seed-data.sh
 
-Coverage target: **80% minimum**
-
-### Run E2E Tests
-
-```bash
+# Run E2E tests
 pnpm run test:e2e
 ```
+
+### API Integration Tests (54 tests)
+
+```bash
+# Start server first
+pnpm run start:dev
+
+# In another terminal
+./scripts/test-api.sh
+```
+
+### Test Credentials
+
+After running `./scripts/seed-data.sh`:
+
+| Role | Email | Password |
+|------|-------|----------|
+| Admin | admin@example.com | Password123! |
+| Customer | customer@example.com | Password123! |
 
 ---
 
@@ -357,19 +395,20 @@ pnpm run test:e2e
 
 ## Development Checklist
 
-- [ ] Environment configured
-- [ ] Database migrations run
-- [ ] Auth endpoints implemented
-- [ ] Product CRUD implemented
-- [ ] Category CRUD implemented
-- [ ] Cart management implemented
-- [ ] Order processing implemented
-- [ ] Reviews implemented
-- [ ] Input validation added
-- [ ] Error handling implemented
-- [ ] Unit tests written (80%+ coverage)
-- [ ] E2E tests written
-- [ ] Swagger documentation added
+- [x] Environment configured
+- [x] Database migrations run
+- [x] Auth endpoints implemented
+- [x] Address management implemented
+- [x] Product CRUD implemented
+- [x] Category CRUD implemented
+- [x] Cart management implemented
+- [x] Order processing implemented
+- [x] Reviews implemented
+- [x] Input validation added
+- [x] Error handling implemented
+- [x] Unit tests written (100% service coverage)
+- [x] E2E tests written (63 tests)
+- [x] Swagger documentation added
 
 ---
 

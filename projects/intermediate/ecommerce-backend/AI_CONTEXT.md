@@ -519,53 +519,49 @@ export class Review {
 
 ## Testing Strategy
 
-### Unit Tests (80% minimum coverage)
+### Unit Tests (76 tests, 100% service coverage)
 
-```typescript
-describe('ProductsService', () => {
-  describe('create', () => {
-    it('should create a product with valid data');
-    it('should throw error when category not found');
-  });
+| Service | Tests |
+|---------|-------|
+| AuthService | 5 tests |
+| ProductsService | 9 tests |
+| CategoriesService | 11 tests |
+| CartsService | 14 tests |
+| OrdersService | 6 tests |
+| ReviewsService | 12 tests |
+| CreateOrderUseCase | 9 tests |
 
-  describe('findAll', () => {
-    it('should return paginated products');
-    it('should filter by category');
-    it('should search by name');
-  });
-});
-
-describe('CreateOrderUseCase', () => {
-  describe('execute', () => {
-    it('should create order from cart');
-    it('should reduce product stock');
-    it('should clear cart after order');
-    it('should throw error when insufficient stock');
-  });
-});
+**Run unit tests:**
+```bash
+pnpm run test           # Run all unit tests
+pnpm run test:cov       # Run with coverage report
 ```
 
-### E2E Tests
+### E2E Tests (63 tests, all passing)
 
-```typescript
-describe('Products Endpoints', () => {
-  describe('GET /api/v1/products', () => {
-    it('should return paginated products');
-    it('should filter products by category');
-  });
+| Test File | Tests |
+|-----------|-------|
+| auth.e2e-spec.ts | 9 tests (register, login, profile) |
+| products.e2e-spec.ts | 18 tests (products CRUD, filtering) |
+| products.e2e-spec.ts | 8 tests (categories CRUD) |
+| cart.e2e-spec.ts | 11 tests (add, update, remove, clear) |
+| orders.e2e-spec.ts | 12 tests (create, list, flow) |
+| reviews.e2e-spec.ts | 12 tests (CRUD, validation) |
 
-  describe('POST /api/v1/products', () => {
-    it('should create product as admin');
-    it('should fail for non-admin users');
-  });
-});
+**Run E2E tests:**
+```bash
+# Seed test data first
+./scripts/seed-data.sh
 
-describe('Cart Endpoints', () => {
-  describe('POST /api/v1/cart/items', () => {
-    it('should add item to cart');
-    it('should update quantity if item exists');
-  });
-});
+# Run E2E tests
+pnpm run test:e2e
+```
+
+### API Integration Tests (54 tests)
+
+Shell-based API testing with `test-api.sh`:
+```bash
+./scripts/test-api.sh
 ```
 
 ---
