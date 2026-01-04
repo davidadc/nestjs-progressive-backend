@@ -9,13 +9,18 @@ import { OrdersModule } from './orders/orders.module';
 import { ReviewsModule } from './reviews/reviews.module';
 import { JwtAuthGuard } from './auth/infrastructure/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/infrastructure/guards/roles.guard';
+import { envValidationSchema } from './config/env.validation';
 
 @Module({
   imports: [
-    // Configuration
+    // Configuration with Joi validation
     ConfigModule.forRoot({
       isGlobal: true,
       envFilePath: '.env',
+      validationSchema: envValidationSchema,
+      validationOptions: {
+        abortEarly: false, // Show all validation errors at once
+      },
     }),
 
     // Database

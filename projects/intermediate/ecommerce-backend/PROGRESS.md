@@ -174,7 +174,7 @@
 - [x] DatabaseConfig (TypeORM async configuration)
 - [x] JwtConfig (JWT module async configuration)
 - [x] AppConfig (.env configuration)
-- [ ] ConfigModule with validation (Joi)
+- [x] ConfigModule with validation (Joi)
 
 ### Phase 8: App Module Integration
 
