@@ -111,9 +111,16 @@
   - [ ] Error handling (404, 401, 403, validation errors)
   - [ ] Test summary with pass/fail counters
 - [ ] Create user journey tests (complete workflows)
-  - [ ] Journey 1: {{Primary user flow, e.g., "Register → Login → Create Resource"}}
-  - [ ] Journey 2: {{Secondary flow, e.g., "Update → Delete → Verify"}}
-  - [ ] Journey 3: {{Guest/unauthenticated flow}}
+  <!-- Define journeys based on your app's user roles and core features -->
+  <!-- Examples by app type:
+       - E-commerce: Purchase flow, Review flow, Guest browsing, Admin product management
+       - Blog: Author publish flow, Reader comment flow, Admin moderation
+       - Task Manager: Create project → Add tasks → Complete → Archive
+       - Chat: Join room → Send messages → Leave room
+  -->
+  - [ ] Journey: {{User role}} - {{Flow name}} ({{Step 1 → Step 2 → Step 3...}})
+  - [ ] Journey: {{User role}} - {{Flow name}} ({{Step 1 → Step 2 → Step 3...}})
+  <!-- Add more journeys as needed for each user role and core feature -->
 - [ ] Make scripts executable (`chmod +x`)
 
 **Usage:**
