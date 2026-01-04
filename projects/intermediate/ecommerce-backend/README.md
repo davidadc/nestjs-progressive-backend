@@ -449,6 +449,71 @@ pnpm run typeorm migration:run
 
 ---
 
+## Potential Improvements
+
+Future enhancements that could be added to this project:
+
+### Payment Integration
+- Stripe/PayPal payment processing
+- Payment webhooks handling
+- Refund management
+- Multiple payment methods per user
+- Invoice generation (PDF)
+
+### Product Features
+- Product variants (size, color, etc.)
+- Product bundles/packages
+- Wishlist functionality
+- Product comparison
+- Recently viewed products
+- Low stock alerts
+
+### Order Management
+- Order status webhooks/notifications
+- Email notifications (order confirmation, shipping, delivery)
+- Order cancellation with stock restoration
+- Partial refunds
+- Order tracking integration
+- Return/exchange requests
+
+### Shopping Experience
+- Coupon/discount codes
+- Loyalty points system
+- Gift cards
+- Save cart for later
+- Guest checkout
+- Abandoned cart recovery emails
+
+### Search & Discovery
+- Elasticsearch for advanced product search
+- Search autocomplete/suggestions
+- Faceted search (filters by attributes)
+- Product recommendations (related/similar)
+- Recently searched terms
+
+### Performance
+- Redis caching for products and categories
+- CDN integration for product images
+- Database query optimization
+- Response compression
+- Horizontal scaling support
+
+### Security
+- Two-factor authentication (2FA)
+- OAuth2 social login (Google, Facebook)
+- Account lockout after failed attempts
+- Fraud detection for orders
+- PCI DSS compliance for payments
+
+### DevOps
+- CI/CD pipeline (GitHub Actions)
+- Docker production optimization
+- Kubernetes deployment manifests
+- Monitoring with Prometheus/Grafana
+- Centralized logging (ELK stack)
+
+---
+
 ## License
 
 MIT
