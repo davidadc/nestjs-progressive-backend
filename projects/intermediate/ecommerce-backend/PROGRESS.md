@@ -186,7 +186,36 @@
   - [x] Global prefix (/api/v1)
   - [x] CORS configuration
 
-### Phase 9: Testing
+### Phase 9: API Integration Testing (Scripts)
+
+> Quick validation of endpoints using shell scripts before formal testing.
+
+- [x] Create `scripts/` directory
+- [x] Create `seed-data.sh` for test data population
+  - [x] Seed categories (5 categories)
+  - [x] Seed products (14 products across categories)
+  - [x] Database cleanup function
+- [x] Create `test-api.sh` for endpoint testing
+  - [x] Health check verification
+  - [x] Auth endpoints (register, login, profile, invalid login, unauthorized access)
+  - [x] Category endpoints (list, get by ID, admin protection)
+  - [x] Product endpoints (list, pagination, sorting, filtering, search, get by ID, 404 handling)
+  - [x] Cart endpoints (get, add item, update quantity, verify, clear)
+  - [x] Order endpoints (list, create from cart, get by ID, pagination)
+  - [x] Review endpoints (get product reviews, create, update)
+  - [x] Test summary with pass/fail/skip counters
+- [x] Make scripts executable (`chmod +x`)
+
+**Usage:**
+```bash
+# Seed test data
+./scripts/seed-data.sh
+
+# Run API tests
+./scripts/test-api.sh
+```
+
+### Phase 10: Unit & E2E Testing
 
 - [ ] Unit tests for AuthService
 - [ ] Unit tests for ProductsService
@@ -202,42 +231,12 @@
 - [ ] E2E tests for reviews endpoints
 - [ ] Achieve 80%+ coverage on services
 
-### Phase 10: Documentation
+### Phase 11: Documentation
 
 - [ ] Swagger API documentation complete
 - [x] PROGRESS.md updated (this file)
 - [ ] AI_CONTEXT.md created
 - [ ] README.md updated
-
-### Phase 11: Manual/Automated API Testing
-
-- [x] Create scripts directory
-- [x] Create seed-data.sh for test data population
-  - [x] Seed categories (5 categories)
-  - [x] Seed products (14 products across categories)
-  - [x] Database cleanup function
-- [x] Create test-api.sh for endpoint testing
-  - [x] Health check verification
-  - [x] Auth endpoints (register, login, profile, invalid login, unauthorized access)
-  - [x] Category endpoints (list, get by ID, admin protection)
-  - [x] Product endpoints (list, pagination, sorting, filtering, search, get by ID, 404 handling)
-  - [x] Cart endpoints (get, add item, update quantity, verify, clear)
-  - [x] Order endpoints (list, create from cart, get by ID, pagination)
-  - [x] Review endpoints (get product reviews, create, update)
-  - [x] Test summary with pass/fail/skip counters
-- [x] Make scripts executable
-
-**Usage:**
-```bash
-# 1. Start the server
-pnpm run start:dev
-
-# 2. Seed the database with test data
-./scripts/seed-data.sh
-
-# 3. Run API tests
-./scripts/test-api.sh
-```
 
 ---
 

@@ -95,14 +95,40 @@
   - [ ] ValidationPipe
   - [ ] CORS (if needed)
 
-### Phase 9: Testing
+### Phase 9: API Integration Testing (Scripts)
+
+> Quick validation of endpoints using shell scripts before formal testing.
+
+- [ ] Create `scripts/` directory
+- [ ] Create `seed-data.sh` for test data population
+  - [ ] Seed reference data (categories, roles, etc.)
+  - [ ] Seed sample entities for testing
+  - [ ] Add cleanup/reset function
+- [ ] Create `test-api.sh` for endpoint testing
+  - [ ] Health check verification
+  - [ ] Auth endpoints (if applicable)
+  - [ ] CRUD endpoints for each resource
+  - [ ] Error handling (404, 401, 403, validation errors)
+  - [ ] Test summary with pass/fail counters
+- [ ] Make scripts executable (`chmod +x`)
+
+**Usage:**
+```bash
+# Seed test data
+./scripts/seed-data.sh
+
+# Run API tests
+./scripts/test-api.sh
+```
+
+### Phase 10: Unit & E2E Testing
 
 - [ ] Create unit tests for services
 - [ ] Create unit tests for use-cases (if applicable)
-- [ ] Create E2E tests
+- [ ] Create E2E tests with Jest/Supertest
 - [ ] Achieve 80%+ coverage on core logic
 
-### Phase 10: Documentation
+### Phase 11: Documentation
 
 - [ ] Swagger API documentation complete
 - [ ] PROGRESS.md updated (this file)
@@ -153,6 +179,9 @@
 │   ├── prisma/ (or typeorm/ or drizzle/)
 │   ├── app.module.ts
 │   └── main.ts
+├── scripts/
+│   ├── seed-data.sh          # Database seeding script
+│   └── test-api.sh           # API integration test script
 ├── prisma/ (or migrations/)
 ├── test/
 └── package.json
@@ -170,13 +199,19 @@ pnpm install
 docker-compose up -d postgres
 
 # Run migrations
-{{pnpm exec prisma migrate dev | pnpm run typeorm migration:run | pnpm run db:migrate}}
+{{pnpm exec prisma migrate dev | pnpm run migration:run | pnpm run db:migrate}}
 
 # Start development server
 pnpm run start:dev
 
 # Access Swagger docs
 open http://localhost:3000/docs
+
+# Seed test data (optional, in new terminal)
+./scripts/seed-data.sh
+
+# Run API integration tests
+./scripts/test-api.sh
 ```
 
 ---
