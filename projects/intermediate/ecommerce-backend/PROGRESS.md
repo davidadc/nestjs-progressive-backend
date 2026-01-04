@@ -204,6 +204,10 @@
   - [x] Order endpoints (list, create from cart, get by ID, pagination)
   - [x] Review endpoints (get product reviews, create, update)
   - [x] Test summary with pass/fail/skip counters
+- [x] Create user journey tests (complete workflows)
+  - [x] Journey 1: Customer Purchase Flow (Register → Login → Browse → Cart → Order)
+  - [x] Journey 2: Product Review Flow (View Orders → Order Details → Leave Review)
+  - [x] Journey 3: Guest Browsing Flow (Browse → View Details → Auth Required for Cart)
 - [x] Make scripts executable (`chmod +x`)
 
 **Usage:**

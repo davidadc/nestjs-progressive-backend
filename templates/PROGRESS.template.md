@@ -110,6 +110,10 @@
   - [ ] CRUD endpoints for each resource
   - [ ] Error handling (404, 401, 403, validation errors)
   - [ ] Test summary with pass/fail counters
+- [ ] Create user journey tests (complete workflows)
+  - [ ] Journey 1: {{Primary user flow, e.g., "Register → Login → Create Resource"}}
+  - [ ] Journey 2: {{Secondary flow, e.g., "Update → Delete → Verify"}}
+  - [ ] Journey 3: {{Guest/unauthenticated flow}}
 - [ ] Make scripts executable (`chmod +x`)
 
 **Usage:**

@@ -487,7 +487,233 @@ else
 fi
 
 # ============================================
-# CART CLEANUP
+# USER JOURNEY TESTS
+# ============================================
+print_header "USER JOURNEY TESTS"
+
+echo -e "\n${CYAN}These tests simulate complete user workflows${NC}"
+
+# ------------------------------
+# Journey 1: New Customer Purchase Flow
+# Register → Login → Browse → Add to Cart → Checkout
+# ------------------------------
+print_subheader "Journey 1: New Customer Purchase Flow"
+
+# Step 1: Register new customer
+print_test "Step 1: Register new customer"
+JOURNEY_TIMESTAMP=$(date +%s)
+JOURNEY_EMAIL="customer${JOURNEY_TIMESTAMP}@example.com"
+RESPONSE=$(request POST "/auth/register" "{\"email\":\"$JOURNEY_EMAIL\",\"password\":\"Customer123!\",\"name\":\"Journey Customer\"}")
+if check_success "$RESPONSE" '.data.id'; then
+    JOURNEY_USER_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+    print_success "Customer registered: $JOURNEY_EMAIL"
+else
+    print_error "Journey 1 failed at registration"
+    print_response "$RESPONSE"
+fi
+
+# Step 2: Login
+print_test "Step 2: Login as new customer"
+RESPONSE=$(request POST "/auth/login" "{\"email\":\"$JOURNEY_EMAIL\",\"password\":\"Customer123!\"}")
+if check_success "$RESPONSE" '.data.accessToken'; then
+    JOURNEY_TOKEN=$(echo "$RESPONSE" | jq -r '.data.accessToken')
+    print_success "Customer logged in"
+else
+    print_error "Journey 1 failed at login"
+    print_response "$RESPONSE"
+fi
+
+# Step 3: Browse products
+print_test "Step 3: Browse available products"
+RESPONSE=$(request GET "/products?limit=5")
+if check_success "$RESPONSE" '.data'; then
+    JOURNEY_PRODUCT_ID=$(echo "$RESPONSE" | jq -r '.data[0].id // .data.items[0].id // empty' 2>/dev/null)
+    JOURNEY_PRODUCT_NAME=$(echo "$RESPONSE" | jq -r '.data[0].name // .data.items[0].name // "Unknown"' 2>/dev/null)
+    if [ -n "$JOURNEY_PRODUCT_ID" ]; then
+        print_success "Found product: $JOURNEY_PRODUCT_NAME"
+    else
+        print_skip "No products available for purchase"
+    fi
+else
+    print_error "Journey 1 failed at browsing products"
+    print_response "$RESPONSE"
+fi
+
+# Step 4: Add product to cart
+print_test "Step 4: Add product to cart"
+if [ -n "$JOURNEY_TOKEN" ] && [ -n "$JOURNEY_PRODUCT_ID" ]; then
+    RESPONSE=$(request POST "/cart/items" "{\"productId\":\"$JOURNEY_PRODUCT_ID\",\"quantity\":1}" "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data'; then
+        print_success "Product added to cart"
+    else
+        print_error "Journey 1 failed at adding to cart"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "Missing token or product ID"
+fi
+
+# Step 5: View cart
+print_test "Step 5: View cart before checkout"
+if [ -n "$JOURNEY_TOKEN" ]; then
+    RESPONSE=$(request GET "/cart" "" "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data'; then
+        CART_TOTAL=$(echo "$RESPONSE" | jq -r '.data.total // "N/A"')
+        print_success "Cart ready for checkout (Total: $CART_TOTAL)"
+    else
+        print_error "Journey 1 failed at viewing cart"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "Missing token"
+fi
+
+# Step 6: Create order (checkout)
+print_test "Step 6: Complete checkout (create order)"
+if [ -n "$JOURNEY_TOKEN" ]; then
+    RESPONSE=$(request POST "/orders" '{"shippingAddress":"456 Customer Lane, Shopping City, SC 54321"}' "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data.id'; then
+        JOURNEY_ORDER_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+        JOURNEY_ORDER_TOTAL=$(echo "$RESPONSE" | jq -r '.data.total // "N/A"')
+        print_success "Order placed! ID: $JOURNEY_ORDER_ID, Total: \$$JOURNEY_ORDER_TOTAL"
+    else
+        if echo "$RESPONSE" | grep -qi "cart.*empty\|no.*items"; then
+            print_skip "Cart was empty (no products seeded)"
+        else
+            print_error "Journey 1 failed at checkout"
+            print_response "$RESPONSE"
+        fi
+    fi
+else
+    print_skip "Missing token"
+fi
+
+echo -e "\n${CYAN}Journey 1 Complete: Registration → Login → Browse → Cart → Order${NC}"
+
+# ------------------------------
+# Journey 2: Product Review Flow
+# Login → View Orders → Review Purchased Product
+# ------------------------------
+print_subheader "Journey 2: Product Review Flow"
+
+# Step 1: View order history
+print_test "Step 1: View order history"
+if [ -n "$JOURNEY_TOKEN" ]; then
+    RESPONSE=$(request GET "/orders" "" "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data'; then
+        ORDER_COUNT=$(echo "$RESPONSE" | jq '.data | if type == "array" then length else .items | length end' 2>/dev/null || echo "0")
+        print_success "Found $ORDER_COUNT order(s) in history"
+    else
+        print_error "Journey 2 failed at viewing orders"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "Missing token"
+fi
+
+# Step 2: View order details
+print_test "Step 2: View order details"
+if [ -n "$JOURNEY_TOKEN" ] && [ -n "$JOURNEY_ORDER_ID" ]; then
+    RESPONSE=$(request GET "/orders/$JOURNEY_ORDER_ID" "" "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data.id'; then
+        ORDER_STATUS=$(echo "$RESPONSE" | jq -r '.data.status // "unknown"')
+        print_success "Order status: $ORDER_STATUS"
+    else
+        print_error "Journey 2 failed at viewing order details"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "No order to view"
+fi
+
+# Step 3: Leave product review
+print_test "Step 3: Leave review for purchased product"
+if [ -n "$JOURNEY_TOKEN" ] && [ -n "$JOURNEY_PRODUCT_ID" ]; then
+    RESPONSE=$(request POST "/products/$JOURNEY_PRODUCT_ID/reviews" '{"rating":5,"comment":"Great product! Fast shipping and exactly as described. Would buy again!"}' "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data.id'; then
+        JOURNEY_REVIEW_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+        print_success "Review posted! ID: $JOURNEY_REVIEW_ID"
+    else
+        if echo "$RESPONSE" | grep -qi "purchase\|order\|already"; then
+            print_skip "Review requires purchase verification or already reviewed"
+        else
+            print_error "Journey 2 failed at posting review"
+            print_response "$RESPONSE"
+        fi
+    fi
+else
+    print_skip "Missing token or product ID"
+fi
+
+# Step 4: View product reviews
+print_test "Step 4: View product reviews"
+if [ -n "$JOURNEY_PRODUCT_ID" ]; then
+    RESPONSE=$(request GET "/products/$JOURNEY_PRODUCT_ID/reviews")
+    if check_success "$RESPONSE" '.data'; then
+        REVIEW_COUNT=$(echo "$RESPONSE" | jq '.data | if type == "array" then length else 0 end' 2>/dev/null || echo "0")
+        print_success "Product has $REVIEW_COUNT review(s)"
+    else
+        print_error "Journey 2 failed at viewing reviews"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "No product ID"
+fi
+
+echo -e "\n${CYAN}Journey 2 Complete: View Orders → Order Details → Leave Review → View Reviews${NC}"
+
+# ------------------------------
+# Journey 3: Guest Browsing Flow
+# Browse Products → View Details → Cannot Add to Cart (must login)
+# ------------------------------
+print_subheader "Journey 3: Guest Browsing Flow (No Auth)"
+
+# Step 1: Browse categories
+print_test "Step 1: Browse categories as guest"
+RESPONSE=$(request GET "/categories")
+if check_success "$RESPONSE" '.data'; then
+    GUEST_CAT_COUNT=$(echo "$RESPONSE" | jq '.data | length')
+    print_success "Guest can see $GUEST_CAT_COUNT categories"
+else
+    print_error "Journey 3 failed at browsing categories"
+fi
+
+# Step 2: Browse products
+print_test "Step 2: Browse products as guest"
+RESPONSE=$(request GET "/products")
+if check_success "$RESPONSE" '.data'; then
+    print_success "Guest can browse products"
+else
+    print_error "Journey 3 failed at browsing products"
+fi
+
+# Step 3: View product details
+print_test "Step 3: View product details as guest"
+if [ -n "$JOURNEY_PRODUCT_ID" ]; then
+    RESPONSE=$(request GET "/products/$JOURNEY_PRODUCT_ID")
+    if check_success "$RESPONSE" '.data'; then
+        print_success "Guest can view product details"
+    else
+        print_error "Journey 3 failed at viewing product details"
+    fi
+else
+    print_skip "No product ID"
+fi
+
+# Step 4: Try to add to cart without auth (should fail)
+print_test "Step 4: Attempt cart access without login (should fail)"
+RESPONSE=$(request POST "/cart/items" '{"productId":"any-product","quantity":1}')
+if echo "$RESPONSE" | jq -e '.statusCode == 401 or .success == false' > /dev/null 2>&1; then
+    print_success "Cart correctly requires authentication"
+else
+    print_error "Cart should require authentication"
+    print_response "$RESPONSE"
+fi
+
+echo -e "\n${CYAN}Journey 3 Complete: Guest can browse but must login to purchase${NC}"
+
+# ============================================
+# CLEANUP
 # ============================================
 print_header "CLEANUP"
 
