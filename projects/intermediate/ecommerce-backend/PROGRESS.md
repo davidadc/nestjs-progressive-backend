@@ -51,8 +51,8 @@
 - [x] Create OrderItem entity
 - [x] Create Review entity
 - [x] Create Address entity (embedded or separate)
-- [ ] Generate initial migration
-- [ ] Run migrations
+- [x] Generate initial migration
+- [x] Run migrations
 
 ### Phase 3: Domain Layer (per module)
 
