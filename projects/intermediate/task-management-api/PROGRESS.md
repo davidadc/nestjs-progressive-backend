@@ -44,20 +44,21 @@
 - [x] Define Project model with User relations
 - [x] Define Task model with Project/User relations
 - [x] Define TaskComment model
-- [ ] Run initial migration (`pnpm exec prisma migrate dev --name init`)
+- [x] Run initial migration (`pnpm exec prisma migrate dev --name init`)
 - [x] Generate Prisma client
 
 ### Phase 3: Domain Layer
 
-- [ ] Create User entity type definition
-- [ ] Create Project entity type definition
-- [ ] Create Task entity type definition (with TaskStatus, TaskPriority enums)
-- [ ] Create TaskComment entity type definition
-- [ ] Create IUserRepository interface
-- [ ] Create IProjectRepository interface
-- [ ] Create ITaskRepository interface
-- [ ] Create ITaskCommentRepository interface
-- [ ] Define domain exceptions (ProjectNotFoundException, TaskNotFoundException, etc.)
+- [x] Create User entity type definition
+- [x] Create Project entity type definition
+- [x] Create Task entity type definition (with TaskStatus, TaskPriority enums)
+- [x] Create TaskComment entity type definition
+- [x] Create IUserRepository interface
+- [x] Create IProjectRepository interface
+- [x] Create ITaskRepository interface
+- [x] Create ITaskCommentRepository interface
+- [x] Define domain exceptions (ProjectNotFoundException, TaskNotFoundException, etc.)
+- [x] Define domain events (TaskStatusChangedEvent, TaskAssignedEvent, TaskCreatedEvent)
 
 ### Phase 4: Application Layer
 
