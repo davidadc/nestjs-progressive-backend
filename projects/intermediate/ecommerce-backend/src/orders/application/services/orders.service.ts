@@ -18,7 +18,10 @@ export class OrdersService {
     private readonly createOrderUseCase: CreateOrderUseCase,
   ) {}
 
-  async createOrder(userId: string, dto: CreateOrderDto): Promise<OrderResponseDto> {
+  async createOrder(
+    userId: string,
+    dto: CreateOrderDto,
+  ): Promise<OrderResponseDto> {
     return this.createOrderUseCase.execute(userId, dto);
   }
 
@@ -41,7 +44,10 @@ export class OrdersService {
     };
   }
 
-  async getOrderById(userId: string, orderId: string): Promise<OrderResponseDto> {
+  async getOrderById(
+    userId: string,
+    orderId: string,
+  ): Promise<OrderResponseDto> {
     const order = await this.orderRepository.findById(orderId);
 
     if (!order) {

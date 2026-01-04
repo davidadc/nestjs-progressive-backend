@@ -4,6 +4,7 @@ import {
   ExecutionContext,
   CallHandler,
 } from '@nestjs/common';
+import { Response } from 'express';
 import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -19,18 +20,27 @@ export interface SuccessResponse<T> {
   };
 }
 
+interface PaginatedData {
+  page?: number;
+  limit?: number;
+  total?: number;
+  pages?: number;
+  [key: string]: unknown;
+}
+
 @Injectable()
-export class ResponseInterceptor<T>
-  implements NestInterceptor<T, SuccessResponse<T>>
-{
+export class ResponseInterceptor<T> implements NestInterceptor<
+  T,
+  SuccessResponse<T>
+> {
   intercept(
     context: ExecutionContext,
     next: CallHandler,
   ): Observable<SuccessResponse<T>> {
-    const response = context.switchToHttp().getResponse();
+    const response = context.switchToHttp().getResponse<Response>();
 
     return next.handle().pipe(
-      map((data) => {
+      map((data: T) => {
         // Check if response has pagination info
         // Must have 'page' property AND at least one of 'total' or 'pages'
         // to avoid false positives with data objects that have 'total' (like orders)
@@ -41,10 +51,8 @@ export class ResponseInterceptor<T>
           ('total' in data || 'pages' in data);
 
         if (hasPagination) {
-          const { page, limit, total, pages, ...rest } = data as Record<
-            string,
-            unknown
-          >;
+          const paginatedData = data as unknown as PaginatedData;
+          const { page, limit, total, pages, ...rest } = paginatedData;
           const mainData = Object.values(rest)[0] || rest;
 
           return {
@@ -52,10 +60,10 @@ export class ResponseInterceptor<T>
             statusCode: response.statusCode,
             data: mainData as T,
             meta: {
-              page: page as number,
-              limit: limit as number,
-              total: total as number,
-              pages: pages as number,
+              page: page,
+              limit: limit,
+              total: total,
+              pages: pages,
             },
           };
         }

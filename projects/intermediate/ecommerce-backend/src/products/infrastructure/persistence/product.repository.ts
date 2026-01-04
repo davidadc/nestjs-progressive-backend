@@ -61,7 +61,10 @@ export class ProductRepository implements IProductRepository {
 
     const validSortFields = ['createdAt', 'name', 'price', 'stock'];
     const sortField = validSortFields.includes(sort) ? sort : 'createdAt';
-    qb.orderBy(`product.${sortField}`, order?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC');
+    qb.orderBy(
+      `product.${sortField}`,
+      order?.toUpperCase() === 'ASC' ? 'ASC' : 'DESC',
+    );
 
     const [entities, total] = await qb
       .skip((page - 1) * limit)

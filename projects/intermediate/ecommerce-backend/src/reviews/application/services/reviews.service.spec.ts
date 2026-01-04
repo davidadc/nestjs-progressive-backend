@@ -172,7 +172,11 @@ describe('ReviewsService', () => {
       reviewRepository.findByUserAndProduct.mockResolvedValue(null);
       reviewRepository.save.mockResolvedValue(mockReview);
 
-      const result = await service.createReview('user-id', 'prod-id', createDto);
+      const result = await service.createReview(
+        'user-id',
+        'prod-id',
+        createDto,
+      );
 
       expect(productRepository.findById).toHaveBeenCalledWith('prod-id');
       expect(userRepository.findById).toHaveBeenCalledWith('user-id');
@@ -226,7 +230,11 @@ describe('ReviewsService', () => {
         comment: 'Updated review',
       });
 
-      const result = await service.updateReview('user-id', 'review-id', updateDto);
+      const result = await service.updateReview(
+        'user-id',
+        'review-id',
+        updateDto,
+      );
 
       expect(reviewRepository.findById).toHaveBeenCalledWith('review-id');
       expect(reviewRepository.update).toHaveBeenCalled();

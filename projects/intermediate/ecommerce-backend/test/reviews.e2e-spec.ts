@@ -56,7 +56,9 @@ describe('ReviewsController (e2e)', () => {
     adminToken = adminLoginRes.body.data?.accessToken;
 
     if (!adminToken) {
-      throw new Error('Failed to login as admin. Run ./scripts/seed-data.sh first.');
+      throw new Error(
+        'Failed to login as admin. Run ./scripts/seed-data.sh first.',
+      );
     }
 
     // Register and login first user
@@ -85,7 +87,10 @@ describe('ReviewsController (e2e)', () => {
     const catRes = await request(app.getHttpServer())
       .post('/api/v1/categories')
       .set('Authorization', `Bearer ${adminToken}`)
-      .send({ name: `Review Test Category ${Date.now()}`, description: 'Test' });
+      .send({
+        name: `Review Test Category ${Date.now()}`,
+        description: 'Test',
+      });
 
     categoryId = catRes.body.data.id;
 
@@ -142,7 +147,9 @@ describe('ReviewsController (e2e)', () => {
           expect(res.body.success).toBe(true);
           expect(res.body.data).toHaveProperty('id');
           expect(res.body.data.rating).toBe(5);
-          expect(res.body.data.comment).toBe('Excellent product! Highly recommended.');
+          expect(res.body.data.comment).toBe(
+            'Excellent product! Highly recommended.',
+          );
           reviewId = res.body.data.id;
         });
     });

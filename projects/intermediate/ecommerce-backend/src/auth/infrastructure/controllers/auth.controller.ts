@@ -15,7 +15,10 @@ import {
 import { AuthService } from '../../application/services/auth.service';
 import { RegisterDto } from '../../application/dto/register.dto';
 import { LoginDto } from '../../application/dto/login.dto';
-import { AuthResponseDto, UserResponseDto } from '../../application/dto/user-response.dto';
+import {
+  AuthResponseDto,
+  UserResponseDto,
+} from '../../application/dto/user-response.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 

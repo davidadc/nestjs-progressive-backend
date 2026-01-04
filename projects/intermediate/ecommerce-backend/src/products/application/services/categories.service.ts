@@ -8,7 +8,10 @@ import { v4 as uuidv4 } from 'uuid';
 import type { ICategoryRepository } from '../../domain/repositories/category.repository.interface';
 import { CATEGORY_REPOSITORY } from '../../domain/repositories/category.repository.interface';
 import { Category } from '../../domain/entities/category.entity';
-import { CreateCategoryDto, UpdateCategoryDto } from '../dto/create-category.dto';
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from '../dto/create-category.dto';
 import { CategoryResponseDto } from '../dto/category-response.dto';
 import { CategoryMapper } from '../mappers/category.mapper';
 
@@ -38,7 +41,9 @@ export class CategoriesService {
 
     const existingCategory = await this.categoryRepository.findBySlug(slug);
     if (existingCategory) {
-      throw new ConflictException(`Category with slug "${slug}" already exists`);
+      throw new ConflictException(
+        `Category with slug "${slug}" already exists`,
+      );
     }
 
     const category = Category.create({
@@ -52,7 +57,10 @@ export class CategoriesService {
     return this.categoryMapper.toResponseDto(savedCategory);
   }
 
-  async update(id: string, dto: UpdateCategoryDto): Promise<CategoryResponseDto> {
+  async update(
+    id: string,
+    dto: UpdateCategoryDto,
+  ): Promise<CategoryResponseDto> {
     const existingCategory = await this.categoryRepository.findById(id);
     if (!existingCategory) {
       throw new NotFoundException(`Category with ID ${id} not found`);
@@ -63,7 +71,9 @@ export class CategoriesService {
       slug = Category.generateSlug(dto.name);
       const categoryWithSlug = await this.categoryRepository.findBySlug(slug);
       if (categoryWithSlug && categoryWithSlug.id !== id) {
-        throw new ConflictException(`Category with slug "${slug}" already exists`);
+        throw new ConflictException(
+          `Category with slug "${slug}" already exists`,
+        );
       }
     }
 
@@ -71,7 +81,9 @@ export class CategoriesService {
       existingCategory.id,
       dto.name ?? existingCategory.name,
       slug,
-      dto.description !== undefined ? dto.description : existingCategory.description,
+      dto.description !== undefined
+        ? dto.description
+        : existingCategory.description,
       existingCategory.createdAt,
       new Date(),
     );

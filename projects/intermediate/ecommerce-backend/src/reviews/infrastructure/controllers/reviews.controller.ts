@@ -22,7 +22,10 @@ import {
   ApiQuery,
 } from '@nestjs/swagger';
 import { ReviewsService } from '../../application/services/reviews.service';
-import { CreateReviewDto, UpdateReviewDto } from '../../application/dto/create-review.dto';
+import {
+  CreateReviewDto,
+  UpdateReviewDto,
+} from '../../application/dto/create-review.dto';
 import {
   ReviewResponseDto,
   PaginatedReviewsResponseDto,
@@ -65,7 +68,10 @@ export class ReviewsController {
     type: ReviewResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Product not found' })
-  @ApiResponse({ status: 409, description: 'User already reviewed this product' })
+  @ApiResponse({
+    status: 409,
+    description: 'User already reviewed this product',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createReview(
     @CurrentUser('id') userId: string,

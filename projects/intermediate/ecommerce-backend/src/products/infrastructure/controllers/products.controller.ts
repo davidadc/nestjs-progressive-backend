@@ -19,7 +19,10 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { ProductsService } from '../../application/services/products.service';
-import { CreateProductDto, UpdateProductDto } from '../../application/dto/create-product.dto';
+import {
+  CreateProductDto,
+  UpdateProductDto,
+} from '../../application/dto/create-product.dto';
 import { FilterProductsDto } from '../../application/dto/filter-products.dto';
 import {
   ProductResponseDto,

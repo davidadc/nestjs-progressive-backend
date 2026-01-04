@@ -16,7 +16,10 @@ export interface PaginatedOrders {
 
 export interface IOrderRepository {
   findById(id: string): Promise<Order | null>;
-  findByUserId(userId: string, options?: FindOrdersOptions): Promise<PaginatedOrders>;
+  findByUserId(
+    userId: string,
+    options?: FindOrdersOptions,
+  ): Promise<PaginatedOrders>;
   save(order: Order): Promise<Order>;
   updateStatus(id: string, status: OrderStatus): Promise<Order>;
 }

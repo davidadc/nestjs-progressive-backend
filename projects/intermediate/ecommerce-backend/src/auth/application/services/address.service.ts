@@ -27,7 +27,7 @@ export class AddressService {
       throw new NotFoundException('User not found');
     }
 
-    return user.addresses.map(this.toResponseDto);
+    return user.addresses.map((addr) => this.toResponseDto(addr));
   }
 
   async addAddress(

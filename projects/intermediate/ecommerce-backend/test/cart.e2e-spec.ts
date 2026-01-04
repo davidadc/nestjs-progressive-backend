@@ -49,7 +49,9 @@ describe('CartController (e2e)', () => {
     adminToken = adminLoginRes.body.data?.accessToken;
 
     if (!adminToken) {
-      throw new Error('Failed to login as admin. Run ./scripts/seed-data.sh first.');
+      throw new Error(
+        'Failed to login as admin. Run ./scripts/seed-data.sh first.',
+      );
     }
 
     // Register and login regular user for cart operations
@@ -105,9 +107,7 @@ describe('CartController (e2e)', () => {
     });
 
     it('should fail without authentication', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/cart')
-        .expect(401);
+      return request(app.getHttpServer()).get('/api/v1/cart').expect(401);
     });
   });
 

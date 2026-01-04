@@ -28,7 +28,10 @@ import { USER_REPOSITORY } from './domain/repositories/user.repository.interface
         return {
           secret,
           signOptions: {
-            expiresIn: parseInt(configService.get<string>('JWT_EXPIRATION', '900'), 10),
+            expiresIn: parseInt(
+              configService.get<string>('JWT_EXPIRATION', '900'),
+              10,
+            ),
           },
         };
       },

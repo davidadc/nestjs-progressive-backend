@@ -21,8 +21,14 @@ export interface ProductRating {
 
 export interface IReviewRepository {
   findById(id: string): Promise<Review | null>;
-  findByProductId(productId: string, options?: FindReviewsOptions): Promise<PaginatedReviews>;
-  findByUserAndProduct(userId: string, productId: string): Promise<Review | null>;
+  findByProductId(
+    productId: string,
+    options?: FindReviewsOptions,
+  ): Promise<PaginatedReviews>;
+  findByUserAndProduct(
+    userId: string,
+    productId: string,
+  ): Promise<Review | null>;
   getProductRating(productId: string): Promise<ProductRating>;
   save(review: Review): Promise<Review>;
   update(review: Review): Promise<Review>;

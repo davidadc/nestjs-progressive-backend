@@ -18,7 +18,10 @@ import {
   ApiParam,
 } from '@nestjs/swagger';
 import { CategoriesService } from '../../application/services/categories.service';
-import { CreateCategoryDto, UpdateCategoryDto } from '../../application/dto/create-category.dto';
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+} from '../../application/dto/create-category.dto';
 import { CategoryResponseDto } from '../../application/dto/category-response.dto';
 import { Public } from '../../../common/decorators/public.decorator';
 import { Roles } from '../../../common/decorators/roles.decorator';

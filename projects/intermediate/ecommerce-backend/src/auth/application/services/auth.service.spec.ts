@@ -81,7 +81,9 @@ describe('AuthService', () => {
 
       const result = await service.register(registerDto);
 
-      expect(userRepository.findByEmail).toHaveBeenCalledWith(registerDto.email);
+      expect(userRepository.findByEmail).toHaveBeenCalledWith(
+        registerDto.email,
+      );
       expect(bcrypt.hash).toHaveBeenCalledWith(registerDto.password, 10);
       expect(userRepository.save).toHaveBeenCalled();
       expect(userMapper.toResponseDto).toHaveBeenCalled();

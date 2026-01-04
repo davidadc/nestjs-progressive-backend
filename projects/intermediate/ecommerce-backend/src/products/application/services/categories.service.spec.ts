@@ -111,7 +111,9 @@ describe('CategoriesService', () => {
 
       const result = await service.create(createDto);
 
-      expect(categoryRepository.findBySlug).toHaveBeenCalledWith('new-category');
+      expect(categoryRepository.findBySlug).toHaveBeenCalledWith(
+        'new-category',
+      );
       expect(categoryRepository.save).toHaveBeenCalled();
       expect(categoryMapper.toResponseDto).toHaveBeenCalled();
       expect(result).toBeDefined();
@@ -120,7 +122,9 @@ describe('CategoriesService', () => {
     it('should throw ConflictException if slug already exists', async () => {
       categoryRepository.findBySlug.mockResolvedValue(mockCategory);
 
-      await expect(service.create(createDto)).rejects.toThrow(ConflictException);
+      await expect(service.create(createDto)).rejects.toThrow(
+        ConflictException,
+      );
       expect(categoryRepository.save).not.toHaveBeenCalled();
     });
   });

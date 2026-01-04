@@ -56,4 +56,4 @@ async function bootstrap() {
   console.log(`Application is running on: http://localhost:${port}`);
   console.log(`Swagger docs available at: http://localhost:${port}/docs`);
 }
-bootstrap();
+void bootstrap();

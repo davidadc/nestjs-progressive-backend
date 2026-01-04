@@ -59,11 +59,11 @@ export class ReviewRepository implements IReviewRepository {
       .select('AVG(review.rating)', 'average')
       .addSelect('COUNT(review.id)', 'count')
       .where('review.productId = :productId', { productId })
-      .getRawOne();
+      .getRawOne<{ average: string | null; count: string }>();
 
     return {
-      average: parseFloat(result?.average) || 0,
-      count: parseInt(result?.count, 10) || 0,
+      average: parseFloat(result?.average ?? '0') || 0,
+      count: parseInt(result?.count ?? '0', 10) || 0,
     };
   }
 

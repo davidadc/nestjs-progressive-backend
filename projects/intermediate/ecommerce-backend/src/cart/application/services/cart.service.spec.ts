@@ -204,7 +204,11 @@ describe('CartService', () => {
       cartRepository.findByUserId.mockResolvedValue(mockCart);
       cartRepository.updateItemQuantity.mockResolvedValue(mockCart);
 
-      const result = await service.updateItemQuantity('user-id', 'item-id', updateDto);
+      const result = await service.updateItemQuantity(
+        'user-id',
+        'item-id',
+        updateDto,
+      );
 
       expect(cartRepository.findByUserId).toHaveBeenCalledWith('user-id');
       expect(cartRepository.updateItemQuantity).toHaveBeenCalledWith(
@@ -249,16 +253,19 @@ describe('CartService', () => {
       const result = await service.removeItem('user-id', 'item-id');
 
       expect(cartRepository.findByUserId).toHaveBeenCalledWith('user-id');
-      expect(cartRepository.removeItem).toHaveBeenCalledWith('cart-id', 'item-id');
+      expect(cartRepository.removeItem).toHaveBeenCalledWith(
+        'cart-id',
+        'item-id',
+      );
       expect(result).toBeDefined();
     });
 
     it('should throw NotFoundException if cart not found', async () => {
       cartRepository.findByUserId.mockResolvedValue(null);
 
-      await expect(
-        service.removeItem('user-id', 'item-id'),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.removeItem('user-id', 'item-id')).rejects.toThrow(
+        NotFoundException,
+      );
     });
 
     it('should throw NotFoundException if item not found', async () => {

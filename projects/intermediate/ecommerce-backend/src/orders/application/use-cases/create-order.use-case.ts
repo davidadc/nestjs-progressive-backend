@@ -35,7 +35,10 @@ export class CreateOrderUseCase {
     private readonly dataSource: DataSource,
   ) {}
 
-  async execute(userId: string, dto: CreateOrderDto): Promise<OrderResponseDto> {
+  async execute(
+    userId: string,
+    dto: CreateOrderDto,
+  ): Promise<OrderResponseDto> {
     // Get user for address
     const user = await this.userRepository.findById(userId);
     if (!user) {
@@ -72,7 +75,9 @@ export class CreateOrderUseCase {
       }
 
       if (!product.isInStock()) {
-        throw new BadRequestException(`Product "${product.name}" is not available`);
+        throw new BadRequestException(
+          `Product "${product.name}" is not available`,
+        );
       }
 
       if (!product.hasEnoughStock(cartItem.quantity)) {
@@ -112,7 +117,10 @@ export class CreateOrderUseCase {
 
       // Reduce stock for each item
       for (const item of orderItems) {
-        await this.productRepository.updateStock(item.productId, -item.quantity);
+        await this.productRepository.updateStock(
+          item.productId,
+          -item.quantity,
+        );
       }
 
       // Clear cart

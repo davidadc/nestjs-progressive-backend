@@ -28,7 +28,9 @@ export class ProductsService {
     private readonly productMapper: ProductMapper,
   ) {}
 
-  async findAll(filter: FilterProductsDto): Promise<PaginatedProductsResponseDto> {
+  async findAll(
+    filter: FilterProductsDto,
+  ): Promise<PaginatedProductsResponseDto> {
     const { products, total } = await this.productRepository.findAll({
       page: filter.page,
       limit: filter.limit,
@@ -61,7 +63,9 @@ export class ProductsService {
   async create(dto: CreateProductDto): Promise<ProductResponseDto> {
     const category = await this.categoryRepository.findById(dto.categoryId);
     if (!category) {
-      throw new BadRequestException(`Category with ID ${dto.categoryId} not found`);
+      throw new BadRequestException(
+        `Category with ID ${dto.categoryId} not found`,
+      );
     }
 
     const product = Product.create({
@@ -88,7 +92,9 @@ export class ProductsService {
     if (dto.categoryId) {
       const category = await this.categoryRepository.findById(dto.categoryId);
       if (!category) {
-        throw new BadRequestException(`Category with ID ${dto.categoryId} not found`);
+        throw new BadRequestException(
+          `Category with ID ${dto.categoryId} not found`,
+        );
       }
     }
 

@@ -41,14 +41,19 @@ describe('ProductsController (e2e)', () => {
     adminToken = loginRes.body.data?.accessToken;
 
     if (!adminToken) {
-      throw new Error('Failed to login as admin. Run ./scripts/seed-data.sh first.');
+      throw new Error(
+        'Failed to login as admin. Run ./scripts/seed-data.sh first.',
+      );
     }
 
     // Create a test category first
     const catRes = await request(app.getHttpServer())
       .post('/api/v1/categories')
       .set('Authorization', `Bearer ${adminToken}`)
-      .send({ name: `Test Category ${Date.now()}`, description: 'Test description' });
+      .send({
+        name: `Test Category ${Date.now()}`,
+        description: 'Test description',
+      });
 
     categoryId = catRes.body.data?.id;
   });
@@ -236,7 +241,9 @@ describe('CategoriesController (e2e)', () => {
     adminToken = loginRes.body.data?.accessToken;
 
     if (!adminToken) {
-      throw new Error('Failed to login as admin. Run ./scripts/seed-data.sh first.');
+      throw new Error(
+        'Failed to login as admin. Run ./scripts/seed-data.sh first.',
+      );
     }
   });
 

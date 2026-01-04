@@ -11,7 +11,6 @@ describe('OrdersController (e2e)', () => {
   let productId: string;
   let categoryId: string;
   let orderId: string;
-  let addressId: string;
 
   const testUser = {
     email: `order-user-${Date.now()}@example.com`,
@@ -50,7 +49,9 @@ describe('OrdersController (e2e)', () => {
     adminToken = adminLoginRes.body.data?.accessToken;
 
     if (!adminToken) {
-      throw new Error('Failed to login as admin. Run ./scripts/seed-data.sh first.');
+      throw new Error(
+        'Failed to login as admin. Run ./scripts/seed-data.sh first.',
+      );
     }
 
     // Register and login regular user for order operations
@@ -87,8 +88,8 @@ describe('OrdersController (e2e)', () => {
 
     productId = prodRes.body.data.id;
 
-    // Add a shipping address
-    const addrRes = await request(app.getHttpServer())
+    // Add a shipping address (sets default for order creation)
+    await request(app.getHttpServer())
       .post('/api/v1/users/me/addresses')
       .set('Authorization', `Bearer ${userToken}`)
       .send({
@@ -99,8 +100,6 @@ describe('OrdersController (e2e)', () => {
         country: 'Test Country',
         isDefault: true,
       });
-
-    addressId = addrRes.body.data?.id;
   });
 
   afterAll(async () => {
@@ -131,9 +130,7 @@ describe('OrdersController (e2e)', () => {
     });
 
     it('should fail without authentication', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/orders')
-        .expect(401);
+      return request(app.getHttpServer()).get('/api/v1/orders').expect(401);
     });
   });
 

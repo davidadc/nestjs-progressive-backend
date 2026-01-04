@@ -104,7 +104,10 @@ describe('OrdersService', () => {
 
       const result = await service.createOrder('user-id', createDto);
 
-      expect(createOrderUseCase.execute).toHaveBeenCalledWith('user-id', createDto);
+      expect(createOrderUseCase.execute).toHaveBeenCalledWith(
+        'user-id',
+        createDto,
+      );
       expect(result).toEqual(expectedResponse);
     });
   });
@@ -176,9 +179,9 @@ describe('OrdersService', () => {
       );
       orderRepository.findById.mockResolvedValue(otherUserOrder);
 
-      await expect(
-        service.getOrderById('user-id', 'order-id'),
-      ).rejects.toThrow(NotFoundException);
+      await expect(service.getOrderById('user-id', 'order-id')).rejects.toThrow(
+        NotFoundException,
+      );
     });
   });
 });

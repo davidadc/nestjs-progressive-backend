@@ -38,7 +38,10 @@ export class OrdersController {
     description: 'Order created',
     type: OrderResponseDto,
   })
-  @ApiResponse({ status: 400, description: 'Cart is empty or insufficient stock' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cart is empty or insufficient stock',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   async createOrder(
     @CurrentUser('id') userId: string,

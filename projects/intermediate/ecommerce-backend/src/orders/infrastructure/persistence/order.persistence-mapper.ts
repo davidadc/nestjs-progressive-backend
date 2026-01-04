@@ -1,7 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Order, OrderStatus } from '../../domain/entities/order.entity';
 import { OrderItem } from '../../domain/entities/order-item.entity';
-import { OrderOrmEntity, OrderStatus as OrmOrderStatus } from './order.orm-entity';
+import {
+  OrderOrmEntity,
+  OrderStatus as OrmOrderStatus,
+} from './order.orm-entity';
 import { OrderItemOrmEntity } from './order-item.orm-entity';
 import type { Address } from '../../../auth/domain/value-objects/address.value-object';
 
