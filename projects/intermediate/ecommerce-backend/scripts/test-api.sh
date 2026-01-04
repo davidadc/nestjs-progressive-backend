@@ -23,6 +23,7 @@ USER_TOKEN=""
 ADMIN_TOKEN=""
 USER_ID=""
 ADMIN_ID=""
+ADDRESS_ID=""
 CATEGORY_ID="cat-electronics"  # From seed data
 PRODUCT_ID="prod-laptop"       # From seed data
 CART_ITEM_ID=""
@@ -119,6 +120,18 @@ fi
 # ============================================
 print_header "AUTH ENDPOINTS"
 
+# Login as seeded admin user (from seed-data.sh)
+print_test "Login as admin user (seeded)"
+RESPONSE=$(request POST "/auth/login" '{"email":"admin@example.com","password":"Password123!"}')
+print_response "$RESPONSE"
+if check_success "$RESPONSE" '.data.accessToken'; then
+    ADMIN_TOKEN=$(echo "$RESPONSE" | jq -r '.data.accessToken')
+    ADMIN_ID=$(echo "$RESPONSE" | jq -r '.data.user.id')
+    print_success "Admin logged in, token obtained"
+else
+    print_error "Failed to login as admin - did you run ./scripts/seed-data.sh first?"
+fi
+
 # Register regular user
 print_test "Register new user"
 TIMESTAMP=$(date +%s)
@@ -130,18 +143,6 @@ if check_success "$RESPONSE" '.data.id'; then
     print_success "User registered with ID: $USER_ID"
 else
     print_error "Failed to register user"
-fi
-
-# Register admin user (for testing admin endpoints)
-print_test "Register admin user"
-RESPONSE=$(request POST "/auth/register" "{\"email\":\"admin${TIMESTAMP}@example.com\",\"password\":\"Admin123!\",\"name\":\"Admin User\"}")
-print_response "$RESPONSE"
-if check_success "$RESPONSE" '.data.id'; then
-    ADMIN_ID=$(echo "$RESPONSE" | jq -r '.data.id')
-    ADMIN_EMAIL="admin${TIMESTAMP}@example.com"
-    print_success "Admin user registered with ID: $ADMIN_ID"
-else
-    print_error "Failed to register admin user"
 fi
 
 # Login as regular user
@@ -186,6 +187,145 @@ else
 fi
 
 # ============================================
+# ADDRESS ENDPOINTS
+# ============================================
+print_header "ADDRESS ENDPOINTS"
+
+# List addresses (should be empty)
+print_test "List addresses (initially empty)"
+RESPONSE=$(request GET "/users/me/addresses" "" "$USER_TOKEN")
+print_response "$RESPONSE"
+if check_success "$RESPONSE" '.data'; then
+    print_success "Addresses list retrieved"
+else
+    print_error "Failed to list addresses"
+fi
+
+# Add first address
+print_test "Add first address (should become default)"
+RESPONSE=$(request POST "/users/me/addresses" '{"street":"123 Main St","city":"New York","state":"NY","zipCode":"10001","country":"United States"}' "$USER_TOKEN")
+print_response "$RESPONSE"
+if check_success "$RESPONSE" '.data.id'; then
+    ADDRESS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+    IS_DEFAULT=$(echo "$RESPONSE" | jq -r '.data.isDefault')
+    if [ "$IS_DEFAULT" = "true" ]; then
+        print_success "First address created and set as default: $ADDRESS_ID"
+    else
+        print_error "First address should be default"
+    fi
+else
+    print_error "Failed to add address"
+fi
+
+# Add second address
+print_test "Add second address"
+RESPONSE=$(request POST "/users/me/addresses" '{"street":"456 Oak Ave","city":"Los Angeles","state":"CA","zipCode":"90001","country":"United States"}' "$USER_TOKEN")
+print_response "$RESPONSE"
+if check_success "$RESPONSE" '.data.id'; then
+    SECOND_ADDRESS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+    print_success "Second address created: $SECOND_ADDRESS_ID"
+else
+    print_error "Failed to add second address"
+fi
+
+# Get address by ID
+print_test "Get address by ID"
+if [ -n "$ADDRESS_ID" ]; then
+    RESPONSE=$(request GET "/users/me/addresses/$ADDRESS_ID" "" "$USER_TOKEN")
+    print_response "$RESPONSE"
+    if check_success "$RESPONSE" '.data.id'; then
+        print_success "Address retrieved"
+    else
+        print_error "Failed to get address"
+    fi
+else
+    print_skip "No address ID available"
+fi
+
+# Update address
+print_test "Update address"
+if [ -n "$ADDRESS_ID" ]; then
+    RESPONSE=$(request PUT "/users/me/addresses/$ADDRESS_ID" '{"street":"123 Main Street Updated"}' "$USER_TOKEN")
+    print_response "$RESPONSE"
+    if check_success "$RESPONSE" '.data.street'; then
+        UPDATED_STREET=$(echo "$RESPONSE" | jq -r '.data.street')
+        if [[ "$UPDATED_STREET" == *"Updated"* ]]; then
+            print_success "Address updated"
+        else
+            print_error "Address not properly updated"
+        fi
+    else
+        print_error "Failed to update address"
+    fi
+else
+    print_skip "No address ID available"
+fi
+
+# Set second address as default
+print_test "Set second address as default"
+if [ -n "$SECOND_ADDRESS_ID" ]; then
+    RESPONSE=$(request PATCH "/users/me/addresses/$SECOND_ADDRESS_ID/default" "" "$USER_TOKEN")
+    print_response "$RESPONSE"
+    if check_success "$RESPONSE" '.data.isDefault'; then
+        IS_DEFAULT=$(echo "$RESPONSE" | jq -r '.data.isDefault')
+        if [ "$IS_DEFAULT" = "true" ]; then
+            print_success "Second address set as default"
+        else
+            print_error "Failed to set default"
+        fi
+    else
+        print_error "Failed to set default address"
+    fi
+else
+    print_skip "No second address ID available"
+fi
+
+# List addresses (should have 2)
+print_test "List addresses (should have 2)"
+RESPONSE=$(request GET "/users/me/addresses" "" "$USER_TOKEN")
+print_response "$RESPONSE"
+if check_success "$RESPONSE" '.data'; then
+    ADDR_COUNT=$(echo "$RESPONSE" | jq '.data | length')
+    if [ "$ADDR_COUNT" = "2" ]; then
+        print_success "User has $ADDR_COUNT addresses"
+    else
+        print_error "Expected 2 addresses, got $ADDR_COUNT"
+    fi
+else
+    print_error "Failed to list addresses"
+fi
+
+# Delete first address
+print_test "Delete first address"
+if [ -n "$ADDRESS_ID" ]; then
+    RESPONSE=$(curl -s -X DELETE "$BASE_URL/users/me/addresses/$ADDRESS_ID" -H "$CONTENT_TYPE" -H "Authorization: Bearer $USER_TOKEN")
+    if [ -z "$RESPONSE" ] || echo "$RESPONSE" | jq -e '.success != false' > /dev/null 2>&1; then
+        print_success "Address deleted"
+    else
+        print_error "Failed to delete address"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "No address ID available"
+fi
+
+# Verify only one address remains (and it's default)
+print_test "Verify remaining address is default"
+RESPONSE=$(request GET "/users/me/addresses" "" "$USER_TOKEN")
+if check_success "$RESPONSE" '.data'; then
+    ADDR_COUNT=$(echo "$RESPONSE" | jq '.data | length')
+    DEFAULT_COUNT=$(echo "$RESPONSE" | jq '[.data[] | select(.isDefault == true)] | length')
+    if [ "$ADDR_COUNT" = "1" ] && [ "$DEFAULT_COUNT" = "1" ]; then
+        ADDRESS_ID=$(echo "$RESPONSE" | jq -r '.data[0].id')
+        print_success "One address remains and it's the default"
+    else
+        print_error "Expected 1 default address"
+    fi
+else
+    print_error "Failed to verify addresses"
+fi
+
+# ============================================
 # CATEGORY ENDPOINTS
 # ============================================
 print_header "CATEGORY ENDPOINTS"
@@ -222,14 +362,18 @@ print_response "$RESPONSE"
 if echo "$RESPONSE" | jq -e '.statusCode == 403 or .success == false' > /dev/null 2>&1; then
     print_success "Admin-only endpoint correctly protected"
 else
-    # If it succeeded, the user might have admin role
-    if check_success "$RESPONSE" '.data.id'; then
-        print_success "Category created (user has admin privileges)"
-        # Clean up - delete the test category
-        TEST_CAT_ID=$(echo "$RESPONSE" | jq -r '.data.id')
-    else
-        print_error "Unexpected response"
-    fi
+    print_error "Admin endpoint should reject non-admin users"
+fi
+
+# Create category with admin token
+print_test "Create category (with admin token)"
+RESPONSE=$(request POST "/categories" "{\"name\":\"Test Admin Category $TIMESTAMP\",\"description\":\"Created by admin\"}" "$ADMIN_TOKEN")
+print_response "$RESPONSE"
+if check_success "$RESPONSE" '.data.id'; then
+    TEST_CAT_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+    print_success "Category created by admin: $TEST_CAT_ID"
+else
+    print_error "Admin failed to create category"
 fi
 
 # ============================================
@@ -353,7 +497,7 @@ else
     # Update cart item quantity
     print_test "Update cart item quantity"
     if [ -n "$CART_ITEM_ID" ]; then
-        RESPONSE=$(request PATCH "/cart/items/$CART_ITEM_ID" '{"quantity":3}' "$USER_TOKEN")
+        RESPONSE=$(request PUT "/cart/items/$CART_ITEM_ID" '{"quantity":3}' "$USER_TOKEN")
         print_response "$RESPONSE"
         if check_success "$RESPONSE" '.data'; then
             print_success "Cart item quantity updated"
@@ -405,7 +549,7 @@ else
         if echo "$RESPONSE" | grep -qi "cart.*empty\|no.*items"; then
             print_skip "Cart is empty, cannot create order"
         elif echo "$RESPONSE" | grep -qi "address"; then
-            print_skip "No shipping address available (address management not implemented)"
+            print_skip "No shipping address available"
         else
             print_error "Failed to create order"
         fi
@@ -556,8 +700,23 @@ else
     print_skip "Missing token or product ID"
 fi
 
-# Step 5: View cart
-print_test "Step 5: View cart before checkout"
+# Step 5: Add shipping address
+print_test "Step 5: Add shipping address"
+if [ -n "$JOURNEY_TOKEN" ]; then
+    RESPONSE=$(request POST "/users/me/addresses" '{"street":"789 Journey Lane","city":"Test City","state":"TC","zipCode":"12345","country":"United States","isDefault":true}' "$JOURNEY_TOKEN")
+    if check_success "$RESPONSE" '.data.id'; then
+        JOURNEY_ADDRESS_ID=$(echo "$RESPONSE" | jq -r '.data.id')
+        print_success "Shipping address added: $JOURNEY_ADDRESS_ID"
+    else
+        print_error "Journey 1 failed at adding address"
+        print_response "$RESPONSE"
+    fi
+else
+    print_skip "Missing token"
+fi
+
+# Step 6: View cart
+print_test "Step 6: View cart before checkout"
 if [ -n "$JOURNEY_TOKEN" ]; then
     RESPONSE=$(request GET "/cart" "" "$JOURNEY_TOKEN")
     if check_success "$RESPONSE" '.data'; then
@@ -571,19 +730,25 @@ else
     print_skip "Missing token"
 fi
 
-# Step 6: Create order (checkout)
-print_test "Step 6: Complete checkout (create order)"
+# Step 7: Create order (checkout)
+print_test "Step 7: Complete checkout (create order)"
 if [ -n "$JOURNEY_TOKEN" ]; then
     RESPONSE=$(request POST "/orders" '{}' "$JOURNEY_TOKEN")
-    if check_success "$RESPONSE" '.data.id'; then
-        JOURNEY_ORDER_ID=$(echo "$RESPONSE" | jq -r '.data.id')
-        JOURNEY_ORDER_TOTAL=$(echo "$RESPONSE" | jq -r '.data.total // "N/A"')
-        print_success "Order placed! ID: $JOURNEY_ORDER_ID, Total: \$$JOURNEY_ORDER_TOTAL"
+    # Order response might have ID in .data.id or directly in .data (as string)
+    if check_success "$RESPONSE" '.data'; then
+        JOURNEY_ORDER_ID=$(echo "$RESPONSE" | jq -r '.data.id // .data')
+        JOURNEY_ORDER_TOTAL=$(echo "$RESPONSE" | jq -r '.data.total // .meta.total // "N/A"')
+        if [ -n "$JOURNEY_ORDER_ID" ] && [ "$JOURNEY_ORDER_ID" != "null" ]; then
+            print_success "Order placed! ID: $JOURNEY_ORDER_ID, Total: \$$JOURNEY_ORDER_TOTAL"
+        else
+            print_error "Order created but no ID returned"
+        fi
     else
         if echo "$RESPONSE" | grep -qi "cart.*empty\|no.*items"; then
             print_skip "Cart was empty (no products seeded)"
         elif echo "$RESPONSE" | grep -qi "address"; then
-            print_skip "No shipping address (address management not yet implemented)"
+            print_error "No shipping address available"
+            print_response "$RESPONSE"
         else
             print_error "Journey 1 failed at checkout"
             print_response "$RESPONSE"
@@ -593,7 +758,7 @@ else
     print_skip "Missing token"
 fi
 
-echo -e "\n${CYAN}Journey 1 Complete: Registration → Login → Browse → Cart → Order${NC}"
+echo -e "\n${CYAN}Journey 1 Complete: Registration → Login → Browse → Cart → Address → Order${NC}"
 
 # ------------------------------
 # Journey 2: Product Review Flow

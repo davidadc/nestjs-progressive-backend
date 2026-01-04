@@ -8,16 +8,18 @@ import {
   IsIn,
   Min,
 } from 'class-validator';
-import { Transform } from 'class-transformer';
+import { Transform, Type } from 'class-transformer';
 
 export class FilterProductsDto {
   @ApiPropertyOptional({ example: 1, default: 1 })
+  @Type(() => Number)
   @IsNumber()
   @Min(1)
   @IsOptional()
   page?: number = 1;
 
   @ApiPropertyOptional({ example: 10, default: 10 })
+  @Type(() => Number)
   @IsNumber()
   @Min(1)
   @IsOptional()
@@ -34,12 +36,14 @@ export class FilterProductsDto {
   categoryId?: string;
 
   @ApiPropertyOptional({ example: 100 })
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   @IsOptional()
   minPrice?: number;
 
   @ApiPropertyOptional({ example: 1000 })
+  @Type(() => Number)
   @IsNumber()
   @Min(0)
   @IsOptional()

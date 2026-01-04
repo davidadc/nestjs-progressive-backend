@@ -80,14 +80,32 @@ print_success "Tables cleared"
 # ============================================
 print_header "SEEDING USERS"
 
-# Password hash for "Password123!" generated with bcrypt (cost 10)
-# In a real scenario, you'd generate these properly
-USER_PASSWORD_HASH='$2b$10$rQZKQYxvzPtqnXqKqXqXqOKQYxvzPtqnXqKqXqXqOKQYxvzPtqnXq'
+# Generate bcrypt hash for "Password123!" using Node.js
+# This ensures we have a valid hash that works with the API
+print_info "Generating password hashes..."
 
-# For testing, we'll use the API to register users instead of direct SQL
-# This ensures passwords are hashed correctly
-print_info "Users will be created via API during test script execution"
-print_success "User seeding deferred to API tests"
+# Use Node.js to generate proper bcrypt hash
+PASSWORD_HASH=$(node -e "
+const bcrypt = require('bcrypt');
+const hash = bcrypt.hashSync('Password123!', 10);
+console.log(hash);
+" 2>/dev/null)
+
+if [ -z "$PASSWORD_HASH" ]; then
+    print_error "Failed to generate password hash. Using fallback."
+    # Fallback hash for "Password123!" (pre-generated)
+    PASSWORD_HASH='$2b$10$EpRnTzVlqHNP0.fUbXUwSOyuiXe/QLSUG6xNekdHgTGmrpHEfIoxm'
+fi
+
+# Create admin user
+run_sql "
+INSERT INTO users (email, password, name, role, addresses) VALUES
+    ('admin@example.com', '$PASSWORD_HASH', 'Admin User', 'admin', '[]'),
+    ('customer@example.com', '$PASSWORD_HASH', 'Test Customer', 'customer', '[]')
+ON CONFLICT (email) DO UPDATE SET password = EXCLUDED.password, role = EXCLUDED.role;
+"
+print_success "Admin user seeded: admin@example.com / Password123!"
+print_success "Customer user seeded: customer@example.com / Password123!"
 
 # ============================================
 # SEED CATEGORIES
@@ -188,8 +206,10 @@ fi
 print_header "SEED SUMMARY"
 
 echo -e "\nSeeded data counts:"
-run_sql "SELECT 'Categories' as entity, COUNT(*) as count FROM categories UNION ALL SELECT 'Products', COUNT(*) FROM products;" 2>/dev/null | grep -E "Categories|Products"
+run_sql "SELECT 'Users' as entity, COUNT(*) as count FROM users UNION ALL SELECT 'Categories', COUNT(*) FROM categories UNION ALL SELECT 'Products', COUNT(*) FROM products;" 2>/dev/null | grep -E "Users|Categories|Products"
 
 echo -e "\n${GREEN}Database seeding completed!${NC}"
-echo -e "${YELLOW}Note: Users, carts, orders, and reviews will be created during API tests.${NC}"
+echo -e "${YELLOW}Test credentials:${NC}"
+echo -e "  Admin:    admin@example.com / Password123!"
+echo -e "  Customer: customer@example.com / Password123!"
 echo -e "${YELLOW}Run the test script: ./scripts/test-api.sh${NC}"

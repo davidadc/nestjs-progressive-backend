@@ -32,10 +32,13 @@ export class ResponseInterceptor<T>
     return next.handle().pipe(
       map((data) => {
         // Check if response has pagination info
+        // Must have 'page' property AND at least one of 'total' or 'pages'
+        // to avoid false positives with data objects that have 'total' (like orders)
         const hasPagination =
           data &&
           typeof data === 'object' &&
-          ('page' in data || 'total' in data || 'pages' in data);
+          'page' in data &&
+          ('total' in data || 'pages' in data);
 
         if (hasPagination) {
           const { page, limit, total, pages, ...rest } = data as Record<

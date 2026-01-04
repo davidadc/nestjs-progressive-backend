@@ -7,8 +7,10 @@ import { UserOrmEntity } from './infrastructure/persistence/user.orm-entity';
 import { UserRepository } from './infrastructure/persistence/user.repository';
 import { UserPersistenceMapper } from './infrastructure/persistence/user.persistence-mapper';
 import { AuthService } from './application/services/auth.service';
+import { AddressService } from './application/services/address.service';
 import { UserMapper } from './application/mappers/user.mapper';
 import { AuthController } from './infrastructure/controllers/auth.controller';
+import { AddressController } from './infrastructure/controllers/address.controller';
 import { JwtStrategy } from './infrastructure/strategies/jwt.strategy';
 import { USER_REPOSITORY } from './domain/repositories/user.repository.interface';
 
@@ -32,9 +34,10 @@ import { USER_REPOSITORY } from './domain/repositories/user.repository.interface
       },
     }),
   ],
-  controllers: [AuthController],
+  controllers: [AuthController, AddressController],
   providers: [
     AuthService,
+    AddressService,
     UserMapper,
     UserPersistenceMapper,
     JwtStrategy,
@@ -43,6 +46,6 @@ import { USER_REPOSITORY } from './domain/repositories/user.repository.interface
       useClass: UserRepository,
     },
   ],
-  exports: [AuthService, USER_REPOSITORY],
+  exports: [AuthService, AddressService, USER_REPOSITORY],
 })
 export class AuthModule {}
