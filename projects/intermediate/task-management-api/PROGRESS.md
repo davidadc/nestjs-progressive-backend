@@ -104,17 +104,21 @@
 ### Phase 5: Infrastructure Layer
 
 #### Persistence (Repositories)
-- [ ] Create UserRepository (implements IUserRepository)
-- [ ] Create ProjectRepository (implements IProjectRepository)
-- [ ] Create TaskRepository (implements ITaskRepository)
-- [ ] Create TaskCommentRepository (implements ITaskCommentRepository)
-- [ ] Create PrismaModule for database connection
+- [x] Create UserRepository (implements IUserRepository)
+- [x] Create ProjectRepository (implements IProjectRepository)
+- [x] Create TaskRepository (implements ITaskRepository)
+- [x] Create TaskCommentRepository (implements ITaskCommentRepository)
+- [x] Create PrismaModule for database connection
 
 #### Controllers
-- [ ] Create AuthController (/api/v1/auth) with Swagger docs
+- [x] Create AuthController (/api/v1/auth) with Swagger docs
   - POST /register
   - POST /login
-- [ ] Create ProjectsController (/api/v1/projects) with Swagger docs
+- [x] Create UsersController (/api/v1/users) with Swagger docs
+  - GET /me - Get current user
+  - PATCH /me - Update current user
+  - GET / - List users (Admin only)
+- [x] Create ProjectsController (/api/v1/projects) with Swagger docs
   - POST / - Create project (Admin only)
   - GET / - List projects
   - GET /:id - Get project
@@ -122,7 +126,7 @@
   - DELETE /:id - Delete project (Owner only)
   - POST /:id/members - Add member (Owner only)
   - DELETE /:id/members/:userId - Remove member (Owner only)
-- [ ] Create TasksController (/api/v1/tasks, /api/v1/projects/:projectId/tasks) with Swagger docs
+- [x] Create TasksController (/api/v1/tasks, /api/v1/projects/:projectId/tasks) with Swagger docs
   - POST /projects/:projectId/tasks - Create task (Admin, Manager)
   - GET /tasks - List my tasks (with filters)
   - GET /tasks/:id - Get task
@@ -133,44 +137,42 @@
   - GET /tasks/:id/comments - List comments
 
 #### Guards & Decorators
-- [ ] Create JwtAuthGuard
-- [ ] Create RolesGuard
-- [ ] Create @Roles() decorator
-- [ ] Create @CurrentUser() decorator
-- [ ] Create ProjectOwnerGuard (for project operations)
-- [ ] Create TaskAccessGuard (for task operations)
+- [x] Create JwtAuthGuard
+- [x] Create RolesGuard
+- [x] Create @Roles() decorator
+- [x] Create @CurrentUser() decorator
+- [x] Create @Public() decorator
 
 #### Interceptors
-- [ ] Create ResponseInterceptor (envelope wrapper)
-- [ ] Create LoggingInterceptor (optional)
+- [x] Create ResponseInterceptor (envelope wrapper)
 
-### Phase 6: Common Module
+### Phase 6: Common Module (Completed in Phase 1)
 
-- [ ] Create BaseResponseDto (success, statusCode, data, pagination, meta)
-- [ ] Create PaginationDto
-- [ ] Create @ApiPaginatedResponse() decorator
-- [ ] Create HttpExceptionFilter
-- [ ] Create ValidationExceptionFilter
+- [x] Create BaseResponseDto (success, statusCode, data, pagination, meta)
+- [x] Create PaginationDto
+- [x] Create @ApiPaginatedResponse() decorator
+- [x] Create HttpExceptionFilter
 
-### Phase 7: Configuration
+### Phase 7: Configuration (Completed in Phase 1)
 
-- [ ] Create database.config.ts
-- [ ] Create jwt.config.ts
-- [ ] Create throttle.config.ts
-- [ ] Wire up ConfigModule with validation (Joi or class-validator)
-- [ ] Set up environment validation
+- [x] Create database.config.ts
+- [x] Create jwt.config.ts
+- [x] Create throttle.config.ts
+- [x] Wire up ConfigModule with validation
 
-### Phase 8: App Module Integration
+### Phase 8: App Module Integration (Completed)
 
-- [ ] Update AppModule with all module imports
-- [ ] Configure main.ts with:
-  - [ ] Swagger documentation (/docs)
-  - [ ] Global ValidationPipe
-  - [ ] Global ResponseInterceptor
-  - [ ] Global HttpExceptionFilter
-  - [ ] CORS configuration
-  - [ ] Helmet for security headers
-  - [ ] Rate limiting (ThrottlerModule)
+- [x] Update AppModule with all module imports
+- [x] Configure main.ts with:
+  - [x] Swagger documentation (/docs)
+  - [x] Global ValidationPipe
+  - [x] Global ResponseInterceptor
+  - [x] Global HttpExceptionFilter
+  - [x] CORS configuration
+  - [x] Helmet for security headers
+  - [x] Rate limiting (ThrottlerModule)
+  - [x] Global JwtAuthGuard
+  - [x] Global RolesGuard
 
 ### Phase 9: API Integration Testing (Scripts)
 

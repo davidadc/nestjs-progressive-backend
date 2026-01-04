@@ -48,18 +48,9 @@ async function bootstrap() {
       'Task management system with RBAC, project organization, and task assignments',
     )
     .setVersion('1.0')
-    .addBearerAuth(
-      {
-        type: 'http',
-        scheme: 'bearer',
-        bearerFormat: 'JWT',
-        name: 'JWT',
-        description: 'Enter JWT token',
-        in: 'header',
-      },
-      'JWT-auth',
-    )
-    .addTag('Auth', 'Authentication endpoints')
+    .addBearerAuth()
+    .addTag('Health', 'Health check endpoints')
+    .addTag('Authentication', 'Authentication endpoints')
     .addTag('Users', 'User management endpoints')
     .addTag('Projects', 'Project management endpoints')
     .addTag('Tasks', 'Task management endpoints')
