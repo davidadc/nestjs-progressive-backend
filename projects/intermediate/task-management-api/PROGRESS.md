@@ -63,47 +63,43 @@
 ### Phase 4: Application Layer
 
 #### Auth Module
-- [ ] Create RegisterDto with validation
-- [ ] Create LoginDto with validation
-- [ ] Create AuthResponseDto
-- [ ] Create AuthService (register, login, validateUser)
-- [ ] Create JwtStrategy
-- [ ] Create UserMapper
+- [x] Create RegisterDto with validation
+- [x] Create LoginDto with validation
+- [x] Create AuthResponseDto
+- [x] Create AuthService (register, login, validateUser)
+- [x] Create JwtStrategy
+- [x] Create JwtAuthGuard and RolesGuard
+- [x] Create @Public() decorator
 
 #### Users Module
-- [ ] Create UserResponseDto
-- [ ] Create UpdateUserDto
-- [ ] Create UsersService
-- [ ] Create UserMapper
+- [x] Create UserResponseDto
+- [x] Create UpdateUserDto
+- [x] Create UsersService
+- [x] Create UserMapper
 
 #### Projects Module
-- [ ] Create CreateProjectDto with validation
-- [ ] Create UpdateProjectDto
-- [ ] Create AddMemberDto
-- [ ] Create ProjectResponseDto
-- [ ] Create ProjectsService
-- [ ] Create CreateProjectUseCase
-- [ ] Create AddMemberUseCase
-- [ ] Create ProjectMapper
+- [x] Create CreateProjectDto with validation
+- [x] Create UpdateProjectDto
+- [x] Create AddMemberDto
+- [x] Create ProjectResponseDto
+- [x] Create ProjectsService (includes all use case logic)
+- [x] Create ProjectMapper
 
 #### Tasks Module
-- [ ] Create CreateTaskDto with validation (title, description, priority, dueDate, assignedTo)
-- [ ] Create UpdateTaskDto
-- [ ] Create UpdateTaskStatusDto
-- [ ] Create FindTasksDto (filtering/pagination query params)
-- [ ] Create TaskResponseDto
-- [ ] Create TasksService
-- [ ] Create CreateTaskUseCase
-- [ ] Create AssignTaskUseCase
-- [ ] Create UpdateTaskStatusUseCase
-- [ ] Create TaskMapper
-- [ ] Implement Observer pattern for task status changes (event emission)
+- [x] Create CreateTaskDto with validation (title, description, priority, dueDate, assignedTo)
+- [x] Create UpdateTaskDto
+- [x] Create UpdateTaskStatusDto
+- [x] Create FindTasksDto (filtering/pagination query params)
+- [x] Create TaskResponseDto
+- [x] Create TasksService (includes all use case logic)
+- [x] Create TaskMapper
+- [x] Implement Observer pattern for task status changes (event emission)
 
 #### Comments Module
-- [ ] Create CreateCommentDto with validation
-- [ ] Create CommentResponseDto
-- [ ] Create CommentsService
-- [ ] Create CommentMapper
+- [x] Create CreateCommentDto with validation
+- [x] Create CommentResponseDto
+- [x] Create CommentsService
+- [x] Create CommentMapper
 
 ### Phase 5: Infrastructure Layer
 
