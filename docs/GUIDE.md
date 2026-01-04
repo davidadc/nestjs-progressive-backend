@@ -1494,7 +1494,7 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Automatic timestamps
 - [x] **Testing:** 100% service coverage (20 tests)
 
-### Blog REST API
+### Blog REST API ✅
 
 - [x] **Entities:** User, Post, Comment, Category
 - [x] **Endpoints:**
@@ -1507,6 +1507,40 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Anyone can comment
   - [x] Soft delete for posts
 - [x] **Testing:** 100% service coverage (43 unit + 26 E2E tests)
+
+### E-commerce Backend ✅
+
+- [x] **Entities:** User, Category, Product, Cart, CartItem, Order, OrderItem, Review, Address
+- [x] **Endpoints:**
+  - [x] Auth (register, login, profile, logout, refresh)
+  - [x] Categories CRUD
+  - [x] Products CRUD with filtering/search
+  - [x] Cart management
+  - [x] Order placement and history
+  - [x] Reviews and ratings
+  - [x] Address management
+- [x] **Features:**
+  - [x] Role-based access (Admin, Customer)
+  - [x] Product search and filters
+  - [x] Cart persistence
+  - [x] Order status workflow
+  - [x] Average rating calculation
+- [x] **Testing:** Unit + E2E tests (80%+ coverage)
+
+### Task Management API 🟨 (In Progress)
+
+- [ ] **Entities:** User, Project, Task, TaskComment
+- [ ] **Endpoints:**
+  - [ ] Auth (register, login)
+  - [ ] Projects CRUD + member management
+  - [ ] Tasks CRUD with filtering
+  - [ ] Task comments
+- [ ] **Features:**
+  - [ ] RBAC (Admin, Manager, User)
+  - [ ] Task status and priority
+  - [ ] Task assignment
+  - [ ] Project membership
+- [ ] **Testing:** Unit + E2E tests (80%+ coverage)
 
 ---
 
