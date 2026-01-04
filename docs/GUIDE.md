@@ -1527,20 +1527,20 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Average rating calculation
 - [x] **Testing:** Unit + E2E tests (80%+ coverage)
 
-### Task Management API 🟨 (In Progress)
+### Task Management API ✅ (Completed)
 
-- [ ] **Entities:** User, Project, Task, TaskComment
-- [ ] **Endpoints:**
-  - [ ] Auth (register, login)
-  - [ ] Projects CRUD + member management
-  - [ ] Tasks CRUD with filtering
-  - [ ] Task comments
-- [ ] **Features:**
-  - [ ] RBAC (Admin, Manager, User)
-  - [ ] Task status and priority
-  - [ ] Task assignment
-  - [ ] Project membership
-- [ ] **Testing:** Unit + E2E tests (80%+ coverage)
+- [x] **Entities:** User, Project, Task, TaskComment
+- [x] **Endpoints:**
+  - [x] Auth (register, login)
+  - [x] Projects CRUD + member management
+  - [x] Tasks CRUD with filtering
+  - [x] Task comments
+- [x] **Features:**
+  - [x] RBAC (Admin, Manager, User)
+  - [x] Task status and priority
+  - [x] Task assignment
+  - [x] Project membership
+- [x] **Testing:** Unit (39 tests) + E2E tests
 
 ---
 
