@@ -303,6 +303,9 @@ pnpm run test:e2e
 
 # Run API tests
 ./scripts/test-api.sh
+
+# Run user journey tests (RBAC workflows)
+./scripts/test-journeys.sh
 ```
 
 ---

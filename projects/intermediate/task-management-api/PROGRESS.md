@@ -196,6 +196,11 @@
   - [x] Not found tests (404)
   - [x] Test summary with pass/fail counters
 - [x] Make scripts executable (`chmod +x`)
+- [x] Create `test-journeys.sh` for user journey testing
+  - [x] Journey 1: Admin - Full project lifecycle
+  - [x] Journey 2: Manager - Task management flow
+  - [x] Journey 3: User - Task worker flow
+  - [x] Journey 4: Unauthorized access attempts (RBAC enforcement)
 
 **Usage:**
 ```bash
@@ -204,6 +209,9 @@
 
 # Run API tests
 ./scripts/test-api.sh
+
+# Run user journey tests
+./scripts/test-journeys.sh
 ```
 
 ### Phase 10: Unit & E2E Testing
@@ -472,7 +480,8 @@ task-management-api/
 │
 ├── scripts/
 │   ├── seed-data.sh
-│   └── test-api.sh
+│   ├── test-api.sh
+│   └── test-journeys.sh
 │
 ├── test/
 │   ├── auth.e2e-spec.ts
