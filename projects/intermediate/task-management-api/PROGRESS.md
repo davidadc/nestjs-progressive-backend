@@ -178,30 +178,24 @@
 
 > Quick validation of endpoints using shell scripts before formal testing.
 
-- [ ] Create `scripts/` directory
-- [ ] Create `seed-data.sh` for test data population
-  - [ ] Seed users (admin, manager, regular users)
-  - [ ] Seed sample projects with members
-  - [ ] Seed sample tasks with various statuses/priorities
-  - [ ] Seed sample comments
-  - [ ] Add cleanup/reset function
-- [ ] Create `test-api.sh` for endpoint testing
-  - [ ] Health check verification
-  - [ ] Auth endpoints (register, login)
-  - [ ] Project CRUD endpoints
-  - [ ] Member management endpoints
-  - [ ] Task CRUD endpoints with filtering
-  - [ ] Comment endpoints
-  - [ ] RBAC validation (403 tests)
-  - [ ] Validation error tests (400)
-  - [ ] Not found tests (404)
-  - [ ] Test summary with pass/fail counters
-- [ ] Create user journey tests:
-  - [ ] Journey: Admin - Full project lifecycle (Create project → Add members → Create tasks → Complete → Archive)
-  - [ ] Journey: Manager - Task management flow (View projects → Create tasks → Assign → Track progress)
-  - [ ] Journey: User - Task worker flow (Login → View assigned → Update status → Comment)
-  - [ ] Journey: Unauthorized access attempts (verify RBAC enforcement)
-- [ ] Make scripts executable (`chmod +x`)
+- [x] Create `scripts/` directory
+- [x] Create `seed-data.sh` for test data population
+  - [x] Seed users (admin, manager, regular users)
+  - [x] Seed sample projects with members
+  - [x] Seed sample tasks with various statuses/priorities
+  - [x] Seed sample comments
+- [x] Create `test-api.sh` for endpoint testing
+  - [x] Health check verification
+  - [x] Auth endpoints (register, login)
+  - [x] Project CRUD endpoints
+  - [x] Member management endpoints
+  - [x] Task CRUD endpoints with filtering
+  - [x] Comment endpoints
+  - [x] RBAC validation (403 tests)
+  - [x] Validation error tests (400)
+  - [x] Not found tests (404)
+  - [x] Test summary with pass/fail counters
+- [x] Make scripts executable (`chmod +x`)
 
 **Usage:**
 ```bash
