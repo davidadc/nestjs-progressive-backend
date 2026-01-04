@@ -1496,17 +1496,17 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ### Blog REST API
 
-- [ ] **Entities:** User, Post, Comment, Category
-- [ ] **Endpoints:**
-  - [ ] Post CRUD
-  - [ ] Comment management
-  - [ ] List categories
-  - [ ] List posts by category
-- [ ] **Features:**
-  - [ ] Only authors can create posts
-  - [ ] Anyone can comment
-  - [ ] Soft delete for posts
-- [ ] **Testing:** 80%+ coverage
+- [x] **Entities:** User, Post, Comment, Category
+- [x] **Endpoints:**
+  - [x] Post CRUD
+  - [x] Comment management
+  - [x] List categories
+  - [x] List posts by category
+- [x] **Features:**
+  - [x] Only authors can create posts
+  - [x] Anyone can comment
+  - [x] Soft delete for posts
+- [x] **Testing:** 100% service coverage (43 unit + 26 E2E tests)
 
 ---
 
