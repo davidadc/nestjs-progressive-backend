@@ -14,7 +14,8 @@ export class PostsRepository {
 
   async create(data: Partial<Post>): Promise<Post> {
     const post = this.repository.create(data);
-    return this.repository.save(post);
+    const savedPost = await this.repository.save(post);
+    return this.findById(savedPost.id) as Promise<Post>;
   }
 
   async findAllPublished(dto: FindPostsDto): Promise<PaginatedResult<Post>> {
