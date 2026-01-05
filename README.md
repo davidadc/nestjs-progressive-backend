@@ -24,7 +24,7 @@ Collection of 16 progressive NestJS backend projects, from Beginner to Expert le
 | ----------------------- | ------ | --------- | --- |
 | **E-commerce Backend**  | ✅     | 20+       | ✅  |
 | **Task Management API** | ✅     | 18        | ✅  |
-| **Chat App Backend**    | ⬜     | WebSocket | ✅  |
+| **Chat App Backend**    | ✅     | 9 + WS    | ✅  |
 | **File Upload API**     | ⬜     | 5         | ✅  |
 
 ### Advanced Level
