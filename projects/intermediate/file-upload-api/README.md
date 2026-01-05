@@ -91,7 +91,7 @@ pnpm run start:dev
 ```
 
 The API will be available at `http://localhost:3000`
-Swagger docs at `http://localhost:3000/api`
+Swagger docs at `http://localhost:3000/docs`
 
 ---
 
@@ -275,7 +275,7 @@ pnpm run test:e2e
 
 - **[AI_CONTEXT.md](./AI_CONTEXT.md)** - Context for Claude Code
 - **[PROGRESS.md](./PROGRESS.md)** - Implementation progress tracker
-- **[Swagger UI](http://localhost:3000/api)** - API documentation (when running)
+- **[Swagger UI](http://localhost:3000/docs)** - API documentation (when running)
 
 ### Monorepo Documentation
 
