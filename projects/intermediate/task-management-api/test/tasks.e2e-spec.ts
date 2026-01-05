@@ -4,6 +4,8 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { ResponseInterceptor } from '../src/common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../src/common/filters/http-exception.filter';
 
 describe('TasksController (e2e)', () => {
   let app: INestApplication<App>;
@@ -24,8 +26,13 @@ describe('TasksController (e2e)', () => {
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     );
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalInterceptors(new ResponseInterceptor());
     await app.init();
 
     prismaService = moduleFixture.get<PrismaService>(PrismaService);
@@ -103,8 +110,8 @@ describe('TasksController (e2e)', () => {
         .set('Authorization', `Bearer ${adminToken}`)
         .expect(200)
         .expect((res) => {
-          expect(res.body.data).toHaveProperty('items');
-          expect(res.body.data).toHaveProperty('pagination');
+          expect(res.body.data).toBeInstanceOf(Array);
+          expect(res.body).toHaveProperty('pagination');
         });
     });
 

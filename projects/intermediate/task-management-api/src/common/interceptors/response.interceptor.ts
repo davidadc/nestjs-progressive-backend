@@ -36,6 +36,11 @@ export class ResponseInterceptor<T>
 
     return next.handle().pipe(
       map((data) => {
+        // Skip envelope for 204 No Content responses
+        if (statusCode === 204) {
+          return data;
+        }
+
         // If response already has the envelope structure, return as is
         if (data && typeof data === 'object' && 'success' in data) {
           return data;

@@ -131,7 +131,7 @@ result=$(api_call POST "/auth/register" "{
 }" "")
 http_code=$(echo "$result" | cut -d'|' -f1)
 body=$(echo "$result" | cut -d'|' -f2)
-test_result "POST /auth/register - Duplicate email (400/409)" "400" "$http_code" "$body"
+test_result "POST /auth/register - Duplicate email (409)" "409" "$http_code" "$body"
 
 # Register with invalid email
 result=$(api_call POST "/auth/register" '{

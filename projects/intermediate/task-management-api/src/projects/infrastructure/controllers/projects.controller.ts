@@ -8,6 +8,8 @@ import {
   Param,
   UseGuards,
   ParseUUIDPipe,
+  HttpCode,
+  HttpStatus,
 } from '@nestjs/common';
 import {
   ApiTags,
@@ -103,6 +105,7 @@ export class ProjectsController {
   }
 
   @Delete(':id')
+  @HttpCode(HttpStatus.NO_CONTENT)
   @ApiOperation({ summary: 'Delete project (Owner only)' })
   @ApiParam({ name: 'id', description: 'Project UUID' })
   @ApiResponse({ status: 204, description: 'Project deleted successfully' })

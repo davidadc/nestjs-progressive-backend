@@ -4,6 +4,8 @@ import request from 'supertest';
 import { App } from 'supertest/types';
 import { AppModule } from '../src/app.module';
 import { PrismaService } from '../src/prisma/prisma.service';
+import { ResponseInterceptor } from '../src/common/interceptors/response.interceptor';
+import { HttpExceptionFilter } from '../src/common/filters/http-exception.filter';
 
 describe('AuthController (e2e)', () => {
   let app: INestApplication<App>;
@@ -21,8 +23,13 @@ describe('AuthController (e2e)', () => {
         whitelist: true,
         forbidNonWhitelisted: true,
         transform: true,
+        transformOptions: {
+          enableImplicitConversion: true,
+        },
       }),
     );
+    app.useGlobalFilters(new HttpExceptionFilter());
+    app.useGlobalInterceptors(new ResponseInterceptor());
     await app.init();
 
     prismaService = moduleFixture.get<PrismaService>(PrismaService);

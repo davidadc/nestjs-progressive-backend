@@ -20,7 +20,7 @@ export class AuthController {
 
   @Public()
   @Post('register')
-  @Throttle({ default: { limit: 5, ttl: 60000 } }) // 5 requests per minute
+  @Throttle({ default: { limit: 10, ttl: 60000 } }) // 10 requests per minute
   @ApiOperation({ summary: 'Register a new user' })
   @ApiBody({ type: RegisterDto })
   @ApiResponse({
@@ -33,7 +33,7 @@ export class AuthController {
     description: 'Validation error or email already exists',
   })
   @ApiTooManyRequestsResponse({
-    description: 'Rate limit exceeded (5 requests per minute)',
+    description: 'Rate limit exceeded (10 requests per minute)',
   })
   async register(@Body() dto: RegisterDto): Promise<AuthResponseDto> {
     return this.authService.register(dto);
