@@ -410,6 +410,49 @@ pnpm exec prisma migrate status
 
 ---
 
+## Potential Improvements
+
+Future enhancements that could be added to this project:
+
+### Task Features
+- Task dependencies (blocking/blocked by)
+- Subtasks/checklist items
+- Task templates for recurring work
+- Time tracking and estimates
+- Task attachments/file uploads
+- Task labels/tags
+
+### Notifications
+- Email notifications for assignments
+- In-app notification system
+- Webhook integrations (Slack, Discord)
+- Daily/weekly digest emails
+- @mentions in comments
+
+### Collaboration
+- Real-time updates (WebSocket)
+- Task activity log/history
+- User presence indicators
+- Collaborative editing
+- Team workload view
+
+### Reporting & Analytics
+- Project progress dashboards
+- Burndown/burnup charts
+- Time spent reports
+- User productivity metrics
+- Export to CSV/PDF
+
+### Advanced Features
+- Recurring tasks
+- Task automation rules
+- Custom fields per project
+- Kanban board view
+- Calendar integration
+- API rate limiting per user tier
+
+---
+
 ## License
 
 MIT
