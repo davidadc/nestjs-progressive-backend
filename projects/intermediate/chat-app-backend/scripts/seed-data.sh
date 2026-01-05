@@ -2,8 +2,7 @@
 
 # Chat App - Seed Data Script
 # This script seeds the database with test data for development
-
-set -e
+# Note: Don't use set -e because we want to continue if users already exist
 
 BASE_URL="${BASE_URL:-http://localhost:3000}"
 API_URL="$BASE_URL/api/v1"
@@ -165,8 +164,8 @@ CONV1=$(create_conversation "alice@example.com" "${USER_IDS[bob@example.com]}")
 # Alice, Bob, and Charlie group chat
 if [ -n "${USER_IDS[charlie@example.com]}" ]; then
     echo -n "  Creating group chat... "
-    local token="${USER_TOKENS[alice@example.com]}"
-    local response=$(api_call POST "/conversations" "{\"participantIds\":[\"${USER_IDS[bob@example.com]}\",\"${USER_IDS[charlie@example.com]}\"],\"name\":\"Project Team\"}" "$token")
+    token="${USER_TOKENS[alice@example.com]}"
+    response=$(api_call POST "/conversations" "{\"participantIds\":[\"${USER_IDS[bob@example.com]}\",\"${USER_IDS[charlie@example.com]}\"],\"name\":\"Project Team\"}" "$token")
     if echo "$response" | grep -q '"success":true'; then
         CONV2=$(echo "$response" | grep -o '"id":"[^"]*"' | head -1 | cut -d'"' -f4)
         echo -e "${GREEN}OK${NC} (ID: $CONV2)"

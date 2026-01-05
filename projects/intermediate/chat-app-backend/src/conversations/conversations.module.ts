@@ -7,7 +7,7 @@ import { UsersModule } from '../users/users.module';
 import { MessagesModule } from '../messages/messages.module';
 
 @Module({
-  imports: [UsersModule, forwardRef(() => MessagesModule)],
+  imports: [forwardRef(() => UsersModule), forwardRef(() => MessagesModule)],
   controllers: [ConversationsController],
   providers: [
     ConversationService,
