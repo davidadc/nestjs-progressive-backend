@@ -21,10 +21,13 @@ describe('AuthService', () => {
     email: 'test@example.com',
     name: 'Test User',
     password: 'hashedPassword',
-    avatar: null,
+    avatar: null as string | null,
     createdAt: new Date(),
     updatedAt: new Date(),
   };
+
+  // Expected avatar in responses (service converts null to undefined)
+  const expectedAvatar = undefined;
 
   beforeEach(async () => {
     mockUserRepository = {
@@ -84,7 +87,7 @@ describe('AuthService', () => {
         id: mockUser.id,
         email: mockUser.email,
         name: mockUser.name,
-        avatar: mockUser.avatar,
+        avatar: expectedAvatar,
         createdAt: mockUser.createdAt,
       });
     });
@@ -128,7 +131,7 @@ describe('AuthService', () => {
           id: mockUser.id,
           email: mockUser.email,
           name: mockUser.name,
-          avatar: mockUser.avatar,
+          avatar: expectedAvatar,
           createdAt: mockUser.createdAt,
         },
       });
@@ -163,7 +166,7 @@ describe('AuthService', () => {
         id: mockUser.id,
         email: mockUser.email,
         name: mockUser.name,
-        avatar: mockUser.avatar,
+        avatar: expectedAvatar,
         createdAt: mockUser.createdAt,
       });
     });
