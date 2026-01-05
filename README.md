@@ -23,7 +23,7 @@ Collection of 16 progressive NestJS backend projects, from Beginner to Expert le
 | Project                 | Status | Endpoints | DB  |
 | ----------------------- | ------ | --------- | --- |
 | **E-commerce Backend**  | ✅     | 20+       | ✅  |
-| **Task Management API** | ⬜     | 10+       | ✅  |
+| **Task Management API** | ✅     | 18        | ✅  |
 | **Chat App Backend**    | ⬜     | WebSocket | ✅  |
 | **File Upload API**     | ⬜     | 5         | ✅  |
 
@@ -311,7 +311,7 @@ docker-compose up -d
 ### Phase 2: Intermediate Level
 
 - [x] E-commerce Backend
-- [ ] Task Management API
+- [x] Task Management API
 - [ ] Chat App Backend
 - [ ] File Upload API
 
@@ -527,6 +527,6 @@ MIT - Free for educational and personal use
 
 ---
 
-**Last updated:** 2026-01-04
+**Last updated:** 2026-01-05
 **Maintainer:** David
 **Contributions:** Welcome

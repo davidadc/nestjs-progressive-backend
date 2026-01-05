@@ -1535,6 +1535,29 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] README with setup instructions
   - [x] AI_CONTEXT.md for Claude Code
 
+### Task Management API ✅
+
+- [x] **Entities:** User, Project, Task, TaskComment
+- [x] **Endpoints:**
+  - [x] Auth (register, login)
+  - [x] Projects CRUD + member management
+  - [x] Tasks CRUD with filtering
+  - [x] Task comments
+- [x] **Features:**
+  - [x] RBAC (Admin, Manager, User)
+  - [x] Task status and priority
+  - [x] Task assignment
+  - [x] Project membership
+- [x] **Testing:**
+  - [x] Unit tests: 39 tests
+  - [x] E2E tests: 29 tests
+  - [x] API integration tests: 25 tests
+  - [x] User journey tests: 33 tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI at /docs
+  - [x] README with setup instructions
+  - [x] AI_CONTEXT.md for Claude Code
+
 ---
 
 ## Useful Resources
@@ -1579,5 +1602,5 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ---
 
-**Last updated:** 2026-01-04
+**Last updated:** 2026-01-05
 **Suggested next review:** After completing Intermediate Level
