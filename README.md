@@ -311,7 +311,7 @@ docker-compose up -d
 ### Phase 2: Intermediate Level
 
 - [x] E-commerce Backend
-- [ ] Task Management API (in progress)
+- [x] Task Management API
 - [ ] Chat App Backend
 - [ ] File Upload API
 
@@ -527,6 +527,6 @@ MIT - Free for educational and personal use
 
 ---
 
-**Last updated:** 2026-01-03
+**Last updated:** 2026-01-05
 **Maintainer:** David
 **Contributions:** Welcome

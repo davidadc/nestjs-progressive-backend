@@ -1586,5 +1586,5 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ---
 
-**Last updated:** 2026-01-03
+**Last updated:** 2026-01-05
 **Suggested next review:** After completing Beginner Level
