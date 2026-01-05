@@ -364,6 +364,72 @@ aws s3 ls s3://your-bucket-name
 
 ---
 
+## Potential Improvements
+
+Future enhancements that could be added to this project:
+
+### File Management
+
+- Folder/directory organization for files
+- File versioning (keep history of uploads)
+- Batch upload (multiple files at once)
+- Resumable uploads for large files (chunked upload)
+- File sharing with expiring links
+- Public/private file visibility toggle
+- File tags and metadata
+
+### Image Processing
+
+- Multiple thumbnail sizes (small, medium, large)
+- Image cropping and resizing on upload
+- Image format conversion (PNG → WebP, etc.)
+- EXIF data extraction and storage
+- Image compression optimization
+- Blur hash generation for placeholders
+- Face detection for profile photos
+
+### Storage & Performance
+
+- CDN integration for file serving
+- Multi-cloud storage support (GCS, Azure Blob)
+- Storage tiering (hot/cold storage)
+- Background jobs for thumbnail generation (Bull/Redis)
+- Lazy thumbnail generation on first request
+- File deduplication (content hashing)
+- Presigned URLs for direct S3 uploads
+
+### Security & Compliance
+
+- Malware scanning (ClamAV integration)
+- Content moderation for images
+- Encryption at rest
+- Access logs and audit trail
+- GDPR compliance (data export/deletion)
+- IP-based access restrictions
+- Signed download URLs with expiration
+
+### User Experience
+
+- Upload progress tracking (WebSocket/SSE)
+- Drag-and-drop upload support (frontend)
+- Image gallery view endpoint
+- Bulk operations (delete multiple files)
+- File search by name, type, date
+- Storage usage alerts/notifications
+- Trash/recycle bin with restore
+
+### Integration & API
+
+- Webhook notifications on upload/delete
+- API rate limiting per endpoint
+- File upload via URL (fetch from remote)
+- ZIP archive generation for bulk downloads
+- Video thumbnail extraction
+- PDF preview generation
+- Office document preview
+
+---
+
 ## License
 
 MIT
