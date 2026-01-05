@@ -91,7 +91,7 @@
 
 - [ ] Update AppModule with all imports
 - [ ] Configure main.ts with:
-  - [ ] Swagger documentation
+  - [ ] Swagger documentation (must be at `/docs` endpoint)
   - [ ] ValidationPipe
   - [ ] CORS (if needed)
 

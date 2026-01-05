@@ -1587,6 +1587,40 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] AI_CONTEXT.md for Claude Code
   - [x] PROGRESS.md with implementation tracking
 
+### File Upload API ✅
+
+- [x] **Entities:** User, File
+- [x] **Endpoints:**
+  - [x] Auth (register, login, profile)
+  - [x] POST /files/upload (with rate limiting)
+  - [x] GET /files (list with pagination, filtering, search)
+  - [x] GET /files/:id (metadata)
+  - [x] GET /files/:id/download (streaming)
+  - [x] GET /files/:id/thumbnail (image thumbnails)
+  - [x] DELETE /files/:id
+  - [x] GET /files/storage/usage
+- [x] **Features:**
+  - [x] Dual storage support (local filesystem + AWS S3)
+  - [x] Strategy pattern for storage switching
+  - [x] Automatic thumbnail generation (Sharp, WebP)
+  - [x] Storage quota management per user
+  - [x] File type validation (MIME types)
+  - [x] File size limits
+  - [x] Rate limiting on uploads
+- [x] **Security:**
+  - [x] JWT authentication
+  - [x] User-scoped file access
+  - [x] Rate limiting (throttler)
+  - [x] File type whitelisting
+- [x] **Testing:**
+  - [x] Unit tests: 56 tests
+  - [x] E2E tests: 29 tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI at /api
+  - [x] README with setup instructions
+  - [x] AI_CONTEXT.md for Claude Code
+  - [x] PROGRESS.md with implementation tracking
+
 ---
 
 ## Useful Resources

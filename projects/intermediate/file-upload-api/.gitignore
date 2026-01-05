@@ -1,0 +1,38 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+pnpm-debug.log*
+
+# Test
+coverage/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Uploads directory (local storage)
+uploads/
+!uploads/.gitkeep
+
+# Prisma
+prisma/*.db
+prisma/*.db-journal
+
+/generated/prisma
