@@ -149,6 +149,7 @@
 - [x] Make scripts executable (`chmod +x`)
 
 **Usage:**
+
 ```bash
 # Seed test data
 ./scripts/seed-data.sh
@@ -162,17 +163,44 @@
 
 ### Phase 10: Unit & E2E Testing
 
-- [x] Create unit tests for AuthService
-- [x] Create unit tests for UserService
-- [x] Create unit tests for ConversationService
-- [x] Create unit tests for MessageService
-- [x] Create unit tests for PresenceService
-- [x] Create unit tests for ChatGateway
-- [x] Create E2E tests for auth endpoints
-- [x] Create E2E tests for conversation endpoints
-- [x] Create E2E tests for message endpoints
-- [x] Create E2E tests for WebSocket events
+#### Unit Tests (Jest)
+
+- [x] Create unit tests for AuthService (6 tests)
+- [x] Create unit tests for ConversationService (10 tests)
+- [x] Create unit tests for MessageService (9 tests)
+- [x] Create unit tests for PresenceService (7 tests)
+- [x] Create unit tests for ChatGateway (15 tests)
+  - [x] Test handleConnection with valid/invalid token
+  - [x] Test handleDisconnect and presence cleanup
+  - [x] Test handleJoinConversation (participant validation)
+  - [x] Test handleLeaveConversation
+  - [x] Test handleSendMessage (message creation + broadcast)
+  - [x] Test handleTypingStart/Stop (typing indicators)
+  - [x] Test handlePresenceUpdate (status changes)
+
+#### E2E Tests (Jest + Supertest + socket.io-client)
+
+- [x] Create E2E tests for auth endpoints (9 tests)
+- [x] Create E2E tests for conversation endpoints (6 tests)
+- [x] Create E2E tests for message endpoints (5 tests)
+- [x] Create E2E tests for user endpoints (3 tests)
+- [x] Create E2E tests for WebSocket events (13 tests)
+  - [x] Test WebSocket connection with valid/invalid token
+  - [x] Test conversation:join and conversation:leave
+  - [x] Test message:send and message:received broadcast
+  - [x] Test typing:start/stop and typing:update broadcast
+  - [x] Test presence:update and user:online/offline events
+
+#### Coverage
+
 - [x] Achieve 80%+ coverage on core logic
+
+**Test Counts:**
+
+- Unit tests: 48 (Jest)
+- E2E tests: 36 (Jest)
+- Script tests: 48 (17 API + 31 WebSocket)
+- **Total: 132 tests**
 
 ### Phase 11: Documentation
 
@@ -186,17 +214,17 @@
 
 ## Endpoints
 
-| Method | Endpoint                               | Description               | Auth Required |
-| ------ | -------------------------------------- | ------------------------- | ------------- |
-| POST   | `/api/v1/auth/register`                | Register new user         | No            |
-| POST   | `/api/v1/auth/login`                   | Login and get JWT         | No            |
-| GET    | `/api/v1/conversations`                | List user conversations   | Yes           |
-| POST   | `/api/v1/conversations`                | Create conversation       | Yes           |
-| GET    | `/api/v1/conversations/:id`            | Get conversation details  | Yes           |
-| GET    | `/api/v1/conversations/:id/messages`   | Get message history       | Yes           |
-| POST   | `/api/v1/conversations/:id/messages`   | Send message (HTTP)       | Yes           |
-| POST   | `/api/v1/conversations/:id/participants` | Add participant         | Yes           |
-| GET    | `/api/v1/users/online`                 | Get online users          | Yes           |
+| Method | Endpoint                                 | Description              | Auth Required |
+| ------ | ---------------------------------------- | ------------------------ | ------------- |
+| POST   | `/api/v1/auth/register`                  | Register new user        | No            |
+| POST   | `/api/v1/auth/login`                     | Login and get JWT        | No            |
+| GET    | `/api/v1/conversations`                  | List user conversations  | Yes           |
+| POST   | `/api/v1/conversations`                  | Create conversation      | Yes           |
+| GET    | `/api/v1/conversations/:id`              | Get conversation details | Yes           |
+| GET    | `/api/v1/conversations/:id/messages`     | Get message history      | Yes           |
+| POST   | `/api/v1/conversations/:id/messages`     | Send message (HTTP)      | Yes           |
+| POST   | `/api/v1/conversations/:id/participants` | Add participant          | Yes           |
+| GET    | `/api/v1/users/online`                   | Get online users         | Yes           |
 
 ---
 
@@ -204,25 +232,25 @@
 
 ### Client → Server
 
-| Event                | Payload                                    |
-| -------------------- | ------------------------------------------ |
-| `conversation:join`  | `{ conversationId: string }`               |
-| `conversation:leave` | `{ conversationId: string }`               |
+| Event                | Payload                                       |
+| -------------------- | --------------------------------------------- |
+| `conversation:join`  | `{ conversationId: string }`                  |
+| `conversation:leave` | `{ conversationId: string }`                  |
 | `message:send`       | `{ conversationId: string, content: string }` |
-| `typing:start`       | `{ conversationId: string }`               |
-| `typing:stop`        | `{ conversationId: string }`               |
-| `presence:update`    | `{ status: 'online' \| 'away' \| 'busy' }` |
+| `typing:start`       | `{ conversationId: string }`                  |
+| `typing:stop`        | `{ conversationId: string }`                  |
+| `presence:update`    | `{ status: 'online' \| 'away' \| 'busy' }`    |
 
 ### Server → Client
 
-| Event               | Payload                                          |
-| ------------------- | ------------------------------------------------ |
-| `message:received`  | `{ id, conversationId, sender, content, ... }`   |
-| `typing:update`     | `{ conversationId, userId, isTyping }`           |
-| `user:online`       | `{ userId, name, status }`                       |
-| `user:offline`      | `{ userId }`                                     |
-| `participant:added` | `{ conversationId, user }`                       |
-| `error`             | `{ message: string, code: string }`              |
+| Event               | Payload                                        |
+| ------------------- | ---------------------------------------------- |
+| `message:received`  | `{ id, conversationId, sender, content, ... }` |
+| `typing:update`     | `{ conversationId, userId, isTyping }`         |
+| `user:online`       | `{ userId, name, status }`                     |
+| `user:offline`      | `{ userId }`                                   |
+| `participant:added` | `{ conversationId, user }`                     |
+| `error`             | `{ message: string, code: string }`            |
 
 ---
 
@@ -452,14 +480,27 @@ pnpm run test:e2e
 
 ## Test Coverage
 
-```
-auth.service.ts          | __% statements | __% functions
-user.service.ts          | __% statements | __% functions
-conversation.service.ts  | __% statements | __% functions
-message.service.ts       | __% statements | __% functions
-presence.service.ts      | __% statements | __% functions
-chat.gateway.ts          | __% statements | __% functions
-```
+| File                    | Unit Tests | Status |
+| ----------------------- | ---------- | ------ |
+| auth.service.ts         | 6 tests    | Done   |
+| conversation.service.ts | 10 tests   | Done   |
+| message.service.ts      | 9 tests    | Done   |
+| presence.service.ts     | 7 tests    | Done   |
+| chat.gateway.ts         | 15 tests   | Done   |
+| app.controller.ts       | 1 test     | Done   |
+
+| File                   | E2E Tests | Status |
+| ---------------------- | --------- | ------ |
+| Auth endpoints         | 9 tests   | Done   |
+| Conversation endpoints | 6 tests   | Done   |
+| Message endpoints      | 5 tests   | Done   |
+| User endpoints         | 3 tests   | Done   |
+| WebSocket events       | 13 tests  | Done   |
+
+| Script            | Tests    | Status |
+| ----------------- | -------- | ------ |
+| test-api.sh       | 17 tests | Done   |
+| test-websocket.sh | 31 tests | Done   |
 
 ---
 
@@ -479,6 +520,8 @@ chat.gateway.ts          | __% statements | __% functions
 
 ## Known Issues / TODOs
 
+### Future Features
+
 - [ ] Add message read receipts
 - [ ] Add file/image attachment support
 - [ ] Add message reactions
@@ -489,4 +532,4 @@ chat.gateway.ts          | __% statements | __% functions
 
 **Started:** 2026-01-05
 **Completed:** 2026-01-05
-**Next Steps:** Project implementation complete. Run migrations and start the server.
+**Next Steps:** Project implementation complete. All tests passing (132 total).
