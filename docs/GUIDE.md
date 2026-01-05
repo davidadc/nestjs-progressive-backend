@@ -1558,6 +1558,35 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] README with setup instructions
   - [x] AI_CONTEXT.md for Claude Code
 
+### Chat App Backend ✅
+
+- [x] **Entities:** User, Conversation, ConversationParticipant, Message
+- [x] **Endpoints:**
+  - [x] Auth (register, login)
+  - [x] Conversations CRUD + participants
+  - [x] Messages with pagination
+  - [x] Online users
+- [x] **WebSocket Events:**
+  - [x] conversation:join/leave
+  - [x] message:send/received
+  - [x] typing:start/stop/update
+  - [x] presence:update, user:online/offline
+- [x] **Features:**
+  - [x] Real-time messaging via Socket.io
+  - [x] User presence (online/away/busy)
+  - [x] Typing indicators
+  - [x] Redis for presence tracking
+- [x] **Testing:**
+  - [x] Unit tests: 48 tests
+  - [x] E2E tests: 36 tests
+  - [x] API integration tests: 17 tests
+  - [x] WebSocket tests: 31 tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI at /api
+  - [x] README with setup instructions
+  - [x] AI_CONTEXT.md for Claude Code
+  - [x] PROGRESS.md with implementation tracking
+
 ---
 
 ## Useful Resources
