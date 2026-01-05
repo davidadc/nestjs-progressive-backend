@@ -338,6 +338,71 @@ pnpm exec drizzle-kit migrate
 
 ---
 
+## Potential Improvements
+
+Future enhancements that could be added to this project:
+
+### Messaging Features
+
+- Message read receipts (delivered/read status)
+- Message reactions (emoji responses)
+- Message editing and deletion
+- Reply to specific messages (threads)
+- Forward messages to other conversations
+- Rich text formatting (markdown support)
+- Voice messages
+
+### Media & Attachments
+
+- File/image uploads with preview
+- Video sharing and playback
+- Link previews with metadata
+- Image compression and thumbnails
+- Cloud storage integration (S3, GCS)
+
+### Conversations
+
+- Group chat admin roles and permissions
+- Conversation archiving and muting
+- Pinned messages
+- Conversation search
+- Leave/rejoin group functionality
+- Conversation settings (name, avatar)
+
+### Notifications
+
+- Push notifications (FCM, APNs)
+- Email notifications for offline users
+- Notification preferences per conversation
+- Do not disturb mode
+- Desktop notifications (browser)
+
+### Security & Privacy
+
+- End-to-end encryption
+- Message expiration (disappearing messages)
+- Block/report users
+- Two-factor authentication
+- Session management (logout all devices)
+
+### Performance & Scalability
+
+- Message pagination with cursor-based scrolling
+- Redis pub/sub for horizontal scaling
+- Message delivery queue (RabbitMQ/Bull)
+- CDN for media files
+- Database read replicas
+
+### Analytics & Moderation
+
+- Usage analytics dashboard
+- Content moderation (spam detection)
+- Admin panel for user management
+- Audit logs
+- Rate limiting per user
+
+---
+
 ## License
 
 MIT
