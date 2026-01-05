@@ -11,8 +11,6 @@ import {
   type IUserRepository,
   USER_REPOSITORY,
 } from '../../../users/domain/repositories/user.repository.interface';
-import { Project } from '../../domain/entities/project.entity';
-import { User, UserRole } from '../../../users/domain/entities/user.entity';
 import { CreateProjectDto } from '../dto/create-project.dto';
 import { UpdateProjectDto } from '../dto/update-project.dto';
 import { ProjectResponseDto } from '../dto/project-response.dto';
@@ -38,7 +36,10 @@ export class ProjectsService {
     private readonly projectMapper: ProjectMapper,
   ) {}
 
-  async create(dto: CreateProjectDto, userId: string): Promise<ProjectResponseDto> {
+  async create(
+    dto: CreateProjectDto,
+    userId: string,
+  ): Promise<ProjectResponseDto> {
     const project = await this.projectRepository.create({
       name: dto.name,
       description: dto.description,
@@ -63,7 +64,8 @@ export class ProjectsService {
   }
 
   async findAllAccessibleByUser(userId: string): Promise<ProjectResponseDto[]> {
-    const projects = await this.projectRepository.findAllAccessibleByUser(userId);
+    const projects =
+      await this.projectRepository.findAllAccessibleByUser(userId);
     return this.projectMapper.toResponseDtoList(projects);
   }
 
@@ -151,7 +153,10 @@ export class ProjectsService {
       throw new ProjectAccessDeniedException('Cannot remove the project owner');
     }
 
-    const isMember = await this.projectRepository.isMember(projectId, userIdToRemove);
+    const isMember = await this.projectRepository.isMember(
+      projectId,
+      userIdToRemove,
+    );
     if (!isMember) {
       throw new UserNotMemberException();
     }

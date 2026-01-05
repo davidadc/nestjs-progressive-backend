@@ -133,23 +133,25 @@ describe('ProjectsService', () => {
       const result = await service.findById('project-id-1', 'owner-id');
 
       expect(result).toBeDefined();
-      expect(mockTaskRepository.countByProjectId).toHaveBeenCalledWith('project-id-1');
+      expect(mockTaskRepository.countByProjectId).toHaveBeenCalledWith(
+        'project-id-1',
+      );
     });
 
     it('should throw ProjectNotFoundException if project not found', async () => {
       mockProjectRepository.findByIdWithMembers.mockResolvedValue(null);
 
-      await expect(service.findById('non-existent', 'owner-id')).rejects.toThrow(
-        ProjectNotFoundException,
-      );
+      await expect(
+        service.findById('non-existent', 'owner-id'),
+      ).rejects.toThrow(ProjectNotFoundException);
     });
 
     it('should throw ProjectAccessDeniedException if user is not a member', async () => {
       mockProjectRepository.findByIdWithMembers.mockResolvedValue(mockProject);
 
-      await expect(service.findById('project-id-1', 'non-member-id')).rejects.toThrow(
-        ProjectAccessDeniedException,
-      );
+      await expect(
+        service.findById('project-id-1', 'non-member-id'),
+      ).rejects.toThrow(ProjectAccessDeniedException);
     });
   });
 
@@ -160,9 +162,16 @@ describe('ProjectsService', () => {
 
     it('should update a project if user is owner', async () => {
       mockProjectRepository.findById.mockResolvedValue(mockProject);
-      mockProjectRepository.update.mockResolvedValue({ ...mockProject, name: 'Updated Project' });
+      mockProjectRepository.update.mockResolvedValue({
+        ...mockProject,
+        name: 'Updated Project',
+      });
 
-      const result = await service.update('project-id-1', updateDto, 'owner-id');
+      const result = await service.update(
+        'project-id-1',
+        updateDto,
+        'owner-id',
+      );
 
       expect(result).toBeDefined();
       expect(mockProjectRepository.update).toHaveBeenCalled();
@@ -171,9 +180,9 @@ describe('ProjectsService', () => {
     it('should throw NotProjectOwnerException if user is not owner', async () => {
       mockProjectRepository.findById.mockResolvedValue(mockProject);
 
-      await expect(service.update('project-id-1', updateDto, 'non-owner-id')).rejects.toThrow(
-        NotProjectOwnerException,
-      );
+      await expect(
+        service.update('project-id-1', updateDto, 'non-owner-id'),
+      ).rejects.toThrow(NotProjectOwnerException);
     });
   });
 
@@ -190,9 +199,9 @@ describe('ProjectsService', () => {
     it('should throw NotProjectOwnerException if user is not owner', async () => {
       mockProjectRepository.findById.mockResolvedValue(mockProject);
 
-      await expect(service.delete('project-id-1', 'non-owner-id')).rejects.toThrow(
-        NotProjectOwnerException,
-      );
+      await expect(
+        service.delete('project-id-1', 'non-owner-id'),
+      ).rejects.toThrow(NotProjectOwnerException);
     });
   });
 
@@ -205,10 +214,17 @@ describe('ProjectsService', () => {
         members: [mockOwner, mockMember],
       });
 
-      const result = await service.addMember('project-id-1', 'member-id', 'owner-id');
+      const result = await service.addMember(
+        'project-id-1',
+        'member-id',
+        'owner-id',
+      );
 
       expect(result).toBeDefined();
-      expect(mockProjectRepository.addMember).toHaveBeenCalledWith('project-id-1', 'member-id');
+      expect(mockProjectRepository.addMember).toHaveBeenCalledWith(
+        'project-id-1',
+        'member-id',
+      );
     });
 
     it('should throw NotFoundException if user to add not found', async () => {

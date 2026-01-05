@@ -135,9 +135,9 @@ describe('CommentsService', () => {
     it('should throw TaskNotFoundException if task not found', async () => {
       mockTaskRepository.findById.mockResolvedValue(null);
 
-      await expect(service.create('non-existent', createDto, mockUser)).rejects.toThrow(
-        TaskNotFoundException,
-      );
+      await expect(
+        service.create('non-existent', createDto, mockUser),
+      ).rejects.toThrow(TaskNotFoundException);
     });
 
     it('should throw ForbiddenException if user not in project', async () => {
@@ -147,11 +147,13 @@ describe('CommentsService', () => {
         members: [],
         ownerId: 'other-user',
       });
-      mockProjectRepository.findByIdWithMembers.mockResolvedValue(projectWithoutUser);
-
-      await expect(service.create('task-id', createDto, mockUser)).rejects.toThrow(
-        ForbiddenException,
+      mockProjectRepository.findByIdWithMembers.mockResolvedValue(
+        projectWithoutUser,
       );
+
+      await expect(
+        service.create('task-id', createDto, mockUser),
+      ).rejects.toThrow(ForbiddenException);
     });
   });
 
@@ -164,15 +166,17 @@ describe('CommentsService', () => {
       const result = await service.findByTaskId('task-id', mockUser);
 
       expect(result).toHaveLength(1);
-      expect(mockCommentRepository.findByTaskId).toHaveBeenCalledWith('task-id');
+      expect(mockCommentRepository.findByTaskId).toHaveBeenCalledWith(
+        'task-id',
+      );
     });
 
     it('should throw TaskNotFoundException if task not found', async () => {
       mockTaskRepository.findById.mockResolvedValue(null);
 
-      await expect(service.findByTaskId('non-existent', mockUser)).rejects.toThrow(
-        TaskNotFoundException,
-      );
+      await expect(
+        service.findByTaskId('non-existent', mockUser),
+      ).rejects.toThrow(TaskNotFoundException);
     });
   });
 
@@ -186,10 +190,17 @@ describe('CommentsService', () => {
         content: 'Updated content',
       });
 
-      const result = await service.update('comment-id', 'Updated content', mockUser);
+      const result = await service.update(
+        'comment-id',
+        'Updated content',
+        mockUser,
+      );
 
       expect(result).toBeDefined();
-      expect(mockCommentRepository.update).toHaveBeenCalledWith('comment-id', 'Updated content');
+      expect(mockCommentRepository.update).toHaveBeenCalledWith(
+        'comment-id',
+        'Updated content',
+      );
     });
   });
 

@@ -6,10 +6,7 @@ import {
 } from '../../domain/repositories/project.repository.interface';
 import { Project } from '../../domain/entities/project.entity';
 import { User, UserRole } from '../../../users/domain/entities/user.entity';
-import {
-  Project as PrismaProject,
-  User as PrismaUser,
-} from '@prisma/client';
+import { Project as PrismaProject, User as PrismaUser } from '@prisma/client';
 
 type PrismaProjectWithRelations = PrismaProject & {
   owner?: PrismaUser;
@@ -87,10 +84,7 @@ export class ProjectRepository implements IProjectRepository {
   async findAllAccessibleByUser(userId: string): Promise<Project[]> {
     const prismaProjects = await this.prisma.project.findMany({
       where: {
-        OR: [
-          { ownerId: userId },
-          { members: { some: { id: userId } } },
-        ],
+        OR: [{ ownerId: userId }, { members: { some: { id: userId } } }],
       },
       include: {
         owner: true,
@@ -105,7 +99,8 @@ export class ProjectRepository implements IProjectRepository {
     const updateData: Record<string, unknown> = {};
 
     if (data.name !== undefined) updateData.name = data.name;
-    if (data.description !== undefined) updateData.description = data.description;
+    if (data.description !== undefined)
+      updateData.description = data.description;
 
     const prismaProject = await this.prisma.project.update({
       where: { id },
@@ -172,7 +167,9 @@ export class ProjectRepository implements IProjectRepository {
       name: prismaProject.name,
       description: prismaProject.description ?? undefined,
       ownerId: prismaProject.ownerId,
-      owner: prismaProject.owner ? this.mapUserToDomain(prismaProject.owner) : undefined,
+      owner: prismaProject.owner
+        ? this.mapUserToDomain(prismaProject.owner)
+        : undefined,
       members: prismaProject.members?.map((m) => this.mapUserToDomain(m)),
       createdAt: prismaProject.createdAt,
       updatedAt: prismaProject.updatedAt,

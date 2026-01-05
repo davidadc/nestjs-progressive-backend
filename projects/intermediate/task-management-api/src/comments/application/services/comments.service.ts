@@ -1,4 +1,9 @@
-import { Injectable, Inject, NotFoundException, ForbiddenException } from '@nestjs/common';
+import {
+  Injectable,
+  Inject,
+  NotFoundException,
+  ForbiddenException,
+} from '@nestjs/common';
 import {
   type ICommentRepository,
   COMMENT_REPOSITORY,
@@ -39,9 +44,13 @@ export class CommentsService {
       throw new TaskNotFoundException(taskId);
     }
 
-    const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+    const project = await this.projectRepository.findByIdWithMembers(
+      task.projectId,
+    );
     if (!project?.isMember(currentUser.id)) {
-      throw new ForbiddenException('You must be a project member to comment on tasks');
+      throw new ForbiddenException(
+        'You must be a project member to comment on tasks',
+      );
     }
 
     const comment = await this.commentRepository.create({
@@ -54,15 +63,22 @@ export class CommentsService {
     return this.commentMapper.toResponseDto(commentWithUser!);
   }
 
-  async findByTaskId(taskId: string, currentUser: User): Promise<CommentResponseDto[]> {
+  async findByTaskId(
+    taskId: string,
+    currentUser: User,
+  ): Promise<CommentResponseDto[]> {
     const task = await this.taskRepository.findById(taskId);
     if (!task) {
       throw new TaskNotFoundException(taskId);
     }
 
-    const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+    const project = await this.projectRepository.findByIdWithMembers(
+      task.projectId,
+    );
     if (!project?.isMember(currentUser.id)) {
-      throw new ForbiddenException('You must be a project member to view comments');
+      throw new ForbiddenException(
+        'You must be a project member to view comments',
+      );
     }
 
     const comments = await this.commentRepository.findByTaskId(taskId);

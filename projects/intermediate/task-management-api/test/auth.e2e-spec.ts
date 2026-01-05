@@ -114,13 +114,11 @@ describe('AuthController (e2e)', () => {
     const testPassword = 'Password123!';
 
     beforeAll(async () => {
-      await request(app.getHttpServer())
-        .post('/api/v1/auth/register')
-        .send({
-          email: testEmail,
-          password: testPassword,
-          name: 'Login Test User',
-        });
+      await request(app.getHttpServer()).post('/api/v1/auth/register').send({
+        email: testEmail,
+        password: testPassword,
+        name: 'Login Test User',
+      });
     });
 
     it('should login with valid credentials', () => {

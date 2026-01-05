@@ -46,7 +46,10 @@ export class ProjectsController {
   })
   @ApiResponse({ status: 400, description: 'Validation error' })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Forbidden - Admin access required' })
+  @ApiResponse({
+    status: 403,
+    description: 'Forbidden - Admin access required',
+  })
   async create(
     @Body() dto: CreateProjectDto,
     @CurrentUser() user: User,
@@ -127,7 +130,10 @@ export class ProjectsController {
     description: 'Member added successfully',
     type: ProjectResponseDto,
   })
-  @ApiResponse({ status: 400, description: 'Validation error or user already member' })
+  @ApiResponse({
+    status: 400,
+    description: 'Validation error or user already member',
+  })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
   @ApiResponse({ status: 403, description: 'Access denied - not owner' })
   @ApiResponse({ status: 404, description: 'Project or user not found' })
@@ -149,7 +155,10 @@ export class ProjectsController {
     type: ProjectResponseDto,
   })
   @ApiResponse({ status: 401, description: 'Unauthorized' })
-  @ApiResponse({ status: 403, description: 'Access denied - not owner or cannot remove owner' })
+  @ApiResponse({
+    status: 403,
+    description: 'Access denied - not owner or cannot remove owner',
+  })
   @ApiResponse({ status: 404, description: 'Project or user not found' })
   async removeMember(
     @Param('id', ParseUUIDPipe) id: string,

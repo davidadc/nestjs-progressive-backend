@@ -93,7 +93,9 @@ export class CommentRepository implements ICommentRepository {
       id: prismaComment.id,
       taskId: prismaComment.taskId,
       userId: prismaComment.userId,
-      user: prismaComment.user ? this.mapUserToDomain(prismaComment.user) : undefined,
+      user: prismaComment.user
+        ? this.mapUserToDomain(prismaComment.user)
+        : undefined,
       content: prismaComment.content,
       createdAt: prismaComment.createdAt,
       updatedAt: prismaComment.updatedAt,

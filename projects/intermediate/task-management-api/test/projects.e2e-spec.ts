@@ -122,9 +122,7 @@ describe('ProjectsController (e2e)', () => {
     });
 
     it('should return 401 without auth token', () => {
-      return request(app.getHttpServer())
-        .get('/api/v1/projects')
-        .expect(401);
+      return request(app.getHttpServer()).get('/api/v1/projects').expect(401);
     });
   });
 

@@ -15,7 +15,10 @@ export class FindTasksDto extends PaginationQueryDto {
   @IsEnum(TaskPriority)
   priority?: TaskPriority;
 
-  @ApiPropertyOptional({ example: 'me', description: 'Use "me" for current user or UUID' })
+  @ApiPropertyOptional({
+    example: 'me',
+    description: 'Use "me" for current user or UUID',
+  })
   @IsOptional()
   @IsString()
   assignedTo?: string;

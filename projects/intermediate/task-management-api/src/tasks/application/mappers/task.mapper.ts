@@ -1,6 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { Task } from '../../domain/entities/task.entity';
-import { TaskResponseDto, TaskUserDto, TaskProjectDto } from '../dto/task-response.dto';
+import {
+  TaskResponseDto,
+  TaskUserDto,
+  TaskProjectDto,
+} from '../dto/task-response.dto';
 import { User } from '../../../users/domain/entities/user.entity';
 import { Project } from '../../../projects/domain/entities/project.entity';
 

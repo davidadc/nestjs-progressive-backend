@@ -1,6 +1,9 @@
 import { Injectable } from '@nestjs/common';
 import { Project } from '../../domain/entities/project.entity';
-import { ProjectResponseDto, ProjectMemberDto } from '../dto/project-response.dto';
+import {
+  ProjectResponseDto,
+  ProjectMemberDto,
+} from '../dto/project-response.dto';
 import { User } from '../../../users/domain/entities/user.entity';
 
 @Injectable()

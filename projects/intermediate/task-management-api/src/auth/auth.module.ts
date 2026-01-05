@@ -20,7 +20,10 @@ import { USER_REPOSITORY } from '../users/domain/repositories/user.repository.in
       useFactory: (configService: ConfigService) => ({
         secret: configService.get<string>('JWT_SECRET'),
         signOptions: {
-          expiresIn: parseInt(configService.get<string>('JWT_EXPIRATION', '900'), 10),
+          expiresIn: parseInt(
+            configService.get<string>('JWT_EXPIRATION', '900'),
+            10,
+          ),
         },
       }),
       inject: [ConfigService],

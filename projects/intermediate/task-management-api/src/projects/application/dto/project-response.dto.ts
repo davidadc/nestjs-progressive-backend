@@ -1,5 +1,4 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { UserResponseDto } from '../../../users/application/dto/user-response.dto';
 
 export class ProjectMemberDto {
   @ApiProperty({ example: 'uuid-string' })

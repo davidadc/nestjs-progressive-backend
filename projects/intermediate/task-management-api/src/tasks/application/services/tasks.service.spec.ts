@@ -133,15 +133,18 @@ describe('TasksService', () => {
 
       expect(result).toBeDefined();
       expect(mockTaskRepository.create).toHaveBeenCalled();
-      expect(mockEventEmitter.emit).toHaveBeenCalledWith('task.created', expect.anything());
+      expect(mockEventEmitter.emit).toHaveBeenCalledWith(
+        'task.created',
+        expect.anything(),
+      );
     });
 
     it('should throw ProjectNotFoundException if project not found', async () => {
       mockProjectRepository.findByIdWithMembers.mockResolvedValue(null);
 
-      await expect(service.create('non-existent', createDto, mockUser)).rejects.toThrow(
-        ProjectNotFoundException,
-      );
+      await expect(
+        service.create('non-existent', createDto, mockUser),
+      ).rejects.toThrow(ProjectNotFoundException);
     });
 
     it('should throw ProjectAccessDeniedException if user is not a member', async () => {
@@ -150,20 +153,22 @@ describe('TasksService', () => {
         members: [],
         ownerId: 'other-user',
       });
-      mockProjectRepository.findByIdWithMembers.mockResolvedValue(projectWithoutUser);
-
-      await expect(service.create('project-id', createDto, mockUser)).rejects.toThrow(
-        ProjectAccessDeniedException,
+      mockProjectRepository.findByIdWithMembers.mockResolvedValue(
+        projectWithoutUser,
       );
+
+      await expect(
+        service.create('project-id', createDto, mockUser),
+      ).rejects.toThrow(ProjectAccessDeniedException);
     });
 
     it('should throw TaskModificationDeniedException if user cannot manage tasks', async () => {
       const regularUser = new User({ ...mockUser, role: UserRole.USER });
       mockProjectRepository.findByIdWithMembers.mockResolvedValue(mockProject);
 
-      await expect(service.create('project-id', createDto, regularUser)).rejects.toThrow(
-        TaskModificationDeniedException,
-      );
+      await expect(
+        service.create('project-id', createDto, regularUser),
+      ).rejects.toThrow(TaskModificationDeniedException);
     });
   });
 
@@ -176,7 +181,9 @@ describe('TasksService', () => {
       const result = await service.findById('task-id', mockUser);
 
       expect(result).toBeDefined();
-      expect(mockCommentRepository.countByTaskId).toHaveBeenCalledWith('task-id');
+      expect(mockCommentRepository.countByTaskId).toHaveBeenCalledWith(
+        'task-id',
+      );
     });
 
     it('should throw TaskNotFoundException if task not found', async () => {
@@ -194,7 +201,9 @@ describe('TasksService', () => {
         members: [],
         ownerId: 'other-user',
       });
-      mockProjectRepository.findByIdWithMembers.mockResolvedValue(projectWithoutUser);
+      mockProjectRepository.findByIdWithMembers.mockResolvedValue(
+        projectWithoutUser,
+      );
 
       await expect(service.findById('task-id', mockUser)).rejects.toThrow(
         TaskAccessDeniedException,
@@ -211,7 +220,10 @@ describe('TasksService', () => {
     it('should update a task successfully', async () => {
       mockTaskRepository.findByIdWithRelations.mockResolvedValue(mockTask);
       mockProjectRepository.findByIdWithMembers.mockResolvedValue(mockProject);
-      mockTaskRepository.update.mockResolvedValue({ ...mockTask, ...updateDto });
+      mockTaskRepository.update.mockResolvedValue({
+        ...mockTask,
+        ...updateDto,
+      });
 
       const result = await service.update('task-id', updateDto, mockUser);
 
@@ -222,7 +234,10 @@ describe('TasksService', () => {
     it('should emit status changed event when status changes', async () => {
       mockTaskRepository.findByIdWithRelations.mockResolvedValue(mockTask);
       mockProjectRepository.findByIdWithMembers.mockResolvedValue(mockProject);
-      mockTaskRepository.update.mockResolvedValue({ ...mockTask, ...updateDto });
+      mockTaskRepository.update.mockResolvedValue({
+        ...mockTask,
+        ...updateDto,
+      });
 
       await service.update('task-id', { status: TaskStatus.DONE }, mockUser);
 
@@ -242,7 +257,11 @@ describe('TasksService', () => {
         status: TaskStatus.IN_PROGRESS,
       });
 
-      const result = await service.updateStatus('task-id', TaskStatus.IN_PROGRESS, mockUser);
+      const result = await service.updateStatus(
+        'task-id',
+        TaskStatus.IN_PROGRESS,
+        mockUser,
+      );
 
       expect(result).toBeDefined();
       expect(mockEventEmitter.emit).toHaveBeenCalledWith(

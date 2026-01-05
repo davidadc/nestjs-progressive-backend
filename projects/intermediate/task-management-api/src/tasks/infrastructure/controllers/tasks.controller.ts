@@ -66,15 +66,51 @@ export class TasksController {
 
   @Get('tasks')
   @ApiOperation({ summary: 'List tasks with filters' })
-  @ApiQuery({ name: 'status', required: false, description: 'Filter by status' })
-  @ApiQuery({ name: 'priority', required: false, description: 'Filter by priority' })
-  @ApiQuery({ name: 'projectId', required: false, description: 'Filter by project' })
-  @ApiQuery({ name: 'assignedTo', required: false, description: 'Filter by assignee (use "me" for current user)' })
-  @ApiQuery({ name: 'search', required: false, description: 'Search in title/description' })
-  @ApiQuery({ name: 'sort', required: false, description: 'Sort field (createdAt, dueDate, priority, status)' })
-  @ApiQuery({ name: 'order', required: false, description: 'Sort order (asc, desc)' })
-  @ApiQuery({ name: 'page', required: false, description: 'Page number (default: 1)' })
-  @ApiQuery({ name: 'limit', required: false, description: 'Items per page (default: 10, max: 100)' })
+  @ApiQuery({
+    name: 'status',
+    required: false,
+    description: 'Filter by status',
+  })
+  @ApiQuery({
+    name: 'priority',
+    required: false,
+    description: 'Filter by priority',
+  })
+  @ApiQuery({
+    name: 'projectId',
+    required: false,
+    description: 'Filter by project',
+  })
+  @ApiQuery({
+    name: 'assignedTo',
+    required: false,
+    description: 'Filter by assignee (use "me" for current user)',
+  })
+  @ApiQuery({
+    name: 'search',
+    required: false,
+    description: 'Search in title/description',
+  })
+  @ApiQuery({
+    name: 'sort',
+    required: false,
+    description: 'Sort field (createdAt, dueDate, priority, status)',
+  })
+  @ApiQuery({
+    name: 'order',
+    required: false,
+    description: 'Sort order (asc, desc)',
+  })
+  @ApiQuery({
+    name: 'page',
+    required: false,
+    description: 'Page number (default: 1)',
+  })
+  @ApiQuery({
+    name: 'limit',
+    required: false,
+    description: 'Items per page (default: 10, max: 100)',
+  })
   @ApiResponse({
     status: 200,
     description: 'Returns paginated list of tasks',
@@ -126,7 +162,9 @@ export class TasksController {
   }
 
   @Patch('tasks/:id/status')
-  @ApiOperation({ summary: 'Update task status only (Admin, Manager, or Assignee)' })
+  @ApiOperation({
+    summary: 'Update task status only (Admin, Manager, or Assignee)',
+  })
   @ApiParam({ name: 'id', description: 'Task UUID' })
   @ApiResponse({
     status: 200,

@@ -36,7 +36,8 @@ export class TaskRepository implements ITaskRepository {
         projectId: data.projectId,
         title: data.title,
         description: data.description,
-        priority: (data.priority as PrismaTaskPriority) ?? PrismaTaskPriority.MEDIUM,
+        priority:
+          (data.priority as PrismaTaskPriority) ?? PrismaTaskPriority.MEDIUM,
         dueDate: data.dueDate,
         assignedToId: data.assignedToId,
         createdById: data.createdById,
@@ -104,7 +105,8 @@ export class TaskRepository implements ITaskRepository {
       if (filter.assignedToId) where.assignedToId = filter.assignedToId;
       if (filter.createdById) where.createdById = filter.createdById;
       if (filter.status) where.status = filter.status as PrismaTaskStatus;
-      if (filter.priority) where.priority = filter.priority as PrismaTaskPriority;
+      if (filter.priority)
+        where.priority = filter.priority as PrismaTaskPriority;
       if (filter.search) {
         where.OR = [
           { title: { contains: filter.search, mode: 'insensitive' } },
@@ -154,9 +156,12 @@ export class TaskRepository implements ITaskRepository {
     const updateData: Prisma.TaskUpdateInput = {};
 
     if (data.title !== undefined) updateData.title = data.title;
-    if (data.description !== undefined) updateData.description = data.description;
-    if (data.status !== undefined) updateData.status = data.status as PrismaTaskStatus;
-    if (data.priority !== undefined) updateData.priority = data.priority as PrismaTaskPriority;
+    if (data.description !== undefined)
+      updateData.description = data.description;
+    if (data.status !== undefined)
+      updateData.status = data.status as PrismaTaskStatus;
+    if (data.priority !== undefined)
+      updateData.priority = data.priority as PrismaTaskPriority;
     if (data.dueDate !== undefined) updateData.dueDate = data.dueDate;
     if (data.assignedToId !== undefined) {
       updateData.assignedTo = data.assignedToId
@@ -205,16 +210,22 @@ export class TaskRepository implements ITaskRepository {
     return new Task({
       id: prismaTask.id,
       projectId: prismaTask.projectId,
-      project: prismaTask.project ? this.mapProjectToDomain(prismaTask.project) : undefined,
+      project: prismaTask.project
+        ? this.mapProjectToDomain(prismaTask.project)
+        : undefined,
       title: prismaTask.title,
       description: prismaTask.description ?? undefined,
       status: prismaTask.status as TaskStatus,
       priority: prismaTask.priority as TaskPriority,
       dueDate: prismaTask.dueDate ?? undefined,
       assignedToId: prismaTask.assignedToId ?? undefined,
-      assignedTo: prismaTask.assignedTo ? this.mapUserToDomain(prismaTask.assignedTo) : undefined,
+      assignedTo: prismaTask.assignedTo
+        ? this.mapUserToDomain(prismaTask.assignedTo)
+        : undefined,
       createdById: prismaTask.createdById,
-      createdBy: prismaTask.createdBy ? this.mapUserToDomain(prismaTask.createdBy) : undefined,
+      createdBy: prismaTask.createdBy
+        ? this.mapUserToDomain(prismaTask.createdBy)
+        : undefined,
       createdAt: prismaTask.createdAt,
       updatedAt: prismaTask.updatedAt,
     });

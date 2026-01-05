@@ -15,7 +15,7 @@ import {
 } from '../../../comments/domain/repositories/comment.repository.interface';
 import { Task } from '../../domain/entities/task.entity';
 import { TaskStatus } from '../../domain/enums/task-status.enum';
-import { User, UserRole } from '../../../users/domain/entities/user.entity';
+import { User } from '../../../users/domain/entities/user.entity';
 import { CreateTaskDto } from '../dto/create-task.dto';
 import { UpdateTaskDto } from '../dto/update-task.dto';
 import { FindTasksDto } from '../dto/find-tasks.dto';
@@ -79,17 +79,29 @@ export class TasksService {
 
     this.eventEmitter.emit(
       'task.created',
-      new TaskCreatedEvent(task.id, projectId, currentUser.id, dto.assignedToId),
+      new TaskCreatedEvent(
+        task.id,
+        projectId,
+        currentUser.id,
+        dto.assignedToId,
+      ),
     );
 
     if (dto.assignedToId) {
       this.eventEmitter.emit(
         'task.assigned',
-        new TaskAssignedEvent(task.id, projectId, dto.assignedToId, currentUser.id),
+        new TaskAssignedEvent(
+          task.id,
+          projectId,
+          dto.assignedToId,
+          currentUser.id,
+        ),
       );
     }
 
-    const taskWithRelations = await this.taskRepository.findByIdWithRelations(task.id);
+    const taskWithRelations = await this.taskRepository.findByIdWithRelations(
+      task.id,
+    );
     return this.taskMapper.toResponseDto(taskWithRelations!);
   }
 
@@ -99,7 +111,9 @@ export class TasksService {
       throw new TaskNotFoundException(id);
     }
 
-    const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+    const project = await this.projectRepository.findByIdWithMembers(
+      task.projectId,
+    );
     if (!project?.isMember(currentUser.id)) {
       throw new TaskAccessDeniedException();
     }
@@ -136,7 +150,9 @@ export class TasksService {
     // Filter tasks to only those in projects the user has access to
     const accessibleTasks: Task[] = [];
     for (const task of result.items) {
-      const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+      const project = await this.projectRepository.findByIdWithMembers(
+        task.projectId,
+      );
       if (project?.isMember(currentUser.id)) {
         accessibleTasks.push(task);
       }
@@ -158,7 +174,9 @@ export class TasksService {
       throw new TaskNotFoundException(id);
     }
 
-    const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+    const project = await this.projectRepository.findByIdWithMembers(
+      task.projectId,
+    );
     if (!project?.isMember(currentUser.id)) {
       throw new TaskAccessDeniedException();
     }
@@ -175,9 +193,10 @@ export class TasksService {
     if (dto.status !== undefined) updateData.status = dto.status;
     if (dto.priority !== undefined) updateData.priority = dto.priority;
     if (dto.dueDate !== undefined) updateData.dueDate = new Date(dto.dueDate);
-    if (dto.assignedToId !== undefined) updateData.assignedToId = dto.assignedToId;
+    if (dto.assignedToId !== undefined)
+      updateData.assignedToId = dto.assignedToId;
 
-    const updatedTask = await this.taskRepository.update(id, updateData);
+    await this.taskRepository.update(id, updateData);
 
     if (dto.status && dto.status !== previousStatus) {
       this.eventEmitter.emit(
@@ -196,11 +215,17 @@ export class TasksService {
     if (dto.assignedToId && dto.assignedToId !== task.assignedToId) {
       this.eventEmitter.emit(
         'task.assigned',
-        new TaskAssignedEvent(id, task.projectId, dto.assignedToId, currentUser.id),
+        new TaskAssignedEvent(
+          id,
+          task.projectId,
+          dto.assignedToId,
+          currentUser.id,
+        ),
       );
     }
 
-    const taskWithRelations = await this.taskRepository.findByIdWithRelations(id);
+    const taskWithRelations =
+      await this.taskRepository.findByIdWithRelations(id);
     return this.taskMapper.toResponseDto(taskWithRelations!);
   }
 
@@ -214,7 +239,9 @@ export class TasksService {
       throw new TaskNotFoundException(id);
     }
 
-    const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+    const project = await this.projectRepository.findByIdWithMembers(
+      task.projectId,
+    );
     if (!project?.isMember(currentUser.id)) {
       throw new TaskAccessDeniedException();
     }
@@ -224,7 +251,7 @@ export class TasksService {
     }
 
     const previousStatus = task.status;
-    const updatedTask = await this.taskRepository.updateStatus(id, status);
+    await this.taskRepository.updateStatus(id, status);
 
     this.eventEmitter.emit(
       'task.status.changed',
@@ -238,7 +265,8 @@ export class TasksService {
       ),
     );
 
-    const taskWithRelations = await this.taskRepository.findByIdWithRelations(id);
+    const taskWithRelations =
+      await this.taskRepository.findByIdWithRelations(id);
     return this.taskMapper.toResponseDto(taskWithRelations!);
   }
 
@@ -248,7 +276,9 @@ export class TasksService {
       throw new TaskNotFoundException(id);
     }
 
-    const project = await this.projectRepository.findByIdWithMembers(task.projectId);
+    const project = await this.projectRepository.findByIdWithMembers(
+      task.projectId,
+    );
     if (!project?.isMember(currentUser.id)) {
       throw new TaskAccessDeniedException();
     }
