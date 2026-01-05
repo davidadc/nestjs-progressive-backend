@@ -1510,24 +1510,32 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ### E-commerce Backend ✅
 
-- [x] **Entities:** User, Category, Product, Cart, CartItem, Order, OrderItem, Review, Address
+- [x] **Entities:** User, Product, Category, Cart, CartItem, Order, OrderItem, Review
 - [x] **Endpoints:**
-  - [x] Auth (register, login, profile, logout, refresh)
-  - [x] Categories CRUD
-  - [x] Products CRUD with filtering/search
-  - [x] Cart management
-  - [x] Order placement and history
-  - [x] Reviews and ratings
-  - [x] Address management
+  - [x] Auth (register, login, profile)
+  - [x] Address management (CRUD + set default)
+  - [x] Products (CRUD with filters, search, pagination)
+  - [x] Categories (CRUD)
+  - [x] Cart (add, update, remove, clear)
+  - [x] Orders (create from cart, list, view)
+  - [x] Reviews (CRUD per product)
 - [x] **Features:**
-  - [x] Role-based access (Admin, Customer)
-  - [x] Product search and filters
-  - [x] Cart persistence
-  - [x] Order status workflow
-  - [x] Average rating calculation
-- [x] **Testing:** Unit + E2E tests (80%+ coverage)
+  - [x] JWT authentication with roles (customer, admin)
+  - [x] Role-based access control
+  - [x] Stock validation on orders
+  - [x] Soft deletes for products
+  - [x] Response envelopes
+  - [x] API versioning (/api/v1)
+- [x] **Testing:**
+  - [x] Unit tests: 76 tests (100% service coverage)
+  - [x] E2E tests: 63 tests
+  - [x] API integration tests: 54 tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI at /docs
+  - [x] README with setup instructions
+  - [x] AI_CONTEXT.md for Claude Code
 
-### Task Management API ✅ (Completed)
+### Task Management API ✅
 
 - [x] **Entities:** User, Project, Task, TaskComment
 - [x] **Endpoints:**
@@ -1540,7 +1548,15 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
   - [x] Task status and priority
   - [x] Task assignment
   - [x] Project membership
-- [x] **Testing:** Unit (39 tests) + E2E tests
+- [x] **Testing:**
+  - [x] Unit tests: 39 tests
+  - [x] E2E tests: 29 tests
+  - [x] API integration tests: 25 tests
+  - [x] User journey tests: 33 tests
+- [x] **Documentation:**
+  - [x] Swagger/OpenAPI at /docs
+  - [x] README with setup instructions
+  - [x] AI_CONTEXT.md for Claude Code
 
 ---
 
@@ -1587,4 +1603,4 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 ---
 
 **Last updated:** 2026-01-05
-**Suggested next review:** After completing Beginner Level
+**Suggested next review:** After completing Intermediate Level
