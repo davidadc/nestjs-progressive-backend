@@ -127,17 +127,25 @@
   - [x] Seed sample conversations
   - [x] Seed sample messages
   - [x] Add cleanup/reset function
-- [x] Create `test-api.sh` for endpoint testing
+- [x] Create `test-api.sh` for endpoint testing (17 tests)
   - [x] Health check verification
   - [x] Auth endpoints (register, login)
   - [x] Conversation CRUD endpoints
   - [x] Message endpoints
   - [x] Error handling (404, 401, 403, validation errors)
   - [x] Test summary with pass/fail counters
-- [x] Create user journey tests (complete workflows)
-  - [x] Journey: New User - Registration Flow (Register → Login → Create Conversation)
-  - [x] Journey: Chat User - Messaging Flow (Login → Get Conversations → Send Message → Get History)
-  - [x] Journey: Group Chat - Group Management (Create Group → Add Participants → Send Messages)
+- [x] Create `test-websocket.sh` / `test-websocket.js` for WebSocket testing (31 tests)
+  - [x] Individual socket event tests (14 tests):
+    - [x] Connection with valid/invalid token
+    - [x] Join/leave conversations
+    - [x] Send/receive messages via WebSocket
+    - [x] Typing indicators (start/stop)
+    - [x] Presence updates (away/online)
+  - [x] User journey tests (17 tests):
+    - [x] Journey 1: Complete chat flow (register → login → connect → chat → get history)
+    - [x] Journey 2: Real-time typing flow (type → indicator → send → clears)
+    - [x] Journey 3: Presence management (status change → disconnect → reconnect)
+    - [x] Journey 4: Multi-conversation handling (join multiple rooms → route correctly)
 - [x] Make scripts executable (`chmod +x`)
 
 **Usage:**
@@ -145,8 +153,11 @@
 # Seed test data
 ./scripts/seed-data.sh
 
-# Run API tests
+# Run REST API tests (17 tests)
 ./scripts/test-api.sh
+
+# Run WebSocket tests (31 tests)
+./scripts/test-websocket.sh
 ```
 
 ### Phase 10: Unit & E2E Testing
@@ -383,7 +394,9 @@ chat-app-backend/
 │   └── main.ts
 ├── scripts/
 │   ├── seed-data.sh
-│   └── test-api.sh
+│   ├── test-api.sh
+│   ├── test-websocket.sh
+│   └── test-websocket.js
 ├── test/
 │   ├── auth.e2e-spec.ts
 │   ├── conversations.e2e-spec.ts
@@ -411,7 +424,7 @@ pnpm install
 docker-compose up -d postgres redis
 
 # Run migrations
-pnpm exec drizzle-kit migrate
+pnpm run db:migrate
 
 # Start development server
 pnpm run start:dev
@@ -422,8 +435,17 @@ open http://localhost:3000/api
 # Seed test data (optional, in new terminal)
 ./scripts/seed-data.sh
 
-# Run API integration tests
+# Run REST API integration tests (17 tests)
 ./scripts/test-api.sh
+
+# Run WebSocket integration tests (31 tests)
+./scripts/test-websocket.sh
+
+# Run unit tests (33 tests)
+pnpm run test
+
+# Run E2E tests (23 tests)
+pnpm run test:e2e
 ```
 
 ---
