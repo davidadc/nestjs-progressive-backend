@@ -29,199 +29,206 @@
 
 ### Phase 1: Project Scaffolding
 
-- [ ] Initialize NestJS project with CLI
-- [ ] Install core dependencies (@nestjs/cqrs, @nestjs/typeorm)
-- [ ] Install validation dependencies (class-validator, class-transformer)
-- [ ] Install documentation (@nestjs/swagger)
-- [ ] Install auth dependencies (@nestjs/jwt, @nestjs/passport, bcrypt)
-- [ ] Install Redis dependencies (@nestjs/cache-manager, ioredis)
-- [ ] Create .env and .env.example files
-- [ ] Set up Advanced DDD folder structure
+- [x] Initialize NestJS project with CLI
+- [x] Install core dependencies (@nestjs/cqrs, @nestjs/typeorm)
+- [x] Install validation dependencies (class-validator, class-transformer)
+- [x] Install documentation (@nestjs/swagger)
+- [x] Install auth dependencies (@nestjs/jwt, @nestjs/passport, bcrypt)
+- [x] Install Redis dependencies (@nestjs/cache-manager, ioredis)
+- [x] Create .env and .env.example files
+- [x] Set up Advanced DDD folder structure
 
 ### Phase 2: Database Setup (TypeORM)
 
-- [ ] Configure TypeORM module with PostgreSQL
-- [ ] Create User ORM entity
-- [ ] Create Post ORM entity
-- [ ] Create Comment ORM entity
-- [ ] Create Like ORM entity
-- [ ] Create Follow ORM entity
-- [ ] Create Hashtag ORM entity
-- [ ] Create PostHashtag junction entity
-- [ ] Generate initial migration
-- [ ] Run migrations
+- [x] Configure TypeORM module with PostgreSQL
+- [x] Create User ORM entity
+- [x] Create Post ORM entity
+- [x] Create Comment ORM entity
+- [x] Create Like ORM entity
+- [x] Create Follow ORM entity
+- [x] Create Hashtag ORM entity
+- [x] Create PostHashtag junction entity
+- [x] Create Notification ORM entity
+- [x] Generate initial migration
+- [x] Run migrations
 
 ### Phase 3: Common Module
 
-- [ ] Create AggregateRoot base class
-- [ ] Create DomainEvent base class
-- [ ] Create ValueObject base class
-- [ ] Create ProblemDetails exception
-- [ ] Create ProblemDetailsFactory with error types:
-  - [ ] notFound
-  - [ ] unauthorized
-  - [ ] forbidden
-  - [ ] conflict (duplicate)
-  - [ ] validationError
-  - [ ] invalidInput
-- [ ] Create ProblemDetailsFilter (global exception filter)
-- [ ] Create ResponseEnvelopeInterceptor
-- [ ] Create CurrentUser decorator
-- [ ] Create pagination DTOs
+- [x] Create AggregateRoot base class
+- [x] Create DomainEvent base class
+- [x] Create ValueObject base class
+- [x] Create ProblemDetails exception
+- [x] Create ProblemDetailsFactory with error types:
+  - [x] notFound
+  - [x] unauthorized
+  - [x] forbidden
+  - [x] conflict (duplicate)
+  - [x] validationError
+  - [x] invalidInput
+- [x] Create ProblemDetailsFilter (global exception filter)
+- [x] Create ResponseEnvelopeInterceptor
+- [x] Create CurrentUser decorator
+- [x] Create pagination DTOs
 
 ### Phase 4: Auth Module
 
-- [ ] Create auth.module.ts
-- [ ] Create JWT strategy
-- [ ] Create JWT auth guard
-- [ ] Create LoginCommand and handler
-- [ ] Create RegisterCommand (delegates to UsersModule)
-- [ ] Create RefreshTokenCommand and handler
-- [ ] Create login.dto.ts with validation
-- [ ] Create auth-response.dto.ts (tokens)
-- [ ] Create auth.controller.ts with endpoints:
-  - [ ] POST /auth/register
-  - [ ] POST /auth/login
-  - [ ] POST /auth/refresh
-  - [ ] GET /auth/profile
+- [x] Create auth.module.ts
+- [x] Create JWT strategy
+- [x] Create JWT auth guard
+- [x] Create LoginCommand and handler
+- [x] Create RegisterCommand and handler
+- [x] Create RefreshTokenCommand and handler
+- [x] Create login.dto.ts with validation
+- [x] Create auth-response.dto.ts (tokens)
+- [x] Create auth.controller.ts with endpoints:
+  - [x] POST /auth/register
+  - [x] POST /auth/login
+  - [x] POST /auth/refresh
+  - [x] GET /auth/profile
 
 ### Phase 5: Users Module (Domain Layer)
 
-- [ ] Create users.module.ts
-- [ ] Create User aggregate root
-- [ ] Create value objects:
-  - [ ] UserId
-  - [ ] Email
-  - [ ] Username
-- [ ] Create domain events:
-  - [ ] UserRegisteredEvent
-  - [ ] UserFollowedEvent
-  - [ ] UserUnfollowedEvent
-- [ ] Create IUserRepository interface
+- [x] Create users.module.ts
+- [x] Create User aggregate root
+- [x] Create value objects:
+  - [x] UserId
+  - [x] Email
+  - [x] Username
+- [x] Create domain events:
+  - [x] UserRegisteredEvent
+  - [x] UserFollowedEvent
+  - [x] UserUnfollowedEvent
+- [x] Create IUserRepository interface
 
 ### Phase 6: Users Module (Application Layer)
 
-- [ ] Create commands:
-  - [ ] RegisterUserCommand + Handler
-  - [ ] FollowUserCommand + Handler
-  - [ ] UnfollowUserCommand + Handler
-  - [ ] UpdateProfileCommand + Handler
-- [ ] Create queries:
-  - [ ] GetUserProfileQuery + Handler
-  - [ ] GetFollowersQuery + Handler
-  - [ ] GetFollowingQuery + Handler
-  - [ ] SearchUsersQuery + Handler
-- [ ] Create DTOs:
-  - [ ] register-user.dto.ts
-  - [ ] update-profile.dto.ts
-  - [ ] user-response.dto.ts
-  - [ ] user-list-response.dto.ts
-- [ ] Create UserMapper
+- [x] Create commands:
+  - [x] RegisterUserCommand + Handler (in Auth module)
+  - [x] FollowUserCommand + Handler
+  - [x] UnfollowUserCommand + Handler
+  - [x] UpdateProfileCommand + Handler
+- [x] Create queries:
+  - [x] GetUserProfileQuery + Handler
+  - [x] GetFollowersQuery + Handler
+  - [x] GetFollowingQuery + Handler
+  - [x] SearchUsersQuery + Handler
+- [x] Create DTOs:
+  - [x] register-user.dto.ts (in Auth module)
+  - [x] update-profile.dto.ts
+  - [x] user-response.dto.ts
+  - [x] user-list-response.dto.ts (UserSummaryDto)
+- [x] Create UserMapper (inline in handlers)
 
 ### Phase 7: Users Module (Infrastructure Layer)
 
-- [ ] Create User ORM entity mapping
-- [ ] Create Follow ORM entity mapping
-- [ ] Create UserRepository implementation
-- [ ] Create users.controller.ts with endpoints:
-  - [ ] GET /users/:id
-  - [ ] GET /users/:id/followers
-  - [ ] GET /users/:id/following
-  - [ ] POST /users/:id/follow
-  - [ ] DELETE /users/:id/follow
-  - [ ] GET /users/search
-- [ ] Create UserFollowedEventHandler (update counters)
+- [x] Create User ORM entity mapping (in Phase 2)
+- [x] Create Follow ORM entity mapping (in Phase 2)
+- [x] Create UserRepository implementation
+- [x] Create users.controller.ts with endpoints:
+  - [x] GET /users/:id
+  - [x] GET /users/:id/followers
+  - [x] GET /users/:id/following
+  - [x] POST /users/:id/follow
+  - [x] DELETE /users/:id/follow
+  - [x] GET /users/search
+  - [x] PATCH /users/:id (update profile)
+- [x] Create UserFollowedEventHandler (create notification)
 
 ### Phase 8: Posts Module (Domain Layer)
 
-- [ ] Create posts.module.ts
-- [ ] Create Post aggregate root
-- [ ] Create value objects:
-  - [ ] PostId
-  - [ ] PostContent (with length validation)
-- [ ] Create domain events:
-  - [ ] PostCreatedEvent
-  - [ ] PostDeletedEvent
-  - [ ] PostLikedEvent
-  - [ ] PostUnlikedEvent
-- [ ] Create IPostRepository interface
+- [x] Create posts.module.ts
+- [x] Create Post aggregate root (via value objects)
+- [x] Create value objects:
+  - [x] PostId
+  - [x] PostContent (with length validation)
+- [x] Create domain events:
+  - [x] PostCreatedEvent
+  - [x] PostDeletedEvent
+  - [x] PostLikedEvent
+  - [x] PostUnlikedEvent
+- [x] Create IPostRepository interface
 
 ### Phase 9: Posts Module (Application Layer)
 
-- [ ] Create commands:
-  - [ ] CreatePostCommand + Handler
-  - [ ] DeletePostCommand + Handler
-  - [ ] LikePostCommand + Handler
-  - [ ] UnlikePostCommand + Handler
-- [ ] Create queries:
-  - [ ] GetPostQuery + Handler
-  - [ ] GetUserPostsQuery + Handler
-  - [ ] GetPostLikesQuery + Handler
-- [ ] Create DTOs:
-  - [ ] create-post.dto.ts
-  - [ ] post-response.dto.ts
-  - [ ] post-list-response.dto.ts
-- [ ] Create PostMapper
-- [ ] Create HashtagExtractorService
+- [x] Create commands:
+  - [x] CreatePostCommand + Handler
+  - [x] DeletePostCommand + Handler
+  - [x] LikePostCommand + Handler
+  - [x] UnlikePostCommand + Handler
+- [x] Create queries:
+  - [x] GetPostQuery + Handler
+  - [x] GetUserPostsQuery + Handler
+  - [x] GetPostLikesQuery + Handler
+- [x] Create DTOs:
+  - [x] create-post.dto.ts
+  - [x] post-response.dto.ts
+  - [x] post-list-response.dto.ts (LikeUserDto)
+- [x] Create PostMapper (inline in handlers)
+- [x] Create HashtagExtractorService
 
 ### Phase 10: Posts Module (Infrastructure Layer)
 
-- [ ] Create Post ORM entity mapping
-- [ ] Create Like ORM entity mapping
-- [ ] Create PostRepository implementation
-- [ ] Create LikeRepository implementation
-- [ ] Create posts.controller.ts with endpoints:
-  - [ ] POST /posts
-  - [ ] GET /posts/:id
-  - [ ] DELETE /posts/:id
-  - [ ] POST /posts/:id/like
-  - [ ] DELETE /posts/:id/like
-  - [ ] GET /posts/:id/likes
-- [ ] Create PostLikedEventHandler (update counters)
+- [x] Create Post ORM entity mapping (in Phase 2)
+- [x] Create Like ORM entity mapping (in Phase 2)
+- [x] Create PostRepository implementation
+- [x] Create LikeRepository (integrated in PostRepository)
+- [x] Create posts.controller.ts with endpoints:
+  - [x] POST /posts
+  - [x] GET /posts/:id
+  - [x] DELETE /posts/:id
+  - [x] POST /posts/:id/like
+  - [x] DELETE /posts/:id/like
+  - [x] GET /posts/:id/likes
+  - [x] GET /posts/user/:userId
+- [x] Create PostLikedEventHandler (create notification)
 
 ### Phase 11: Comments Module
 
-- [ ] Create comments.module.ts
-- [ ] Create Comment entity
-- [ ] Create commands:
-  - [ ] CreateCommentCommand + Handler
-  - [ ] DeleteCommentCommand + Handler
-  - [ ] LikeCommentCommand + Handler
-- [ ] Create queries:
-  - [ ] GetPostCommentsQuery + Handler
-- [ ] Create DTOs
-- [ ] Create CommentRepository
-- [ ] Add comment endpoints to posts.controller.ts:
-  - [ ] POST /posts/:id/comments
-  - [ ] GET /posts/:id/comments
-  - [ ] DELETE /posts/:postId/comments/:commentId
+- [x] Create comments.module.ts
+- [x] Create Comment entity (in Phase 2)
+- [x] Create commands:
+  - [x] CreateCommentCommand + Handler
+  - [x] DeleteCommentCommand + Handler
+  - [x] LikeCommentCommand + Handler
+  - [x] UnlikeCommentCommand + Handler
+- [x] Create queries:
+  - [x] GetPostCommentsQuery + Handler
+- [x] Create DTOs
+- [x] Create CommentRepository (with like operations)
+- [x] Create comments.controller.ts with endpoints:
+  - [x] POST /posts/:postId/comments
+  - [x] GET /posts/:postId/comments
+  - [x] DELETE /posts/:postId/comments/:commentId
+  - [x] POST /posts/:postId/comments/:commentId/like
+  - [x] DELETE /posts/:postId/comments/:commentId/like
+- [x] Create CommentCreatedEventHandler (create notification)
 
 ### Phase 12: Hashtags Module
 
-- [ ] Create hashtags.module.ts
-- [ ] Create Hashtag entity
-- [ ] Create HashtagRepository
-- [ ] Create queries:
-  - [ ] GetTrendingHashtagsQuery + Handler
-  - [ ] GetPostsByHashtagQuery + Handler
-- [ ] Create hashtags.controller.ts with endpoints:
-  - [ ] GET /hashtags/trending
-  - [ ] GET /hashtags/:tag/posts
+- [x] Create hashtags.module.ts
+- [x] Create Hashtag entity (in Phase 2)
+- [x] Create HashtagRepository
+- [x] Create queries:
+  - [x] GetTrendingHashtagsQuery + Handler
+  - [x] GetPostsByHashtagQuery + Handler
+- [x] Create hashtags.controller.ts with endpoints:
+  - [x] GET /hashtags/trending
+  - [x] GET /hashtags/:tag/posts
 
 ### Phase 13: Feed Module
 
-- [ ] Create feed.module.ts
-- [ ] Create FeedService with algorithm:
-  - [ ] Get posts from followed users
-  - [ ] Order by recency
-  - [ ] Support cursor-based pagination
-- [ ] Create FeedCacheService (Redis)
-- [ ] Create queries:
-  - [ ] GetPersonalizedFeedQuery + Handler
-  - [ ] GetTrendingFeedQuery + Handler
-- [ ] Create feed.controller.ts with endpoints:
-  - [ ] GET /feed
-  - [ ] GET /feed/trending
+- [x] Create feed.module.ts
+- [x] Create FeedRepository with algorithm:
+  - [x] Get posts from followed users
+  - [x] Order by recency
+  - [x] Support cursor-based pagination
+- [x] Create FeedCacheService (Redis)
+- [x] Create queries:
+  - [x] GetPersonalizedFeedQuery + Handler
+  - [x] GetTrendingFeedQuery + Handler
+- [x] Create feed.controller.ts with endpoints:
+  - [x] GET /feed (personalized, auth required)
+  - [x] GET /feed/trending (public)
 
 ### Phase 14: Notifications Module (Basic)
 
