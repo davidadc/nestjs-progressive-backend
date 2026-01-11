@@ -149,10 +149,12 @@ src/
 - `templates/AI_CONTEXT.template.md` - Template for creating per-project AI context files
 - `templates/README.template.md` - Template for per-project README files
 - `templates/PROGRESS.template.md` - Template for tracking implementation progress and planification
+- `templates/ARCHITECTURE.template.md` - Template for per-project architecture documentation
 
 ### Per-project files
 - `AI_CONTEXT.md` (per project) - Project-specific context for Claude Code
 - `PROGRESS.md` (per project) - Implementation checklist and progress tracking
+- `ARCHITECTURE.md` (per project) - Project-specific architecture decisions and patterns
 
 ## Recommended Path for Starting a New Project
 
@@ -190,6 +192,7 @@ Copy templates to the project folder:
 cp templates/AI_CONTEXT.template.md projects/{level}/{project}/AI_CONTEXT.md
 cp templates/README.template.md projects/{level}/{project}/README.md
 cp templates/PROGRESS.template.md projects/{level}/{project}/PROGRESS.md
+cp templates/ARCHITECTURE.template.md projects/{level}/{project}/ARCHITECTURE.md
 ```
 Then customize all `{{PLACEHOLDER}}` values.
 
@@ -198,6 +201,12 @@ Then customize all `{{PLACEHOLDER}}` values.
 - Tracks completion status of each phase
 - Documents endpoints, entities, and folder structure
 - Must be reviewed and approved by user before implementation begins
+
+**ARCHITECTURE.md Purpose:**
+- Documents the specific architecture patterns for this project level
+- Defines folder structure, layer responsibilities, and design patterns
+- Provides implementation checklists and code examples
+- Tracks architectural compliance during development
 
 ### Step 6: Implementation Workflow
 Follow the phases from the project's `AI_CONTEXT.md`:
@@ -217,9 +226,16 @@ Follow the phases from the project's `AI_CONTEXT.md`:
 - Code examples → `docs/DESIGN_PATTERNS_PROGRESSIVE_EXAMPLE.md`
 - Navigate docs → `docs/DOCUMENTATION_INDEX.md`
 - Templates → `templates/` folder
+- Project-specific architecture → `{project}/ARCHITECTURE.md`
 
 **"When must I use RFC 7807?"**
 - Advanced and Expert levels (MANDATORY)
+
+**"What files must I create for a new project?"**
+1. `AI_CONTEXT.md` - AI assistant context (from template)
+2. `README.md` - Project documentation (from template)
+3. `PROGRESS.md` - Implementation tracking (from template)
+4. `ARCHITECTURE.md` - Architecture decisions (from template)
 
 ## Environment Variables
 

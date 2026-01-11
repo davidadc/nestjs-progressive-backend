@@ -1340,8 +1340,14 @@ Create an agent per project that knows:
 - Technical requirements
 
 ```bash
-# Create instructions in AI_CONTEXT.md file in each project
-claude code --context AI_CONTEXT.md
+# Copy templates from monorepo root to project folder
+cp templates/AI_CONTEXT.template.md projects/{level}/{project}/AI_CONTEXT.md
+cp templates/README.template.md projects/{level}/{project}/README.md
+cp templates/PROGRESS.template.md projects/{level}/{project}/PROGRESS.md
+cp templates/ARCHITECTURE.template.md projects/{level}/{project}/ARCHITECTURE.md
+
+# Customize placeholders, then run Claude Code from project directory
+claude code
 ```
 
 **AI_CONTEXT.md content:**
@@ -1665,5 +1671,5 @@ id, email (unique), password (hashed), name, createdAt, updatedAt
 
 ---
 
-**Last updated:** 2026-01-05
+**Last updated:** 2026-01-11
 **Suggested next review:** After completing Intermediate Level
