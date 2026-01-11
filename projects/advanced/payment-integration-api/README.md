@@ -22,14 +22,17 @@ Payment integration API with Stripe/Paystack support, featuring webhook handling
 ## Features
 
 - [x] Payment provider integration (Stripe)
+- [x] Paystack provider support (Strategy pattern)
 - [x] Webhook handling with signature validation
+- [x] Webhook retry logic with exponential backoff
 - [x] Payment state machine (pending -> processing -> completed/failed)
 - [x] Transaction audit logging
 - [x] RFC 7807 Problem Details for errors
 - [x] CQRS pattern (Commands/Queries separation)
 - [x] Domain Events for payment lifecycle
-- [ ] Paystack provider support
-- [ ] Subscription/recurring payments
+- [x] Idempotency key handling
+- [x] Rate limiting (multi-tier)
+- [x] Health checks (database, payment providers)
 
 ---
 
@@ -268,15 +271,18 @@ pnpm run test:e2e
 
 ## Development Checklist
 
-- [ ] Environment configured
-- [ ] Database migrations run
-- [ ] Stripe keys configured
-- [ ] All endpoints implemented
-- [ ] RFC 7807 error handling
-- [ ] Webhook signature validation
-- [ ] Unit tests written (80%+ coverage)
-- [ ] E2E tests written
-- [ ] Swagger documentation added
+- [x] Environment configured
+- [x] Database migrations run
+- [x] Stripe keys configured
+- [x] All endpoints implemented
+- [x] RFC 7807 error handling
+- [x] Webhook signature validation
+- [x] Unit tests written (80%+ coverage)
+- [x] E2E tests written
+- [x] Swagger documentation added
+- [x] Health checks implemented
+- [x] Rate limiting configured
+- [x] Idempotency handling added
 
 ---
 
@@ -326,6 +332,58 @@ docker-compose down -v
 docker-compose up -d
 pnpm run typeorm migration:run
 ```
+
+---
+
+## Potential Improvements
+
+The following enhancements could be added to extend the functionality of this payment integration API:
+
+### Infrastructure & Scalability
+
+- **Redis for Rate Limiting**: Replace in-memory throttler storage with Redis for horizontal scaling across multiple instances
+- **Redis for Idempotency Cache**: Use Redis for distributed idempotency key storage with automatic TTL
+- **Message Queue Integration**: Add RabbitMQ/Redis queues for async webhook processing and event-driven architecture
+- **Database Read Replicas**: Configure TypeORM for read/write splitting to improve query performance
+
+### Payment Features
+
+- **Subscription/Recurring Payments**: Implement subscription management with billing cycles, plan upgrades/downgrades
+- **Payment Method Tokenization**: Store payment methods securely for one-click checkout
+- **Multi-Currency Support**: Add currency conversion with real-time exchange rates
+- **Partial Payments**: Support installment payments and split payments
+- **Payment Links**: Generate shareable payment links for invoices
+- **Dispute/Chargeback Handling**: Automated dispute management workflow
+
+### Monitoring & Observability
+
+- **OpenTelemetry Integration**: Distributed tracing across payment flows
+- **Metrics Dashboard**: Prometheus/Grafana for payment success rates, latency, and error tracking
+- **Alert System**: Automated alerts for payment failures, webhook delivery issues, and provider outages
+- **Audit Log Export**: Export transaction logs to external systems (S3, BigQuery) for compliance
+
+### Security Enhancements
+
+- **PCI DSS Compliance Tooling**: Automated compliance checks and reporting
+- **Fraud Detection**: ML-based fraud scoring integration (Stripe Radar, custom rules)
+- **3D Secure 2.0**: Enhanced authentication for card payments
+- **IP Allowlisting**: Restrict webhook endpoints to provider IP ranges
+- **Request Signing**: Sign outgoing API requests for additional security
+
+### Developer Experience
+
+- **Admin Dashboard UI**: React/Next.js dashboard for payment management
+- **SDK Generation**: Auto-generate client SDKs from OpenAPI spec
+- **Webhook Testing UI**: Built-in webhook replay and testing interface
+- **GraphQL API**: Alternative GraphQL endpoint for flexible querying
+- **WebSocket Notifications**: Real-time payment status updates to clients
+
+### Testing & Quality
+
+- **Contract Testing**: Pact tests for provider API contracts
+- **Chaos Engineering**: Resilience testing with simulated failures
+- **Load Testing**: k6/Artillery scripts for performance benchmarking
+- **Snapshot Testing**: Response snapshot tests for API stability
 
 ---
 

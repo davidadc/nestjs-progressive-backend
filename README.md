@@ -3,7 +3,7 @@
 Collection of 16 progressive NestJS backend projects, from Beginner to Expert level.
 
 **Stack:** NestJS + TypeScript + PostgreSQL + Redis
-**Date:** January 2026
+**Date:** January 2026 (Last Updated: 2026-01-11)
 
 ---
 
@@ -32,7 +32,7 @@ Collection of 16 progressive NestJS backend projects, from Beginner to Expert le
 | Project                           | Status | Endpoints | DB  |
 | --------------------------------- | ------ | --------- | --- |
 | **Social Media Backend**          | ✅     | 10+       | ✅  |
-| **Payment Integration API**       | ⬜     | 5         | ✅  |
+| **Payment Integration API**       | ✅     | 5         | ✅  |
 | **Real-time Notification System** | ⬜     | 5         | ✅  |
 | **Admin Dashboard API**           | ⬜     | 10+       | ✅  |
 
@@ -318,7 +318,7 @@ docker-compose up -d
 ### Phase 3: Advanced Level
 
 - [x] Social Media Backend
-- [ ] Payment Integration API
+- [x] Payment Integration API
 - [ ] Real-time Notification System
 - [ ] Admin Dashboard API
 
@@ -528,6 +528,6 @@ MIT - Free for educational and personal use
 
 ---
 
-**Last updated:** 2026-01-11 (Social Media Backend completed)
+**Last updated:** 2026-01-11 (Payment Integration API completed)
 **Maintainer:** David
 **Contributions:** Welcome
