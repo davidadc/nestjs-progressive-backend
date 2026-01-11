@@ -5,6 +5,7 @@ import type { IUserRepository } from '../../domain/repositories/user.repository.
 import { USER_REPOSITORY } from '../../domain/repositories/user.repository.interface';
 import { ProblemDetailsFactory } from '../../../common/exceptions/problem-details.factory';
 import { UserResponseDto } from '../dto/user-response.dto';
+import { UserMapper } from '../mappers/user.mapper';
 
 @QueryHandler(GetUserProfileQuery)
 export class GetUserProfileHandler
@@ -29,18 +30,6 @@ export class GetUserProfileHandler
       isFollowing = !!follow;
     }
 
-    return {
-      id: user.id,
-      email: user.email,
-      username: user.username,
-      name: user.name,
-      avatar: user.avatar,
-      bio: user.bio,
-      followersCount: user.followersCount,
-      followingCount: user.followingCount,
-      postsCount: user.postsCount,
-      createdAt: user.createdAt,
-      isFollowing,
-    };
+    return UserMapper.toResponseDto(user, isFollowing);
   }
 }

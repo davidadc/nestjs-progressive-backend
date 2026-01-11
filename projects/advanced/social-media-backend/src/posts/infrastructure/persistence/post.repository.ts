@@ -10,6 +10,7 @@ import { PostEntity } from '../../../shared/persistence/entities/post.entity';
 import { LikeEntity } from '../../../shared/persistence/entities/like.entity';
 import { HashtagEntity } from '../../../shared/persistence/entities/hashtag.entity';
 import { UserEntity } from '../../../shared/persistence/entities/user.entity';
+import { CommentEntity } from '../../../shared/persistence/entities/comment.entity';
 
 @Injectable()
 export class PostRepository implements IPostRepository {
@@ -22,6 +23,8 @@ export class PostRepository implements IPostRepository {
     private readonly hashtagRepo: Repository<HashtagEntity>,
     @InjectRepository(UserEntity)
     private readonly userRepo: Repository<UserEntity>,
+    @InjectRepository(CommentEntity)
+    private readonly commentRepo: Repository<CommentEntity>,
   ) {}
 
   async findById(id: string): Promise<PostEntity | null> {
@@ -64,6 +67,41 @@ export class PostRepository implements IPostRepository {
   }
 
   async delete(id: string): Promise<void> {
+    // Get the post with relations
+    const post = await this.postRepo.findOne({
+      where: { id },
+      relations: ['hashtags'],
+    });
+
+    if (!post) {
+      return;
+    }
+
+    // Get all comments for this post to delete their likes
+    const comments = await this.commentRepo.find({ where: { postId: id } });
+    const commentIds = comments.map((c) => c.id);
+
+    // Delete all likes for comments (polymorphic, no FK cascade)
+    if (commentIds.length > 0) {
+      await this.likeRepo
+        .createQueryBuilder()
+        .delete()
+        .where('targetId IN (:...ids)', { ids: commentIds })
+        .andWhere('targetType = :type', { type: 'comment' })
+        .execute();
+    }
+
+    // Delete all likes for this post (polymorphic, no FK cascade)
+    await this.likeRepo.delete({
+      targetId: id,
+      targetType: 'post',
+    });
+
+    // Remove hashtag associations (junction table cleanup)
+    post.hashtags = [];
+    await this.postRepo.save(post);
+
+    // Now delete the post (comments will be cascade deleted)
     await this.postRepo.delete(id);
   }
 

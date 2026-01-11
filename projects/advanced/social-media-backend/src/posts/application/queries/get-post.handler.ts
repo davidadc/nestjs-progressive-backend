@@ -5,6 +5,7 @@ import type { IPostRepository } from '../../domain/repositories/post.repository.
 import { POST_REPOSITORY } from '../../domain/repositories/post.repository.interface';
 import { ProblemDetailsFactory } from '../../../common/exceptions/problem-details.factory';
 import { PostResponseDto } from '../dto/post-response.dto';
+import { PostMapper } from '../mappers/post.mapper';
 
 @QueryHandler(GetPostQuery)
 export class GetPostHandler implements IQueryHandler<GetPostQuery> {
@@ -27,21 +28,6 @@ export class GetPostHandler implements IQueryHandler<GetPostQuery> {
       isLiked = !!like;
     }
 
-    return {
-      id: post.id,
-      content: post.content,
-      images: post.images,
-      likesCount: post.likesCount,
-      commentsCount: post.commentsCount,
-      author: {
-        id: post.author.id,
-        username: post.author.username,
-        name: post.author.name,
-        avatar: post.author.avatar,
-      },
-      isLiked,
-      createdAt: post.createdAt,
-      updatedAt: post.updatedAt,
-    };
+    return PostMapper.toResponseDto(post, isLiked);
   }
 }

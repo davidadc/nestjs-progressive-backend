@@ -6,6 +6,7 @@ import { LikeEntity } from '../shared/persistence/entities/like.entity';
 import { HashtagEntity } from '../shared/persistence/entities/hashtag.entity';
 import { NotificationEntity } from '../shared/persistence/entities/notification.entity';
 import { UserEntity } from '../shared/persistence/entities/user.entity';
+import { CommentEntity } from '../shared/persistence/entities/comment.entity';
 import { PostsController } from './infrastructure/controllers/posts.controller';
 import { PostRepository } from './infrastructure/persistence/post.repository';
 import { POST_REPOSITORY } from './domain/repositories/post.repository.interface';
@@ -45,6 +46,7 @@ const EventHandlers = [PostLikedHandler];
       HashtagEntity,
       NotificationEntity,
       UserEntity,
+      CommentEntity,
     ]),
   ],
   controllers: [PostsController],

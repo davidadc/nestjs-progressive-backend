@@ -4,9 +4,9 @@ import { CreatePostCommand } from './create-post.command';
 import type { IPostRepository } from '../../domain/repositories/post.repository.interface';
 import { POST_REPOSITORY } from '../../domain/repositories/post.repository.interface';
 import { PostEntity } from '../../../shared/persistence/entities/post.entity';
-import { PostCreatedEvent } from '../../domain/events/post-created.event';
 import { PostResponseDto } from '../dto/post-response.dto';
-import { HashtagExtractorService } from '../services/hashtag-extractor.service';
+import { Post } from '../../domain/aggregates/post.aggregate';
+import { PostMapper } from '../mappers/post.mapper';
 
 @CommandHandler(CreatePostCommand)
 export class CreatePostHandler implements ICommandHandler<CreatePostCommand> {
@@ -14,27 +14,23 @@ export class CreatePostHandler implements ICommandHandler<CreatePostCommand> {
     @Inject(POST_REPOSITORY)
     private readonly postRepository: IPostRepository,
     private readonly eventBus: EventBus,
-    private readonly hashtagExtractor: HashtagExtractorService,
   ) {}
 
   async execute(command: CreatePostCommand): Promise<PostResponseDto> {
     const { authorId, content, images } = command;
 
-    // Extract hashtags from content
-    const hashtags = this.hashtagExtractor.extract(content);
+    // Create post aggregate (validates content, extracts hashtags, creates event)
+    const postAggregate = Post.create({ authorId, content, images });
 
-    // Create post entity
-    const post = new PostEntity();
-    post.authorId = authorId;
-    post.content = content;
-    post.images = images || [];
-    post.likesCount = 0;
-    post.commentsCount = 0;
+    // Convert aggregate to persistence entity
+    const postEntity = new PostEntity();
+    Object.assign(postEntity, PostMapper.toPersistence(postAggregate));
 
     // Save post
-    const savedPost = await this.postRepository.save(post);
+    const savedPost = await this.postRepository.save(postEntity);
 
-    // Handle hashtags
+    // Handle hashtags from aggregate
+    const hashtags = postAggregate.hashtags;
     if (hashtags.length > 0) {
       const hashtagEntities =
         await this.postRepository.findOrCreateHashtags(hashtags);
@@ -50,28 +46,16 @@ export class CreatePostHandler implements ICommandHandler<CreatePostCommand> {
     // Update author's post count
     await this.postRepository.incrementPostsCount(authorId);
 
-    // Publish event
-    this.eventBus.publish(new PostCreatedEvent(savedPost.id, authorId, hashtags));
+    // Publish domain events from aggregate
+    postAggregate.getUncommittedEvents().forEach((event) => {
+      this.eventBus.publish(event);
+    });
 
-    // Fetch with author for response
+    // Fetch with author for response and use mapper
     const postWithAuthor = await this.postRepository.findByIdWithAuthor(
       savedPost.id,
     );
 
-    return {
-      id: postWithAuthor!.id,
-      content: postWithAuthor!.content,
-      images: postWithAuthor!.images,
-      likesCount: postWithAuthor!.likesCount,
-      commentsCount: postWithAuthor!.commentsCount,
-      author: {
-        id: postWithAuthor!.author.id,
-        username: postWithAuthor!.author.username,
-        name: postWithAuthor!.author.name,
-        avatar: postWithAuthor!.author.avatar,
-      },
-      createdAt: postWithAuthor!.createdAt,
-      updatedAt: postWithAuthor!.updatedAt,
-    };
+    return PostMapper.toResponseDto(postWithAuthor!);
   }
 }

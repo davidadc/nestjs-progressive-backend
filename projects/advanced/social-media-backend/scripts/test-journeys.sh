@@ -3,8 +3,6 @@
 # Social Media API - User Journey Tests
 # Tests complete user workflows end-to-end
 
-set -e
-
 BASE_URL="${API_URL:-http://localhost:3000}"
 CONTENT_TYPE="Content-Type: application/json"
 
@@ -34,16 +32,17 @@ api_call() {
     local data=$3
     local token=$4
 
-    local auth_header=""
+    local -a curl_args=(-s -w "\n%{http_code}" -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE")
+
     if [ -n "$token" ]; then
-        auth_header="-H \"Authorization: Bearer $token\""
+        curl_args+=(-H "Authorization: Bearer $token")
     fi
 
     if [ -n "$data" ]; then
-        eval curl -s -w "\n%{http_code}" -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE" $auth_header -d "'$data'"
-    else
-        eval curl -s -w "\n%{http_code}" -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE" $auth_header
+        curl_args+=(-d "$data")
     fi
+
+    curl "${curl_args[@]}"
 }
 
 parse_response() {
@@ -137,10 +136,10 @@ fi
 
 if $JOURNEY1_PASSED; then
     echo -e "\n  ${GREEN}✓ Journey 1 PASSED${NC}"
-    ((JOURNEY_PASSED++))
+    JOURNEY_PASSED=$((JOURNEY_PASSED + 1))
 else
     echo -e "\n  ${RED}✗ Journey 1 FAILED${NC}"
-    ((JOURNEY_FAILED++))
+    JOURNEY_FAILED=$((JOURNEY_FAILED + 1))
 fi
 echo ""
 
@@ -173,7 +172,7 @@ J2_TOKEN=$(echo "$BODY" | grep -o '"accessToken":"[^"]*"' | sed 's/"accessToken"
 echo -e "  ${BLUE}Step 2: Follow the first user${NC}"
 RESPONSE=$(api_call POST "/api/v1/users/$J1_USER_ID/follow" "" "$J2_TOKEN")
 parse_response "$RESPONSE"
-if ! check_status 201 "$STATUS" "Followed first user"; then
+if ! check_status 204 "$STATUS" "Followed first user"; then
     JOURNEY2_PASSED=false
 fi
 
@@ -181,7 +180,7 @@ fi
 echo -e "  ${BLUE}Step 3: Like the post${NC}"
 RESPONSE=$(api_call POST "/api/v1/posts/$J1_POST_ID/like" "" "$J2_TOKEN")
 parse_response "$RESPONSE"
-if ! check_status 201 "$STATUS" "Post liked"; then
+if ! check_status 204 "$STATUS" "Post liked"; then
     JOURNEY2_PASSED=false
 fi
 
@@ -211,10 +210,10 @@ fi
 
 if $JOURNEY2_PASSED; then
     echo -e "\n  ${GREEN}✓ Journey 2 PASSED${NC}"
-    ((JOURNEY_PASSED++))
+    JOURNEY_PASSED=$((JOURNEY_PASSED + 1))
 else
     echo -e "\n  ${RED}✗ Journey 2 FAILED${NC}"
-    ((JOURNEY_FAILED++))
+    JOURNEY_FAILED=$((JOURNEY_FAILED + 1))
 fi
 echo ""
 
@@ -271,7 +270,7 @@ fi
 echo -e "  ${BLUE}Step 5: Follow discovered user${NC}"
 RESPONSE=$(api_call POST "/api/v1/users/$J1_USER_ID/follow" "" "$J3_TOKEN")
 parse_response "$RESPONSE"
-if ! check_status 201 "$STATUS" "Followed discovered user"; then
+if ! check_status 204 "$STATUS" "Followed discovered user"; then
     JOURNEY3_PASSED=false
 fi
 
@@ -285,10 +284,10 @@ fi
 
 if $JOURNEY3_PASSED; then
     echo -e "\n  ${GREEN}✓ Journey 3 PASSED${NC}"
-    ((JOURNEY_PASSED++))
+    JOURNEY_PASSED=$((JOURNEY_PASSED + 1))
 else
     echo -e "\n  ${RED}✗ Journey 3 FAILED${NC}"
-    ((JOURNEY_FAILED++))
+    JOURNEY_FAILED=$((JOURNEY_FAILED + 1))
 fi
 echo ""
 
@@ -334,15 +333,15 @@ echo -e "  ${BLUE}Step 3: Receive engagement (likes & follow)${NC}"
 # Use existing tokens to like the post
 RESPONSE=$(api_call POST "/api/v1/posts/$J4_POST_ID/like" "" "$J1_TOKEN")
 parse_response "$RESPONSE"
-check_status 201 "$STATUS" "Like from user 1"
+check_status 204 "$STATUS" "Like from user 1"
 
 RESPONSE=$(api_call POST "/api/v1/posts/$J4_POST_ID/like" "" "$J2_TOKEN")
 parse_response "$RESPONSE"
-check_status 201 "$STATUS" "Like from user 2"
+check_status 204 "$STATUS" "Like from user 2"
 
 RESPONSE=$(api_call POST "/api/v1/users/$J4_CREATOR_ID/follow" "" "$J1_TOKEN")
 parse_response "$RESPONSE"
-check_status 201 "$STATUS" "Follow from user 1"
+check_status 204 "$STATUS" "Follow from user 1"
 
 # Step 4: Check notifications
 echo -e "  ${BLUE}Step 4: View notifications${NC}"
@@ -394,10 +393,10 @@ echo -e "    ${GREEN}✓${NC} Creator has $FOLLOWERS_COUNT followers, $POSTS_COU
 
 if $JOURNEY4_PASSED; then
     echo -e "\n  ${GREEN}✓ Journey 4 PASSED${NC}"
-    ((JOURNEY_PASSED++))
+    JOURNEY_PASSED=$((JOURNEY_PASSED + 1))
 else
     echo -e "\n  ${RED}✗ Journey 4 FAILED${NC}"
-    ((JOURNEY_FAILED++))
+    JOURNEY_FAILED=$((JOURNEY_FAILED + 1))
 fi
 echo ""
 

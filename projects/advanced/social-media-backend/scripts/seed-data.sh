@@ -3,8 +3,6 @@
 # Social Media API - Seed Data Script
 # This script populates the database with test data for development and testing
 
-set -e
-
 BASE_URL="${API_URL:-http://localhost:3000}"
 CONTENT_TYPE="Content-Type: application/json"
 
@@ -32,16 +30,17 @@ api_call() {
     local data=$3
     local token=$4
 
-    local auth_header=""
+    local -a curl_args=(-s -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE")
+
     if [ -n "$token" ]; then
-        auth_header="-H \"Authorization: Bearer $token\""
+        curl_args+=(-H "Authorization: Bearer $token")
     fi
 
     if [ -n "$data" ]; then
-        eval curl -s -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE" $auth_header -d "'$data'"
-    else
-        eval curl -s -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE" $auth_header
+        curl_args+=(-d "$data")
     fi
+
+    curl "${curl_args[@]}"
 }
 
 # Function to extract JSON value (simple parser)

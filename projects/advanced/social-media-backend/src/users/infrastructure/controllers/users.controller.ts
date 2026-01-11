@@ -26,6 +26,7 @@ import { Public } from '../../../common/decorators/public.decorator';
 import { CurrentUser } from '../../../common/decorators/current-user.decorator';
 import type { CurrentUserPayload } from '../../../common/decorators/current-user.decorator';
 import { PaginationQueryDto } from '../../../common/dto/pagination.dto';
+import { SearchUsersQueryDto } from '../../application/dtos/search-users.dto';
 import {
   UserResponseDto,
   UserSummaryDto,
@@ -53,17 +54,15 @@ export class UsersController {
   @Get('search')
   @Public()
   @ApiOperation({ summary: 'Search users by username or name' })
-  @ApiQuery({ name: 'q', description: 'Search query', required: true })
   @ApiResponse({
     status: 200,
     description: 'Users matching the search query',
   })
   async searchUsers(
-    @Query('q') query: string,
-    @Query() pagination: PaginationQueryDto,
+    @Query() searchQuery: SearchUsersQueryDto,
   ): Promise<PaginatedResult<UserSummaryDto>> {
     return this.queryBus.execute(
-      new SearchUsersQuery(query, pagination.page, pagination.limit),
+      new SearchUsersQuery(searchQuery.q, searchQuery.page, searchQuery.limit),
     );
   }
 

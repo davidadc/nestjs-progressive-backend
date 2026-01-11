@@ -11,6 +11,7 @@ import {
   PaginatedResult,
   PaginationMeta,
 } from '../../../common/interceptors/response-envelope.interceptor';
+import { CommentMapper } from '../mappers/comment.mapper';
 
 @QueryHandler(GetPostCommentsQuery)
 export class GetPostCommentsHandler
@@ -39,20 +40,9 @@ export class GetPostCommentsHandler
       limit,
     });
 
-    const items: CommentResponseDto[] = result.items.map((comment) => ({
-      id: comment.id,
-      postId: comment.postId,
-      content: comment.content,
-      likesCount: comment.likesCount,
-      author: {
-        id: comment.user.id,
-        username: comment.user.username,
-        name: comment.user.name,
-        avatar: comment.user.avatar,
-      },
-      createdAt: comment.createdAt,
-      updatedAt: comment.updatedAt,
-    }));
+    const items: CommentResponseDto[] = result.items.map((comment) =>
+      CommentMapper.toResponseDto(comment),
+    );
 
     const pagination: PaginationMeta = {
       page: result.page,

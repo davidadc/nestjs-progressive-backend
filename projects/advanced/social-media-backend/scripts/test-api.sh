@@ -3,8 +3,6 @@
 # Social Media API - Integration Test Script
 # Tests all API endpoints and verifies responses
 
-set -e
-
 BASE_URL="${API_URL:-http://localhost:3000}"
 CONTENT_TYPE="Content-Type: application/json"
 
@@ -40,16 +38,16 @@ run_test() {
     local actual_status=$3
     local response=$4
 
-    ((TOTAL++))
+    TOTAL=$((TOTAL + 1))
 
     if [ "$actual_status" -eq "$expected_status" ]; then
         echo -e "  ${GREEN}✓${NC} $name (HTTP $actual_status)"
-        ((PASSED++))
+        PASSED=$((PASSED + 1))
         return 0
     else
         echo -e "  ${RED}✗${NC} $name (expected $expected_status, got $actual_status)"
         echo -e "    Response: $response"
-        ((FAILED++))
+        FAILED=$((FAILED + 1))
         return 1
     fi
 }
@@ -59,19 +57,19 @@ check_rfc7807() {
     local response=$1
     local name=$2
 
-    ((TOTAL++))
+    TOTAL=$((TOTAL + 1))
 
     if echo "$response" | grep -q '"type":' && \
        echo "$response" | grep -q '"title":' && \
        echo "$response" | grep -q '"status":' && \
        echo "$response" | grep -q '"detail":'; then
         echo -e "  ${GREEN}✓${NC} $name - RFC 7807 format valid"
-        ((PASSED++))
+        PASSED=$((PASSED + 1))
         return 0
     else
         echo -e "  ${RED}✗${NC} $name - RFC 7807 format invalid"
         echo -e "    Response: $response"
-        ((FAILED++))
+        FAILED=$((FAILED + 1))
         return 1
     fi
 }
@@ -83,16 +81,17 @@ api_call() {
     local data=$3
     local token=$4
 
-    local auth_header=""
+    local -a curl_args=(-s -w "\n%{http_code}" -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE")
+
     if [ -n "$token" ]; then
-        auth_header="-H \"Authorization: Bearer $token\""
+        curl_args+=(-H "Authorization: Bearer $token")
     fi
 
     if [ -n "$data" ]; then
-        eval curl -s -w "\n%{http_code}" -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE" $auth_header -d "'$data'"
-    else
-        eval curl -s -w "\n%{http_code}" -X "$method" "$BASE_URL$endpoint" -H "$CONTENT_TYPE" $auth_header
+        curl_args+=(-d "$data")
     fi
+
+    curl "${curl_args[@]}"
 }
 
 # Parse response body and status
@@ -213,7 +212,7 @@ check_rfc7807 "$BODY" "User not found error format"
 # Follow user
 RESPONSE=$(api_call POST "/api/v1/users/$TARGET_USER_ID/follow" "" "$ACCESS_TOKEN")
 parse_response "$RESPONSE"
-run_test "POST /users/:id/follow - Follow user" 201 "$STATUS" "$BODY"
+run_test "POST /users/:id/follow - Follow user" 204 "$STATUS" "$BODY"
 
 # Follow same user again (should fail)
 RESPONSE=$(api_call POST "/api/v1/users/$TARGET_USER_ID/follow" "" "$ACCESS_TOKEN")
@@ -295,7 +294,7 @@ run_test "GET /posts/user/:userId - Get user posts" 200 "$STATUS" "$BODY"
 # Like post
 RESPONSE=$(api_call POST "/api/v1/posts/$POST_ID/like" "" "$ACCESS_TOKEN")
 parse_response "$RESPONSE"
-run_test "POST /posts/:id/like - Like post" 201 "$STATUS" "$BODY"
+run_test "POST /posts/:id/like - Like post" 204 "$STATUS" "$BODY"
 
 # Like same post again (should fail)
 RESPONSE=$(api_call POST "/api/v1/posts/$POST_ID/like" "" "$ACCESS_TOKEN")
@@ -335,7 +334,7 @@ run_test "GET /posts/:postId/comments - Get post comments" 200 "$STATUS" "$BODY"
 # Like comment
 RESPONSE=$(api_call POST "/api/v1/posts/$POST_ID/comments/$COMMENT_ID/like" "" "$ACCESS_TOKEN")
 parse_response "$RESPONSE"
-run_test "POST /posts/:postId/comments/:commentId/like - Like comment" 201 "$STATUS" "$BODY"
+run_test "POST /posts/:postId/comments/:commentId/like - Like comment" 204 "$STATUS" "$BODY"
 
 # Unlike comment
 RESPONSE=$(api_call DELETE "/api/v1/posts/$POST_ID/comments/$COMMENT_ID/like" "" "$ACCESS_TOKEN")

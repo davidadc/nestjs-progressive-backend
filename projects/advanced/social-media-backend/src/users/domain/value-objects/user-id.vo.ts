@@ -5,6 +5,9 @@ interface UserIdProps {
 }
 
 export class UserId extends ValueObject<UserIdProps> {
+  private static readonly UUID_REGEX =
+    /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+
   private constructor(props: UserIdProps) {
     super(props);
   }
@@ -14,6 +17,11 @@ export class UserId extends ValueObject<UserIdProps> {
       throw new Error('UserId cannot be empty');
     }
     return new UserId({ value: id });
+  }
+
+  static generate(): UserId {
+    const uuid = crypto.randomUUID();
+    return new UserId({ value: uuid });
   }
 
   get value(): string {
