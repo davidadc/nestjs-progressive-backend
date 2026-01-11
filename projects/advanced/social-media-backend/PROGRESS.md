@@ -232,40 +232,41 @@
 
 ### Phase 14: Notifications Module (Basic)
 
-- [ ] Create notifications.module.ts
-- [ ] Create Notification entity
-- [ ] Create NotificationRepository
-- [ ] Create event handlers:
-  - [ ] UserFollowedNotificationHandler
-  - [ ] PostLikedNotificationHandler
-  - [ ] CommentAddedNotificationHandler
-- [ ] Create queries:
-  - [ ] GetUserNotificationsQuery + Handler
-- [ ] Create commands:
-  - [ ] MarkNotificationReadCommand + Handler
-- [ ] Create notifications.controller.ts with endpoints:
-  - [ ] GET /notifications
-  - [ ] PATCH /notifications/:id/read
-  - [ ] PATCH /notifications/read-all
+- [x] Create notifications.module.ts
+- [x] Create Notification entity
+- [x] Create NotificationRepository
+- [x] Create event handlers:
+  - [x] UserFollowedNotificationHandler
+  - [x] PostLikedNotificationHandler
+  - [x] CommentAddedNotificationHandler
+- [x] Create queries:
+  - [x] GetUserNotificationsQuery + Handler
+- [x] Create commands:
+  - [x] MarkNotificationReadCommand + Handler
+  - [x] MarkAllNotificationsReadCommand + Handler
+- [x] Create notifications.controller.ts with endpoints:
+  - [x] GET /notifications
+  - [x] PATCH /notifications/:id/read
+  - [x] PATCH /notifications/read-all
 
 ### Phase 15: Configuration
 
-- [ ] Create database.config.ts
-- [ ] Create jwt.config.ts
-- [ ] Create redis.config.ts
-- [ ] Wire up ConfigModule with validation
-- [ ] Set up environment validation (Joi/class-validator)
+- [x] Create database.config.ts
+- [x] Create jwt.config.ts
+- [x] Create redis.config.ts
+- [x] Wire up ConfigModule with validation
+- [x] Set up environment validation (Joi/class-validator)
 
 ### Phase 16: App Module Integration
 
-- [ ] Update AppModule with all module imports
-- [ ] Configure main.ts with:
-  - [ ] Swagger documentation at `/docs` endpoint
-  - [ ] Global ValidationPipe
-  - [ ] Global ProblemDetailsFilter
-  - [ ] Global ResponseEnvelopeInterceptor
-  - [ ] CORS configuration
-  - [ ] Request ID middleware
+- [x] Update AppModule with all module imports
+- [x] Configure main.ts with:
+  - [x] Swagger documentation at `/docs` endpoint
+  - [x] Global ValidationPipe
+  - [x] Global ProblemDetailsFilter
+  - [x] Global ResponseEnvelopeInterceptor
+  - [x] CORS configuration
+  - [x] Request ID middleware
 
 ### Phase 17: API Integration Testing (Scripts)
 
