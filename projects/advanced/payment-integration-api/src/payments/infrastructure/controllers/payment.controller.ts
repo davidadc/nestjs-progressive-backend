@@ -10,13 +10,17 @@ import {
   ParseUUIDPipe,
 } from '@nestjs/common';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
+import { Throttle } from '@nestjs/throttler';
 import {
   ApiTags,
   ApiOperation,
   ApiResponse,
   ApiParam,
   ApiBearerAuth,
+  ApiHeader,
+  ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
+import { Idempotent } from '../../../common/idempotency';
 import {
   InitiatePaymentCommand,
   RefundPaymentCommand,
@@ -39,8 +43,15 @@ export class PaymentController {
 
   @Post('orders/:orderId/checkout')
   @HttpCode(HttpStatus.CREATED)
+  @Throttle({ short: { limit: 3, ttl: 1000 }, long: { limit: 10, ttl: 60000 } }) // Stricter: 3/sec, 10/min
+  @Idempotent(24 * 60 * 60 * 1000) // 24 hours TTL
   @ApiOperation({ summary: 'Initiate payment for an order' })
   @ApiParam({ name: 'orderId', description: 'Order ID', type: String })
+  @ApiHeader({
+    name: 'Idempotency-Key',
+    description: 'Unique key for idempotent requests (prevents duplicate payments)',
+    required: false,
+  })
   @ApiResponse({
     status: 201,
     description: 'Payment initiated successfully',
@@ -48,7 +59,8 @@ export class PaymentController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 404, description: 'Order not found' })
-  @ApiResponse({ status: 409, description: 'Payment already exists for order' })
+  @ApiResponse({ status: 409, description: 'Payment already exists for order or duplicate idempotency key' })
+  @ApiTooManyRequestsResponse({ description: 'Rate limit exceeded' })
   async initiatePayment(
     @Param('orderId', ParseUUIDPipe) orderId: string,
     @Body() dto: InitiatePaymentDto,
@@ -120,8 +132,15 @@ export class PaymentController {
 
   @Post('payments/:paymentId/refund')
   @HttpCode(HttpStatus.OK)
+  @Throttle({ short: { limit: 3, ttl: 1000 }, long: { limit: 10, ttl: 60000 } }) // Stricter: 3/sec, 10/min
+  @Idempotent(24 * 60 * 60 * 1000) // 24 hours TTL
   @ApiOperation({ summary: 'Initiate refund for a payment' })
   @ApiParam({ name: 'paymentId', description: 'Payment ID', type: String })
+  @ApiHeader({
+    name: 'Idempotency-Key',
+    description: 'Unique key for idempotent requests (prevents duplicate refunds)',
+    required: false,
+  })
   @ApiResponse({
     status: 200,
     description: 'Refund initiated successfully',
@@ -129,6 +148,8 @@ export class PaymentController {
   })
   @ApiResponse({ status: 404, description: 'Payment not found' })
   @ApiResponse({ status: 400, description: 'Cannot refund payment in current state' })
+  @ApiResponse({ status: 409, description: 'Duplicate idempotency key' })
+  @ApiTooManyRequestsResponse({ description: 'Rate limit exceeded' })
   async refundPayment(
     @Param('paymentId', ParseUUIDPipe) paymentId: string,
   ): Promise<{ success: boolean; statusCode: number; data: PaymentResponseDto }> {

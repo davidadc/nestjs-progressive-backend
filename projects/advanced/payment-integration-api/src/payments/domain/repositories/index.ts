@@ -8,3 +8,9 @@ export type {
   FindTransactionsOptions,
   PaginatedTransactions,
 } from './transaction.repository.interface';
+export { WEBHOOK_EVENT_REPOSITORY } from './webhook-event.repository.interface';
+export type {
+  IWebhookEventRepository,
+  WebhookEventData,
+  WebhookEventStatus,
+} from './webhook-event.repository.interface';

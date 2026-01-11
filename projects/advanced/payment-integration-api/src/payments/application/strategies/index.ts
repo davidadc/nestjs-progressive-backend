@@ -7,3 +7,5 @@ export type {
   CreatePaymentIntentInput,
 } from './payment.strategy.interface';
 export { StripePaymentStrategy } from './stripe.strategy';
+export { PaystackPaymentStrategy } from './paystack.strategy';
+export { PaymentStrategyFactory } from './payment-strategy.factory';

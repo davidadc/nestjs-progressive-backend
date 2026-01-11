@@ -245,6 +245,77 @@ Before marking a phase as complete, verify it aligns with `ARCHITECTURE.md`:
   - [x] Layer responsibilities followed
   - [x] Compliance status table updated above
 
+### Phase 12: Paystack Payment Strategy ✅
+
+- [x] Create Paystack strategy implementation
+  - [x] PaystackPaymentStrategy class
+  - [x] Initialize payment (using Paystack's initialize transaction)
+  - [x] Verify payment status
+  - [x] Handle refunds (full and partial)
+  - [x] Webhook signature validation (HMAC-SHA512)
+- [x] Add Paystack configuration to payment.config.ts
+- [x] Create PaymentStrategyFactory to select strategy based on config
+- [x] Update PaymentsModule with dynamic provider injection
+- [x] Add integration tests for Paystack strategy (15 tests)
+- [x] Update .env.example with Paystack variables
+
+### Phase 13: Webhook Retry Logic ✅
+
+- [x] Create webhook event storage
+  - [x] WebhookEventEntity for storing raw events
+  - [x] IWebhookEventRepository interface and implementation
+  - [x] Status tracking (pending, processed, failed, retrying, dead_letter)
+- [x] Implement retry mechanism
+  - [x] Exponential backoff strategy with jitter
+  - [x] Max retry attempts configuration (default: 5)
+  - [x] Dead letter queue for permanently failed events
+- [x] Add scheduled job for retry processing (every minute via @nestjs/schedule)
+- [x] Add WebhookRetryService with storeEvent, processEvent, scheduleRetry
+- [x] Create migration for webhook_events table
+- [x] Add integration tests for webhook retry service (14 tests)
+
+### Phase 14: Idempotency Key Handling ✅
+
+- [x] Create IdempotencyKeyEntity
+  - [x] Key, request hash, response, status_code, expires_at
+  - [x] Status tracking (processing, completed, failed)
+- [x] Create IdempotencyRepository interface and implementation
+- [x] Create IdempotencyInterceptor
+  - [x] Check for existing key before processing
+  - [x] Store response after successful processing
+  - [x] Return cached response for duplicate requests
+  - [x] Handle payload hash mismatch detection
+- [x] Create @Idempotent() decorator with configurable TTL
+- [x] Apply to payment initiation and refund endpoints
+- [x] Add cleanup job for expired keys (hourly via IdempotencyService)
+- [x] Create migration for idempotency_keys table
+- [x] Add Swagger documentation for Idempotency-Key header
+
+### Phase 15: Rate Limiting ✅
+
+- [x] Install @nestjs/throttler
+- [x] Configure global rate limiting with multiple tiers
+  - [x] Short: 10 requests/second
+  - [x] Medium: 50 requests/10 seconds
+  - [x] Long: 100 requests/minute
+- [x] Add stricter limits for payment endpoints (3/sec, 10/min)
+- [x] Apply global ThrottlerGuard
+- [x] Add @ApiTooManyRequestsResponse documentation
+- [x] In-memory storage (Redis can be added for horizontal scaling)
+
+### Phase 16: Health Check ✅
+
+- [x] Install @nestjs/terminus
+- [x] Create health check controller at `/health`
+- [x] Add health indicators:
+  - [x] Database connectivity (TypeORM ping)
+  - [x] Stripe API connectivity
+  - [x] Paystack API connectivity
+- [x] Add readiness probe at `/health/ready`
+- [x] Add liveness probe at `/health/live`
+- [x] Skip rate limiting on health endpoints
+- [x] Swagger documentation for health endpoints
+
 ---
 
 ## Endpoints
@@ -504,15 +575,24 @@ E2E Tests (1 suite, 16 tests):
 
 ## Known Issues / TODOs
 
-- [ ] Implement Paystack strategy (currently Stripe-only)
-- [ ] Add retry logic for failed webhook processing
-- [ ] Implement idempotency key handling
-- [ ] Add rate limiting on payment endpoints
-- [ ] Add health check for payment provider connectivity
+> All enhancement phases (12-16) have been completed.
+
+- [x] Implement Paystack strategy (Phase 12) ✅
+- [x] Add retry logic for failed webhook processing (Phase 13) ✅
+- [x] Implement idempotency key handling (Phase 14) ✅
+- [x] Add rate limiting on payment endpoints (Phase 15) ✅
+- [x] Add health check for payment provider connectivity (Phase 16) ✅
+
+**Optional Future Enhancements:**
+- [ ] Add Redis storage for rate limiting (horizontal scaling)
+- [ ] Add WebSocket notifications for payment status changes
+- [ ] Implement payment method tokenization
+- [ ] Add support for recurring payments
 
 ---
 
 **Started:** 2026-01-11
-**Completed:** 2026-01-11 ✅
+**Core Phases Completed:** 2026-01-11 ✅
+**Enhancement Phases Completed:** 2026-01-11 ✅
 **Architecture Compliance:** 100% (Target: ≥80%) ✅
-**Status:** All core phases completed
+**Status:** All phases complete (Phases 1-16)
