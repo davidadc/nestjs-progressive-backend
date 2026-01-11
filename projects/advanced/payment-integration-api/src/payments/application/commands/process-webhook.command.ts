@@ -4,7 +4,7 @@ import {
   ICommandHandler,
   EventBus,
 } from '@nestjs/cqrs';
-import { Inject, Logger } from '@nestjs/common';
+import { Inject, Logger, BadRequestException } from '@nestjs/common';
 import Stripe from 'stripe';
 import type { IPaymentRepository, ITransactionRepository } from '../../domain';
 import { PAYMENT_REPOSITORY, TRANSACTION_REPOSITORY } from '../../domain';
@@ -36,10 +36,18 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
     command: ProcessWebhookCommand,
   ): Promise<{ received: boolean }> {
     // Parse and validate webhook
-    const event = this.paymentStrategy.parseWebhookEvent(
-      command.payload,
-      command.signature,
-    ) as Stripe.Event;
+    let event: Stripe.Event;
+    try {
+      event = this.paymentStrategy.parseWebhookEvent(
+        command.payload,
+        command.signature,
+      ) as Stripe.Event;
+    } catch (error) {
+      const message =
+        error instanceof Error ? error.message : 'Invalid webhook signature';
+      this.logger.warn(`Webhook signature validation failed: ${message}`);
+      throw new BadRequestException(`Webhook signature verification failed: ${message}`);
+    }
 
     this.logger.log(`Processing webhook event: ${event.type}`);
 
