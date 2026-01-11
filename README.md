@@ -524,6 +524,7 @@ MIT - Free for educational and personal use
 - NestJS Official YouTube
 - Traversy Media
 - The Net Ninja
+- [Design Patterns Playlist](https://youtube.com/playlist?list=PLrhzvIcii6GNjpARdnO4ueTUAVR9eMBpc&si=Zf9ftO_dcGf4f64V)
 
 ---
 
