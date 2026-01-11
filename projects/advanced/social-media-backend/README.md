@@ -376,6 +376,72 @@ pnpm run typeorm migration:revert
 
 ---
 
+## Potential Improvements
+
+Future enhancements that could be added to this project:
+
+### Content Features
+- Image/video upload for posts (integrate with File Upload API)
+- Post editing with edit history
+- Repost/share functionality
+- Save/bookmark posts
+- Draft posts
+- Scheduled posts
+
+### Social Features
+- Direct messaging (DM)
+- Group chats
+- Stories (24-hour ephemeral content)
+- User blocking/muting
+- Close friends list
+- Account verification badges
+
+### Discovery & Engagement
+- Advanced feed algorithm (engagement-based ranking)
+- Explore/discover page
+- Location-based content
+- User recommendations ("Who to follow")
+- Content recommendations based on interests
+- Polls and interactive content
+
+### Notifications
+- Push notifications (Firebase Cloud Messaging)
+- Email notifications for important events
+- Notification preferences per type
+- Digest emails (daily/weekly summary)
+- @mentions in posts and comments
+
+### Real-time Features
+- WebSocket for live notifications
+- Real-time feed updates
+- Typing indicators in comments
+- Online/offline status
+- Live streaming support
+
+### Analytics & Insights
+- Post analytics (views, reach, engagement)
+- Profile insights for creators
+- Trending topics dashboard
+- Hashtag performance metrics
+- Audience demographics
+
+### Moderation & Safety
+- Content moderation (AI-powered)
+- Report system for posts/users
+- Spam detection
+- Rate limiting per endpoint
+- Two-factor authentication (2FA)
+- Login history and session management
+
+### Performance & Scale
+- Read replicas for feed queries
+- Sharding for large datasets
+- CDN integration for media
+- Background job processing (Bull queues)
+- GraphQL API alternative
+
+---
+
 ## License
 
 MIT
