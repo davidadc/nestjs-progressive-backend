@@ -62,26 +62,23 @@ test_health_check() {
 
 # Test: Initiate Payment
 test_initiate_payment() {
-    local order_id="${1:-order_$(date +%s)}"
-    local amount="${2:-99.99}"
-    local currency="${3:-USD}"
+    local order_id="${1:-$(uuidgen 2>/dev/null || cat /proc/sys/kernel/random/uuid)}"
+    local currency="${2:-USD}"
 
     print_status "info" "Testing payment initiation..."
-    print_status "info" "Order ID: $order_id, Amount: $amount $currency"
+    print_status "info" "Order ID: $order_id, Currency: $currency"
 
     local payload='{
-        "orderId": "'$order_id'",
-        "amount": '$amount',
         "currency": "'$currency'",
         "returnUrl": "https://example.com/success",
         "cancelUrl": "https://example.com/cancel"
     }'
 
-    response=$(api_call "POST" "/payments" "$payload")
+    response=$(api_call "POST" "/orders/$order_id/checkout" "$payload")
     echo "$response" | jq . 2>/dev/null || echo "$response"
 
     # Extract payment ID for subsequent tests
-    payment_id=$(echo "$response" | jq -r '.id // .data.id // empty' 2>/dev/null)
+    payment_id=$(echo "$response" | jq -r '.data.id // .id // empty' 2>/dev/null)
     if [ -n "$payment_id" ] && [ "$payment_id" != "null" ]; then
         print_status "success" "Payment initiated: $payment_id"
         echo "$payment_id"
@@ -116,7 +113,7 @@ test_get_payment_status() {
 
     print_status "info" "Getting payment status for order: $order_id"
 
-    response=$(api_call "GET" "/payments/orders/$order_id/status")
+    response=$(api_call "GET" "/orders/$order_id/payment-status")
     echo "$response" | jq . 2>/dev/null || echo "$response"
 }
 
@@ -128,7 +125,7 @@ test_list_transactions() {
 
     print_status "info" "Listing transactions (page: $page, limit: $limit)"
 
-    local endpoint="/payments/transactions?page=$page&limit=$limit"
+    local endpoint="/transactions?page=$page&limit=$limit"
     if [ -n "$payment_id" ]; then
         endpoint="${endpoint}&paymentId=$payment_id"
     fi
@@ -156,9 +153,9 @@ test_refund_payment() {
 test_error_handling() {
     print_status "info" "Testing RFC 7807 error responses..."
 
-    # Test 404 - Payment not found
+    # Test 404 - Payment not found (use valid UUID format)
     print_status "info" "Testing 404 response..."
-    response=$(api_call "GET" "/payments/nonexistent-payment-id")
+    response=$(api_call "GET" "/payments/00000000-0000-0000-0000-000000000000")
     echo "$response" | jq . 2>/dev/null || echo "$response"
 
     # Check if response follows RFC 7807 format
@@ -172,9 +169,9 @@ test_error_handling() {
         print_status "warn" "Response may not follow RFC 7807 format"
     fi
 
-    # Test 400 - Bad request
-    print_status "info" "Testing 400 response (invalid payload)..."
-    response=$(api_call "POST" "/payments" '{"invalid": "data"}')
+    # Test 400 - Bad request (invalid UUID)
+    print_status "info" "Testing 400 response (invalid UUID)..."
+    response=$(api_call "GET" "/payments/invalid-uuid")
     echo "$response" | jq . 2>/dev/null || echo "$response"
 }
 
@@ -189,11 +186,11 @@ run_all_tests() {
     test_health_check
     echo ""
 
-    # Generate unique order ID
-    ORDER_ID="order_$(date +%s)"
+    # Generate unique order ID (UUID format)
+    ORDER_ID=$(uuidgen 2>/dev/null || cat /proc/sys/kernel/random/uuid)
 
     # Initiate payment
-    PAYMENT_ID=$(test_initiate_payment "$ORDER_ID" 49.99 "USD" 2>&1 | tail -n1)
+    PAYMENT_ID=$(test_initiate_payment "$ORDER_ID" "USD" 2>&1 | tail -n1)
     echo ""
 
     # Get payment by ID
@@ -225,7 +222,7 @@ case "${1:-all}" in
         test_health_check
         ;;
     "initiate")
-        test_initiate_payment "${2:-}" "${3:-99.99}" "${4:-USD}"
+        test_initiate_payment "${2:-}" "${3:-USD}"
         ;;
     "get")
         test_get_payment "$2"
@@ -250,7 +247,7 @@ case "${1:-all}" in
         echo ""
         echo "Commands:"
         echo "  health                      - Test API health"
-        echo "  initiate [orderId] [amount] [currency] - Initiate payment"
+        echo "  initiate [orderId] [currency] - Initiate payment"
         echo "  get <paymentId>             - Get payment by ID"
         echo "  status <orderId>            - Get payment status by order ID"
         echo "  transactions [page] [limit] [paymentId] - List transactions"
