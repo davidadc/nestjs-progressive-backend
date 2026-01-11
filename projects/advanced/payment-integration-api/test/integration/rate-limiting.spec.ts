@@ -1,7 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication, Controller, Get, Post } from '@nestjs/common';
 import { APP_GUARD } from '@nestjs/core';
-import { ThrottlerModule, ThrottlerGuard, Throttle, SkipThrottle } from '@nestjs/throttler';
+import {
+  ThrottlerModule,
+  ThrottlerGuard,
+  Throttle,
+  SkipThrottle,
+} from '@nestjs/throttler';
 import request from 'supertest';
 
 // Test controller to verify rate limiting behavior
@@ -199,7 +204,9 @@ describe('Rate Limiting - Headers', () => {
       .expect(200);
 
     expect(response.headers['x-ratelimit-remaining-test']).toBeDefined();
-    expect(parseInt(response.headers['x-ratelimit-remaining-test'], 10)).toBeLessThan(100);
+    expect(
+      parseInt(response.headers['x-ratelimit-remaining-test'], 10),
+    ).toBeLessThan(100);
   });
 
   it('should decrement remaining count with each request', async () => {
@@ -207,13 +214,19 @@ describe('Rate Limiting - Headers', () => {
       .get('/test/default')
       .expect(200);
 
-    const remaining1 = parseInt(response1.headers['x-ratelimit-remaining-test'], 10);
+    const remaining1 = parseInt(
+      response1.headers['x-ratelimit-remaining-test'],
+      10,
+    );
 
     const response2 = await request(app.getHttpServer())
       .get('/test/default')
       .expect(200);
 
-    const remaining2 = parseInt(response2.headers['x-ratelimit-remaining-test'], 10);
+    const remaining2 = parseInt(
+      response2.headers['x-ratelimit-remaining-test'],
+      10,
+    );
 
     expect(remaining2).toBeLessThan(remaining1);
   });
@@ -323,7 +336,9 @@ describe('Rate Limiting - Tracking Key', () => {
       const response = await request(app.getHttpServer())
         .get('/test/default')
         .expect(200);
-      responses.push(parseInt(response.headers['x-ratelimit-remaining-tracker'], 10));
+      responses.push(
+        parseInt(response.headers['x-ratelimit-remaining-tracker'], 10),
+      );
     }
 
     // Verify remaining count decreases

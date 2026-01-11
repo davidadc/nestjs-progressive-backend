@@ -46,7 +46,9 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
       const message =
         error instanceof Error ? error.message : 'Invalid webhook signature';
       this.logger.warn(`Webhook signature validation failed: ${message}`);
-      throw new BadRequestException(`Webhook signature verification failed: ${message}`);
+      throw new BadRequestException(
+        `Webhook signature verification failed: ${message}`,
+      );
     }
 
     this.logger.log(`Processing webhook event: ${event.type}`);

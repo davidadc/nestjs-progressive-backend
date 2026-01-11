@@ -4,7 +4,6 @@ import {
   HealthCheckService,
   TypeOrmHealthIndicator,
   HealthCheckResult,
-  HealthIndicatorResult,
 } from '@nestjs/terminus';
 import { HealthController } from '../../src/common/health/health.controller';
 import { PaymentProviderHealthIndicator } from '../../src/common/health/payment-provider.health';
@@ -14,7 +13,8 @@ describe('HealthController', () => {
   let controller: HealthController;
   let healthCheckService: jest.Mocked<HealthCheckService>;
   let dbIndicator: jest.Mocked<TypeOrmHealthIndicator>;
-  let paymentProviderIndicator: PaymentProviderHealthIndicator;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  let _paymentProviderIndicator: PaymentProviderHealthIndicator;
 
   const mockConfig: ConfigType<typeof paymentConfig> = {
     provider: 'stripe',
@@ -60,7 +60,7 @@ describe('HealthController', () => {
     }).compile();
 
     controller = module.get<HealthController>(HealthController);
-    paymentProviderIndicator = module.get<PaymentProviderHealthIndicator>(
+    _paymentProviderIndicator = module.get<PaymentProviderHealthIndicator>(
       PaymentProviderHealthIndicator,
     );
   });
@@ -71,12 +71,20 @@ describe('HealthController', () => {
         status: 'ok',
         info: {
           database: { status: 'up' },
-          'payment-provider': { status: 'up', provider: 'stripe', message: 'Stripe API is reachable' },
+          'payment-provider': {
+            status: 'up',
+            provider: 'stripe',
+            message: 'Stripe API is reachable',
+          },
         },
         error: {},
         details: {
           database: { status: 'up' },
-          'payment-provider': { status: 'up', provider: 'stripe', message: 'Stripe API is reachable' },
+          'payment-provider': {
+            status: 'up',
+            provider: 'stripe',
+            message: 'Stripe API is reachable',
+          },
         },
       };
 
@@ -95,14 +103,22 @@ describe('HealthController', () => {
       const unhealthyResult: HealthCheckResult = {
         status: 'error',
         info: {
-          'payment-provider': { status: 'up', provider: 'stripe', message: 'Stripe API is reachable' },
+          'payment-provider': {
+            status: 'up',
+            provider: 'stripe',
+            message: 'Stripe API is reachable',
+          },
         },
         error: {
           database: { status: 'down', message: 'Connection refused' },
         },
         details: {
           database: { status: 'down', message: 'Connection refused' },
-          'payment-provider': { status: 'up', provider: 'stripe', message: 'Stripe API is reachable' },
+          'payment-provider': {
+            status: 'up',
+            provider: 'stripe',
+            message: 'Stripe API is reachable',
+          },
         },
       };
 
@@ -121,11 +137,19 @@ describe('HealthController', () => {
           database: { status: 'up' },
         },
         error: {
-          'payment-provider': { status: 'down', provider: 'stripe', message: 'Stripe API is unreachable' },
+          'payment-provider': {
+            status: 'down',
+            provider: 'stripe',
+            message: 'Stripe API is unreachable',
+          },
         },
         details: {
           database: { status: 'up' },
-          'payment-provider': { status: 'down', provider: 'stripe', message: 'Stripe API is unreachable' },
+          'payment-provider': {
+            status: 'down',
+            provider: 'stripe',
+            message: 'Stripe API is unreachable',
+          },
         },
       };
 
@@ -156,7 +180,9 @@ describe('HealthController', () => {
       const result = await controller.readiness();
 
       expect(result.status).toBe('ok');
-      expect(healthCheckService.check).toHaveBeenCalledWith([expect.any(Function)]);
+      expect(healthCheckService.check).toHaveBeenCalledWith([
+        expect.any(Function),
+      ]);
     });
 
     it('should return not ready when database is down', async () => {
@@ -189,7 +215,9 @@ describe('HealthController', () => {
       await controller.readiness();
 
       // Verify only one check function is passed (database)
-      expect(healthCheckService.check).toHaveBeenCalledWith([expect.any(Function)]);
+      expect(healthCheckService.check).toHaveBeenCalledWith([
+        expect.any(Function),
+      ]);
       const checkFunctions = healthCheckService.check.mock.calls[0][0];
       expect(checkFunctions).toHaveLength(1);
     });
@@ -232,7 +260,9 @@ describe('PaymentProviderHealthIndicator', () => {
   let indicator: PaymentProviderHealthIndicator;
   let mockFetch: jest.Mock;
 
-  const createMockConfig = (provider: 'stripe' | 'paystack'): ConfigType<typeof paymentConfig> => ({
+  const createMockConfig = (
+    provider: 'stripe' | 'paystack',
+  ): ConfigType<typeof paymentConfig> => ({
     provider,
     stripe: {
       secretKey: 'sk_test_123',
@@ -268,7 +298,9 @@ describe('PaymentProviderHealthIndicator', () => {
         ],
       }).compile();
 
-      indicator = module.get<PaymentProviderHealthIndicator>(PaymentProviderHealthIndicator);
+      indicator = module.get<PaymentProviderHealthIndicator>(
+        PaymentProviderHealthIndicator,
+      );
     });
 
     it('should return healthy when Stripe API returns 200', async () => {
@@ -329,7 +361,9 @@ describe('PaymentProviderHealthIndicator', () => {
         ],
       }).compile();
 
-      indicator = module.get<PaymentProviderHealthIndicator>(PaymentProviderHealthIndicator);
+      indicator = module.get<PaymentProviderHealthIndicator>(
+        PaymentProviderHealthIndicator,
+      );
     });
 
     it('should return healthy when Paystack API returns 200', async () => {

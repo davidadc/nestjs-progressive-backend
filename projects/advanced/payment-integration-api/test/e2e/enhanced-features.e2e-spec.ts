@@ -8,10 +8,7 @@ import { WebhookController } from '../../src/payments/infrastructure/controllers
 import { HealthController } from '../../src/common/health/health.controller';
 import { ProblemDetailsFilter } from '../../src/common/exceptions';
 import { PAYMENT_STRATEGY } from '../../src/payments/application/strategies/payment.strategy.interface';
-import {
-  IdempotencyInterceptor,
-  IDEMPOTENT_KEY,
-} from '../../src/common/idempotency/idempotency.interceptor';
+import { IdempotencyInterceptor } from '../../src/common/idempotency/idempotency.interceptor';
 import { IDEMPOTENCY_REPOSITORY } from '../../src/common/idempotency/idempotency.repository';
 import {
   HealthCheckService,
@@ -42,8 +39,17 @@ describe('Health Check Endpoints (E2E)', () => {
 
     const mockConfig = {
       provider: 'stripe',
-      stripe: { secretKey: 'sk_test', publishableKey: 'pk_test', webhookSecret: 'whsec_test' },
-      paystack: { secretKey: 'sk_test', publicKey: 'pk_test', webhookSecret: 'whsec_test', baseUrl: 'https://api.paystack.co' },
+      stripe: {
+        secretKey: 'sk_test',
+        publishableKey: 'pk_test',
+        webhookSecret: 'whsec_test',
+      },
+      paystack: {
+        secretKey: 'sk_test',
+        publicKey: 'pk_test',
+        webhookSecret: 'whsec_test',
+        baseUrl: 'https://api.paystack.co',
+      },
     };
 
     const moduleFixture: TestingModule = await Test.createTestingModule({
@@ -192,7 +198,11 @@ describe('Idempotency (E2E)', () => {
         return Promise.resolve(storedKeys.get(key) || null);
       }),
       create: jest.fn().mockImplementation((data: any) => {
-        const record = { ...data, id: `idem-${Date.now()}`, createdAt: new Date() };
+        const record = {
+          ...data,
+          id: `idem-${Date.now()}`,
+          createdAt: new Date(),
+        };
         storedKeys.set(data.key, record);
         return Promise.resolve(record);
       }),
@@ -238,7 +248,9 @@ describe('Idempotency (E2E)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+    app.useGlobalPipes(
+      new ValidationPipe({ transform: true, whitelist: true }),
+    );
     app.useGlobalFilters(new ProblemDetailsFilter());
 
     // Get the interceptor instance and apply it
@@ -428,7 +440,9 @@ describe('Rate Limiting Behavior (E2E)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
-    app.useGlobalPipes(new ValidationPipe({ transform: true, whitelist: true }));
+    app.useGlobalPipes(
+      new ValidationPipe({ transform: true, whitelist: true }),
+    );
     await app.init();
   });
 

@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ExecutionContext, CallHandler, ConflictException } from '@nestjs/common';
+import {
+  ExecutionContext,
+  CallHandler,
+  ConflictException,
+} from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { of, throwError } from 'rxjs';
-import {
-  IdempotencyInterceptor,
-  IDEMPOTENT_KEY,
-} from '../../src/common/idempotency/idempotency.interceptor';
+import * as crypto from 'crypto';
+import { IdempotencyInterceptor } from '../../src/common/idempotency/idempotency.interceptor';
 import {
   IDEMPOTENCY_REPOSITORY,
   IIdempotencyRepository,
@@ -44,7 +46,9 @@ describe('IdempotencyInterceptor', () => {
     } as unknown as ExecutionContext;
   };
 
-  const createMockCallHandler = (returnValue: unknown = { success: true }): CallHandler => ({
+  const createMockCallHandler = (
+    returnValue: unknown = { success: true },
+  ): CallHandler => ({
     handle: () => of(returnValue),
   });
 
@@ -102,7 +106,9 @@ describe('IdempotencyInterceptor', () => {
         const handler = createMockCallHandler({ id: '123' });
 
         const result$ = await interceptor.intercept(context, handler);
-        const result = await new Promise((resolve) => result$.subscribe(resolve));
+        const result = await new Promise((resolve) =>
+          result$.subscribe(resolve),
+        );
 
         expect(result).toEqual({ id: '123' });
         expect(mockRepository.findByKey).not.toHaveBeenCalled();
@@ -132,7 +138,9 @@ describe('IdempotencyInterceptor', () => {
         });
 
         const result$ = await interceptor.intercept(context, handler);
-        const result = await new Promise((resolve) => result$.subscribe(resolve));
+        const result = await new Promise((resolve) =>
+          result$.subscribe(resolve),
+        );
 
         expect(result).toEqual(responseData);
         expect(mockRepository.findByKey).toHaveBeenCalledWith(idempotencyKey);
@@ -153,7 +161,7 @@ describe('IdempotencyInterceptor', () => {
         const handler = createMockCallHandler();
 
         // Calculate the same hash the interceptor would generate
-        const requestHash = require('crypto')
+        const requestHash = crypto
           .createHash('sha256')
           .update(
             JSON.stringify({
@@ -176,7 +184,9 @@ describe('IdempotencyInterceptor', () => {
         });
 
         const result$ = await interceptor.intercept(context, handler);
-        const result = await new Promise((resolve) => result$.subscribe(resolve));
+        const result = await new Promise((resolve) =>
+          result$.subscribe(resolve),
+        );
 
         expect(result).toEqual(cachedResponse);
         expect(mockRepository.create).not.toHaveBeenCalled();
@@ -214,7 +224,7 @@ describe('IdempotencyInterceptor', () => {
         );
         const handler = createMockCallHandler();
 
-        const requestHash = require('crypto')
+        const requestHash = crypto
           .createHash('sha256')
           .update(
             JSON.stringify({
@@ -250,7 +260,7 @@ describe('IdempotencyInterceptor', () => {
         const responseData = { paymentId: 'pay-new', status: 'processing' };
         const handler = createMockCallHandler(responseData);
 
-        const requestHash = require('crypto')
+        const requestHash = crypto
           .createHash('sha256')
           .update(
             JSON.stringify({
@@ -280,7 +290,9 @@ describe('IdempotencyInterceptor', () => {
         });
 
         const result$ = await interceptor.intercept(context, handler);
-        const result = await new Promise((resolve) => result$.subscribe(resolve));
+        const result = await new Promise((resolve) =>
+          result$.subscribe(resolve),
+        );
 
         expect(result).toEqual(responseData);
         expect(mockRepository.deleteExpired).toHaveBeenCalled();
@@ -310,12 +322,16 @@ describe('IdempotencyInterceptor', () => {
         const result$ = await interceptor.intercept(context, handler);
 
         await expect(
-          new Promise((resolve, reject) => result$.subscribe({ next: resolve, error: reject })),
+          new Promise((resolve, reject) =>
+            result$.subscribe({ next: resolve, error: reject }),
+          ),
         ).rejects.toThrow('Payment failed');
 
         // Give time for the catchError to execute
         await new Promise((resolve) => setTimeout(resolve, 10));
-        expect(mockRepository.update).toHaveBeenCalledWith('idem-1', { status: 'failed' });
+        expect(mockRepository.update).toHaveBeenCalledWith('idem-1', {
+          status: 'failed',
+        });
       });
 
       it('should set X-Idempotent-Replayed header for cached responses', async () => {
@@ -327,7 +343,7 @@ describe('IdempotencyInterceptor', () => {
         const cachedResponse = { paymentId: 'pay-123' };
         const handler = createMockCallHandler();
 
-        const requestHash = require('crypto')
+        const requestHash = crypto
           .createHash('sha256')
           .update(
             JSON.stringify({
@@ -351,7 +367,10 @@ describe('IdempotencyInterceptor', () => {
 
         await interceptor.intercept(context, handler);
 
-        expect(mockResponse.setHeader).toHaveBeenCalledWith('X-Idempotent-Replayed', 'true');
+        expect(mockResponse.setHeader).toHaveBeenCalledWith(
+          'X-Idempotent-Replayed',
+          'true',
+        );
         expect(mockResponse.status).toHaveBeenCalledWith(201);
       });
     });
