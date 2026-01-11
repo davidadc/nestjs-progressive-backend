@@ -647,5 +647,6 @@ pnpm run typeorm migration:revert
 
 ---
 
-**Last updated:** 2026-01-05
+**Status:** Complete
+**Last updated:** 2026-01-11
 **To use:** Run `claude code` from project root
