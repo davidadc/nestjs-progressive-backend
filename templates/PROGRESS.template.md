@@ -19,6 +19,61 @@
 
 ---
 
+## Architecture Compliance
+
+> **IMPORTANT:** This implementation must achieve at least **80% compliance** with the architectural patterns defined in this project's `ARCHITECTURE.md` file.
+
+### Compliance Checklist
+
+Before marking a phase as complete, verify it aligns with `ARCHITECTURE.md`:
+
+| Phase | Architecture Requirement | Compliance Target |
+|-------|-------------------------|-------------------|
+| Phase 3: Domain | Repository interfaces, Value Objects (Advanced+), Domain Events (Advanced+) | 80%+ |
+| Phase 4: Application | DTOs, Services/Use-Cases, Mappers, Commands/Queries (Advanced+) | 80%+ |
+| Phase 5: Infrastructure | Repository implementations, Controllers, Guards | 80%+ |
+| Phase 6: Common | Decorators, Pipes, Filters, RFC 7807 (Advanced+) | 80%+ |
+
+### Required Patterns by Level
+
+<!-- Check the patterns required for your level in ARCHITECTURE.md -->
+
+**Beginner (must implement):**
+- [ ] Repository Pattern
+- [ ] Factory Pattern (DTOs, entities)
+- [ ] Decorator Pattern (Guards, Pipes)
+
+**Intermediate (+ Beginner patterns):**
+- [ ] Strategy Pattern (if multiple providers)
+- [ ] Observer Pattern (EventEmitter)
+- [ ] Adapter Pattern (external services)
+
+**Advanced (+ Intermediate patterns):**
+- [ ] CQRS (CommandBus/QueryBus)
+- [ ] Domain Events
+- [ ] Value Objects
+- [ ] Aggregate Roots
+- [ ] Mappers (Entity ↔ DTO)
+- [ ] RFC 7807 Problem Details
+
+**Expert (+ Advanced patterns):**
+- [ ] Event Sourcing
+- [ ] Saga Pattern
+- [ ] Circuit Breaker
+
+### Current Compliance Status
+
+| Category | Implemented | Required | Percentage |
+|----------|-------------|----------|------------|
+| Design Patterns | {{X}}/{{Y}} | {{Y}} | {{Z}}% |
+| Layer Structure | {{X}}/{{Y}} | {{Y}} | {{Z}}% |
+| Error Handling | {{X}}/{{Y}} | {{Y}} | {{Z}}% |
+| **Overall** | - | - | **{{Z}}%** |
+
+> **Target:** ≥80% overall compliance before marking project as complete.
+
+---
+
 ## Implementation Status
 
 ### Phase 1: Project Scaffolding
@@ -139,12 +194,17 @@
 - [ ] Create E2E tests with Jest/Supertest
 - [ ] Achieve 80%+ coverage on core logic
 
-### Phase 11: Documentation
+### Phase 11: Documentation & Architecture Review
 
 - [ ] Swagger API documentation complete
 - [ ] PROGRESS.md updated (this file)
 - [ ] AI_CONTEXT.md created
+- [ ] ARCHITECTURE.md created and customized
 - [ ] README.md updated
+- [ ] **Architecture compliance verified (≥80%)**
+  - [ ] All required patterns for level implemented
+  - [ ] Layer responsibilities followed
+  - [ ] Compliance status table updated above
 
 ---
 
@@ -251,4 +311,5 @@ open http://localhost:3000/docs
 
 **Started:** {{YYYY-MM-DD}}
 **Completed:** {{YYYY-MM-DD or "In Progress"}}
+**Architecture Compliance:** {{X}}% (Target: ≥80%)
 **Next Steps:** {{What to do after completion}}

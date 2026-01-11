@@ -171,6 +171,17 @@ Template for implementation progress tracking. Contains:
 - Folder structure
 - Design decisions
 
+#### templates/ARCHITECTURE.template.md
+
+Template for project-specific architecture documentation. Contains:
+
+- Layer structure diagrams (by level)
+- Folder structure templates
+- Design patterns checklists
+- CQRS implementation examples
+- Value objects and aggregate root patterns
+- Architecture compliance checklists
+
 #### templates/AI_CONTEXT.example.md
 
 Filled example (User Auth API) showing how to customize the template.
@@ -182,6 +193,7 @@ Filled example (User Auth API) showing how to customize the template.
 cp templates/AI_CONTEXT.template.md projects/beginner/user-auth-api/AI_CONTEXT.md
 cp templates/README.template.md projects/beginner/user-auth-api/README.md
 cp templates/PROGRESS.template.md projects/beginner/user-auth-api/PROGRESS.md
+cp templates/ARCHITECTURE.template.md projects/beginner/user-auth-api/ARCHITECTURE.md
 
 # Edit placeholders with project-specific details
 # Then run Claude Code from the project directory
@@ -199,8 +211,9 @@ cp templates/PROGRESS.template.md projects/beginner/user-auth-api/PROGRESS.md
    - `templates/AI_CONTEXT.template.md` → `projects/{level}/{project}/AI_CONTEXT.md`
    - `templates/README.template.md` → `projects/{level}/{project}/README.md`
    - `templates/PROGRESS.template.md` → `projects/{level}/{project}/PROGRESS.md`
+   - `templates/ARCHITECTURE.template.md` → `projects/{level}/{project}/ARCHITECTURE.md`
 4. Customize: Replace placeholders with project-specific details
-5. Review: Get PROGRESS.md approved before implementation
+5. Review: Get PROGRESS.md and ARCHITECTURE.md approved before implementation
 6. Start: Follow `README.md` Quick Start
 7. Code: Run `claude code` from project directory
 
@@ -231,7 +244,7 @@ cp templates/PROGRESS.template.md projects/beginner/user-auth-api/PROGRESS.md
 2. Consult: `docs/ARCHITECTURE.md` → Next level
 3. Refactor: Introduce new patterns
 4. Validate: Tests pass
-5. Document: Update `AI_CONTEXT.md` and `PROGRESS.md`
+5. Document: Update `AI_CONTEXT.md`, `PROGRESS.md`, and `ARCHITECTURE.md`
 
 ---
 
@@ -260,9 +273,10 @@ START
   ├─→ templates/ (Copy to project)
   │    ├─→ AI_CONTEXT.template.md
   │    ├─→ README.template.md
-  │    └─→ PROGRESS.template.md
+  │    ├─→ PROGRESS.template.md
+  │    └─→ ARCHITECTURE.template.md
   │
-  └─→ Project files (AI_CONTEXT.md, PROGRESS.md)
+  └─→ Project files (AI_CONTEXT.md, PROGRESS.md, ARCHITECTURE.md)
 ```
 
 ---
@@ -392,7 +406,8 @@ nestjs-progressive-backend/
 │   ├── AI_CONTEXT.template.md            # Template for per-project AI context
 │   ├── AI_CONTEXT.example.md             # Filled example (User Auth)
 │   ├── README.template.md                # Template for per-project README
-│   └── PROGRESS.template.md              # Template for progress tracking
+│   ├── PROGRESS.template.md              # Template for progress tracking
+│   └── ARCHITECTURE.template.md          # Template for architecture docs
 │
 ├── projects/
 │   └── beginner/
@@ -400,6 +415,7 @@ nestjs-progressive-backend/
 │           ├── README.md                 # Project-specific README
 │           ├── AI_CONTEXT.md             # Project-specific AI context
 │           ├── PROGRESS.md               # Implementation progress
+│           ├── ARCHITECTURE.md           # Project architecture decisions
 │           └── src/
 │
 ├── README.md                             # Monorepo overview
@@ -481,6 +497,6 @@ nestjs-progressive-backend/
 
 ---
 
-**Last updated:** 2026-01-02
-**Version:** 1.0 Complete
+**Last updated:** 2026-01-11
+**Version:** 1.1 (Added ARCHITECTURE.template.md)
 **Maintainer:** David
