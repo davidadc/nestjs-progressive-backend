@@ -16,7 +16,6 @@ import {
   ApiOperation,
   ApiResponse,
   ApiParam,
-  ApiBearerAuth,
   ApiHeader,
   ApiTooManyRequestsResponse,
 } from '@nestjs/swagger';
@@ -49,7 +48,8 @@ export class PaymentController {
   @ApiParam({ name: 'orderId', description: 'Order ID', type: String })
   @ApiHeader({
     name: 'Idempotency-Key',
-    description: 'Unique key for idempotent requests (prevents duplicate payments)',
+    description:
+      'Unique key for idempotent requests (prevents duplicate payments)',
     required: false,
   })
   @ApiResponse({
@@ -59,12 +59,20 @@ export class PaymentController {
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   @ApiResponse({ status: 404, description: 'Order not found' })
-  @ApiResponse({ status: 409, description: 'Payment already exists for order or duplicate idempotency key' })
+  @ApiResponse({
+    status: 409,
+    description:
+      'Payment already exists for order or duplicate idempotency key',
+  })
   @ApiTooManyRequestsResponse({ description: 'Rate limit exceeded' })
   async initiatePayment(
     @Param('orderId', ParseUUIDPipe) orderId: string,
     @Body() dto: InitiatePaymentDto,
-  ): Promise<{ success: boolean; statusCode: number; data: PaymentResponseDto }> {
+  ): Promise<{
+    success: boolean;
+    statusCode: number;
+    data: PaymentResponseDto;
+  }> {
     // TODO: Get order from OrderService and extract amount
     // For now, using a placeholder amount
     const orderAmount = 99.99; // This should come from OrderService
@@ -77,7 +85,10 @@ export class PaymentController {
       dto.cancelUrl,
     );
 
-    const payment = await this.commandBus.execute(command);
+    const payment = await this.commandBus.execute<
+      InitiatePaymentCommand,
+      PaymentResponseDto
+    >(command);
 
     return {
       success: true,
@@ -97,9 +108,16 @@ export class PaymentController {
   @ApiResponse({ status: 404, description: 'Payment not found' })
   async getPaymentStatus(
     @Param('orderId', ParseUUIDPipe) orderId: string,
-  ): Promise<{ success: boolean; statusCode: number; data: PaymentResponseDto }> {
+  ): Promise<{
+    success: boolean;
+    statusCode: number;
+    data: PaymentResponseDto;
+  }> {
     const query = new GetPaymentStatusQuery(orderId);
-    const payment = await this.queryBus.execute(query);
+    const payment = await this.queryBus.execute<
+      GetPaymentStatusQuery,
+      PaymentResponseDto
+    >(query);
 
     return {
       success: true,
@@ -119,9 +137,16 @@ export class PaymentController {
   @ApiResponse({ status: 404, description: 'Payment not found' })
   async getPaymentById(
     @Param('paymentId', ParseUUIDPipe) paymentId: string,
-  ): Promise<{ success: boolean; statusCode: number; data: PaymentResponseDto }> {
+  ): Promise<{
+    success: boolean;
+    statusCode: number;
+    data: PaymentResponseDto;
+  }> {
     const query = new GetPaymentByIdQuery(paymentId);
-    const payment = await this.queryBus.execute(query);
+    const payment = await this.queryBus.execute<
+      GetPaymentByIdQuery,
+      PaymentResponseDto
+    >(query);
 
     return {
       success: true,
@@ -138,7 +163,8 @@ export class PaymentController {
   @ApiParam({ name: 'paymentId', description: 'Payment ID', type: String })
   @ApiHeader({
     name: 'Idempotency-Key',
-    description: 'Unique key for idempotent requests (prevents duplicate refunds)',
+    description:
+      'Unique key for idempotent requests (prevents duplicate refunds)',
     required: false,
   })
   @ApiResponse({
@@ -147,14 +173,24 @@ export class PaymentController {
     type: PaymentResponseDto,
   })
   @ApiResponse({ status: 404, description: 'Payment not found' })
-  @ApiResponse({ status: 400, description: 'Cannot refund payment in current state' })
+  @ApiResponse({
+    status: 400,
+    description: 'Cannot refund payment in current state',
+  })
   @ApiResponse({ status: 409, description: 'Duplicate idempotency key' })
   @ApiTooManyRequestsResponse({ description: 'Rate limit exceeded' })
   async refundPayment(
     @Param('paymentId', ParseUUIDPipe) paymentId: string,
-  ): Promise<{ success: boolean; statusCode: number; data: PaymentResponseDto }> {
+  ): Promise<{
+    success: boolean;
+    statusCode: number;
+    data: PaymentResponseDto;
+  }> {
     const command = new RefundPaymentCommand(paymentId);
-    const payment = await this.commandBus.execute(command);
+    const payment = await this.commandBus.execute<
+      RefundPaymentCommand,
+      PaymentResponseDto
+    >(command);
 
     return {
       success: true,
@@ -170,9 +206,7 @@ export class PaymentController {
     description: 'Transactions retrieved',
     type: PaginatedTransactionsResponseDto,
   })
-  async listTransactions(
-    @Query() dto: ListTransactionsDto,
-  ): Promise<{
+  async listTransactions(@Query() dto: ListTransactionsDto): Promise<{
     success: boolean;
     statusCode: number;
     data: PaginatedTransactionsResponseDto;
@@ -185,7 +219,10 @@ export class PaymentController {
       limit: dto.limit,
     });
 
-    const result = await this.queryBus.execute(query);
+    const result = await this.queryBus.execute<
+      ListTransactionsQuery,
+      PaginatedTransactionsResponseDto
+    >(query);
 
     return {
       success: true,

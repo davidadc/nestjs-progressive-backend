@@ -1,4 +1,9 @@
-import { ICommand, CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import {
+  ICommand,
+  CommandHandler,
+  ICommandHandler,
+  EventBus,
+} from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import type { IPaymentRepository } from '../../domain';
 import {
@@ -7,7 +12,6 @@ import {
   Money,
   PAYMENT_REPOSITORY,
   PaymentAlreadyProcessedException,
-  OrderNotFoundException,
 } from '../../domain';
 import { PaymentMapper } from '../mappers';
 import { PaymentResponseDto } from '../dto';
@@ -36,7 +40,9 @@ export class InitiatePaymentHandler implements ICommandHandler<InitiatePaymentCo
 
   async execute(command: InitiatePaymentCommand): Promise<PaymentResponseDto> {
     // Check if payment already exists for this order
-    const existingPayment = await this.paymentRepository.findByOrderId(command.orderId);
+    const existingPayment = await this.paymentRepository.findByOrderId(
+      command.orderId,
+    );
     if (existingPayment && !existingPayment.isFailed()) {
       throw new PaymentAlreadyProcessedException(existingPayment.id.value);
     }
@@ -56,7 +62,10 @@ export class InitiatePaymentHandler implements ICommandHandler<InitiatePaymentCo
     });
 
     // Update payment with external details
-    payment.process(paymentResult.externalId, paymentResult.checkoutUrl ?? null);
+    payment.process(
+      paymentResult.externalId,
+      paymentResult.checkoutUrl ?? null,
+    );
 
     // Persist payment
     await this.paymentRepository.save(payment);

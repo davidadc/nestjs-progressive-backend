@@ -7,7 +7,7 @@ import {
 describe('Money Value Object', () => {
   describe('create', () => {
     it('should create a Money instance with valid amount and currency', () => {
-      const money = Money.create(100.50, 'USD');
+      const money = Money.create(100.5, 'USD');
 
       expect(money.amount).toBe(100.5);
       expect(money.currency).toBe('USD');
@@ -33,11 +33,15 @@ describe('Money Value Object', () => {
 
     it('should throw InvalidMoneyException for negative amount', () => {
       expect(() => Money.create(-10, 'USD')).toThrow(InvalidMoneyException);
-      expect(() => Money.create(-10, 'USD')).toThrow('Amount cannot be negative');
+      expect(() => Money.create(-10, 'USD')).toThrow(
+        'Amount cannot be negative',
+      );
     });
 
     it('should throw InvalidMoneyException for amount exceeding maximum', () => {
-      expect(() => Money.create(1000000000, 'USD')).toThrow(InvalidMoneyException);
+      expect(() => Money.create(1000000000, 'USD')).toThrow(
+        InvalidMoneyException,
+      );
       expect(() => Money.create(1000000000, 'USD')).toThrow(
         'Amount exceeds maximum allowed value',
       );
@@ -45,7 +49,9 @@ describe('Money Value Object', () => {
 
     it('should throw InvalidMoneyException for unsupported currency', () => {
       expect(() => Money.create(100, 'XYZ')).toThrow(InvalidMoneyException);
-      expect(() => Money.create(100, 'XYZ')).toThrow('Unsupported currency: XYZ');
+      expect(() => Money.create(100, 'XYZ')).toThrow(
+        'Unsupported currency: XYZ',
+      );
     });
 
     it('should support all defined currencies', () => {
@@ -189,8 +195,12 @@ describe('Money Value Object', () => {
       const money1 = Money.create(100, 'USD');
       const money2 = Money.create(50, 'EUR');
 
-      expect(() => money1.isGreaterThan(money2)).toThrow(CurrencyMismatchException);
-      expect(() => money1.isLessThan(money2)).toThrow(CurrencyMismatchException);
+      expect(() => money1.isGreaterThan(money2)).toThrow(
+        CurrencyMismatchException,
+      );
+      expect(() => money1.isLessThan(money2)).toThrow(
+        CurrencyMismatchException,
+      );
     });
   });
 

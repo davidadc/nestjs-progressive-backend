@@ -32,7 +32,9 @@ export class StripePaymentStrategy implements IPaymentStrategy {
     this.webhookSecret = this.config.stripe.webhookSecret;
   }
 
-  async createPaymentIntent(input: CreatePaymentIntentInput): Promise<PaymentIntentResult> {
+  async createPaymentIntent(
+    input: CreatePaymentIntentInput,
+  ): Promise<PaymentIntentResult> {
     try {
       // Create a Checkout Session for redirect-based payment
       const session = await this.stripe.checkout.sessions.create({
@@ -97,7 +99,10 @@ export class StripePaymentStrategy implements IPaymentStrategy {
       const session = await this.stripe.checkout.sessions.retrieve(externalId);
 
       if (!session.payment_intent) {
-        throw new PaymentProviderException('stripe', 'No payment intent found for session');
+        throw new PaymentProviderException(
+          'stripe',
+          'No payment intent found for session',
+        );
       }
 
       const refundParams: Stripe.RefundCreateParams = {
@@ -123,9 +128,16 @@ export class StripePaymentStrategy implements IPaymentStrategy {
     }
   }
 
-  validateWebhookSignature(payload: string | Buffer, signature: string): boolean {
+  validateWebhookSignature(
+    payload: string | Buffer,
+    signature: string,
+  ): boolean {
     try {
-      this.stripe.webhooks.constructEvent(payload, signature, this.webhookSecret);
+      this.stripe.webhooks.constructEvent(
+        payload,
+        signature,
+        this.webhookSecret,
+      );
       return true;
     } catch {
       return false;
@@ -133,6 +145,10 @@ export class StripePaymentStrategy implements IPaymentStrategy {
   }
 
   parseWebhookEvent(payload: string | Buffer, signature: string): Stripe.Event {
-    return this.stripe.webhooks.constructEvent(payload, signature, this.webhookSecret);
+    return this.stripe.webhooks.constructEvent(
+      payload,
+      signature,
+      this.webhookSecret,
+    );
   }
 }

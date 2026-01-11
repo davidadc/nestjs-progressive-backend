@@ -46,9 +46,14 @@ export class WebhookRetryService {
     signature: string | null,
   ): Promise<WebhookEventData> {
     // Check for duplicate event
-    const existing = await this.webhookEventRepository.findByExternalId(provider, externalEventId);
+    const existing = await this.webhookEventRepository.findByExternalId(
+      provider,
+      externalEventId,
+    );
     if (existing) {
-      this.logger.warn(`Duplicate webhook event: ${provider}/${externalEventId}`);
+      this.logger.warn(
+        `Duplicate webhook event: ${provider}/${externalEventId}`,
+      );
       return existing;
     }
 
@@ -85,8 +90,11 @@ export class WebhookRetryService {
       this.logger.log(`Webhook event processed: ${event.id}`);
       return true;
     } catch (error) {
-      const errorMessage = error instanceof Error ? error.message : 'Unknown error';
-      this.logger.error(`Failed to process webhook event ${event.id}: ${errorMessage}`);
+      const errorMessage =
+        error instanceof Error ? error.message : 'Unknown error';
+      this.logger.error(
+        `Failed to process webhook event ${event.id}: ${errorMessage}`,
+      );
 
       await this.scheduleRetry(event, errorMessage);
       return false;
@@ -100,13 +108,19 @@ export class WebhookRetryService {
     const nextRetryCount = event.retryCount + 1;
 
     if (nextRetryCount >= event.maxRetries) {
-      this.logger.warn(`Moving event ${event.id} to dead letter queue after ${event.maxRetries} retries`);
+      this.logger.warn(
+        `Moving event ${event.id} to dead letter queue after ${event.maxRetries} retries`,
+      );
       await this.webhookEventRepository.moveToDeadLetter(event.id!, error);
       return;
     }
 
     const nextRetryAt = this.calculateNextRetryTime(nextRetryCount);
-    await this.webhookEventRepository.scheduleRetry(event.id!, nextRetryAt, error);
+    await this.webhookEventRepository.scheduleRetry(
+      event.id!,
+      nextRetryAt,
+      error,
+    );
 
     this.logger.log(
       `Scheduled retry ${nextRetryCount}/${event.maxRetries} for event ${event.id} at ${nextRetryAt.toISOString()}`,
@@ -134,13 +148,17 @@ export class WebhookRetryService {
    */
   @Cron(CronExpression.EVERY_MINUTE)
   async processRetryQueue(): Promise<void> {
-    const events = await this.webhookEventRepository.findEventsForRetry(this.config.batchSize);
+    const events = await this.webhookEventRepository.findEventsForRetry(
+      this.config.batchSize,
+    );
 
     if (events.length === 0) {
       return;
     }
 
-    this.logger.log(`Processing ${events.length} webhook events from retry queue`);
+    this.logger.log(
+      `Processing ${events.length} webhook events from retry queue`,
+    );
 
     for (const event of events) {
       try {

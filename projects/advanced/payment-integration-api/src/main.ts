@@ -31,7 +31,8 @@ async function bootstrap() {
 
   // CORS
   app.enableCors({
-    origin: configService.get('app.nodeEnv') === 'development' ? '*' : undefined,
+    origin:
+      configService.get('app.nodeEnv') === 'development' ? '*' : undefined,
     credentials: true,
   });
 
@@ -40,7 +41,7 @@ async function bootstrap() {
     .setTitle('Payment Integration API')
     .setDescription(
       'Payment integration API with Stripe/Paystack support, featuring webhook handling, ' +
-      'transaction auditing, CQRS architecture, and RFC 7807 error responses.',
+        'transaction auditing, CQRS architecture, and RFC 7807 error responses.',
     )
     .setVersion('1.0')
     .addTag('Payments', 'Payment operations')
@@ -55,11 +56,11 @@ async function bootstrap() {
     },
   });
 
-  const port = configService.get('app.port') || 3000;
+  const port = configService.get<number>('app.port') ?? 3000;
   await app.listen(port);
 
   logger.log(`Application is running on: http://localhost:${port}`);
   logger.log(`Swagger documentation: http://localhost:${port}/docs`);
 }
 
-bootstrap();
+void bootstrap();

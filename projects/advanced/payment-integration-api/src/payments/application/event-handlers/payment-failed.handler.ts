@@ -6,7 +6,7 @@ import { PaymentFailedEvent } from '../../domain';
 export class PaymentFailedHandler implements IEventHandler<PaymentFailedEvent> {
   private readonly logger = new Logger(PaymentFailedHandler.name);
 
-  async handle(event: PaymentFailedEvent): Promise<void> {
+  handle(event: PaymentFailedEvent): void {
     this.logger.warn(
       `Payment failed: ${event.paymentId} for order ${event.orderId}. Reason: ${event.reason}`,
     );

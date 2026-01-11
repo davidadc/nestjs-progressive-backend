@@ -42,7 +42,9 @@ describe('TransactionRepository (Integration)', () => {
       ],
     }).compile();
 
-    transactionRepository = module.get<TransactionRepository>(TransactionRepository);
+    transactionRepository = module.get<TransactionRepository>(
+      TransactionRepository,
+    );
   });
 
   describe('create', () => {
@@ -79,7 +81,11 @@ describe('TransactionRepository (Integration)', () => {
         failureReason: 'Card declined',
       };
 
-      const failedEntity = { ...mockTransactionEntity, status: 'failed' as const, failureReason: 'Card declined' };
+      const failedEntity = {
+        ...mockTransactionEntity,
+        status: 'failed' as const,
+        failureReason: 'Card declined',
+      };
       mockTypeOrmRepo.create.mockReturnValue(failedEntity);
       mockTypeOrmRepo.save.mockResolvedValue(failedEntity);
 
@@ -99,7 +105,11 @@ describe('TransactionRepository (Integration)', () => {
         externalId: 're_123',
       };
 
-      const refundEntity = { ...mockTransactionEntity, type: 'refund' as const, externalId: 're_123' };
+      const refundEntity = {
+        ...mockTransactionEntity,
+        type: 'refund' as const,
+        externalId: 're_123',
+      };
       mockTypeOrmRepo.create.mockReturnValue(refundEntity);
       mockTypeOrmRepo.save.mockResolvedValue(refundEntity);
 
@@ -114,7 +124,9 @@ describe('TransactionRepository (Integration)', () => {
     it('should return transaction when found', async () => {
       mockTypeOrmRepo.findOne.mockResolvedValue(mockTransactionEntity);
 
-      const result = await transactionRepository.findById('660e8400-e29b-41d4-a716-446655440000');
+      const result = await transactionRepository.findById(
+        '660e8400-e29b-41d4-a716-446655440000',
+      );
 
       expect(result).not.toBeNull();
       expect(result?.id).toBe('660e8400-e29b-41d4-a716-446655440000');
@@ -136,11 +148,17 @@ describe('TransactionRepository (Integration)', () => {
     it('should return all transactions for a payment', async () => {
       const transactions = [
         mockTransactionEntity,
-        { ...mockTransactionEntity, id: '660e8400-e29b-41d4-a716-446655440001', type: 'refund' as const },
+        {
+          ...mockTransactionEntity,
+          id: '660e8400-e29b-41d4-a716-446655440001',
+          type: 'refund' as const,
+        },
       ];
       mockTypeOrmRepo.find.mockResolvedValue(transactions);
 
-      const result = await transactionRepository.findByPaymentId('550e8400-e29b-41d4-a716-446655440000');
+      const result = await transactionRepository.findByPaymentId(
+        '550e8400-e29b-41d4-a716-446655440000',
+      );
 
       expect(result).toHaveLength(2);
       expect(result[0].paymentId).toBe('550e8400-e29b-41d4-a716-446655440000');
@@ -153,7 +171,9 @@ describe('TransactionRepository (Integration)', () => {
     it('should return empty array when no transactions found', async () => {
       mockTypeOrmRepo.find.mockResolvedValue([]);
 
-      const result = await transactionRepository.findByPaymentId('payment-without-transactions');
+      const result = await transactionRepository.findByPaymentId(
+        'payment-without-transactions',
+      );
 
       expect(result).toHaveLength(0);
     });
@@ -161,9 +181,15 @@ describe('TransactionRepository (Integration)', () => {
 
   describe('findAll', () => {
     it('should return paginated transactions', async () => {
-      mockTypeOrmRepo.findAndCount.mockResolvedValue([[mockTransactionEntity], 1]);
+      mockTypeOrmRepo.findAndCount.mockResolvedValue([
+        [mockTransactionEntity],
+        1,
+      ]);
 
-      const result = await transactionRepository.findAll({ page: 1, limit: 10 });
+      const result = await transactionRepository.findAll({
+        page: 1,
+        limit: 10,
+      });
 
       expect(result.data).toHaveLength(1);
       expect(result.total).toBe(1);
@@ -173,7 +199,10 @@ describe('TransactionRepository (Integration)', () => {
     });
 
     it('should filter by paymentId', async () => {
-      mockTypeOrmRepo.findAndCount.mockResolvedValue([[mockTransactionEntity], 1]);
+      mockTypeOrmRepo.findAndCount.mockResolvedValue([
+        [mockTransactionEntity],
+        1,
+      ]);
 
       await transactionRepository.findAll({
         page: 1,
@@ -191,7 +220,10 @@ describe('TransactionRepository (Integration)', () => {
     });
 
     it('should filter by status', async () => {
-      mockTypeOrmRepo.findAndCount.mockResolvedValue([[mockTransactionEntity], 1]);
+      mockTypeOrmRepo.findAndCount.mockResolvedValue([
+        [mockTransactionEntity],
+        1,
+      ]);
 
       await transactionRepository.findAll({
         page: 1,
@@ -209,7 +241,10 @@ describe('TransactionRepository (Integration)', () => {
     });
 
     it('should filter by type', async () => {
-      mockTypeOrmRepo.findAndCount.mockResolvedValue([[mockTransactionEntity], 1]);
+      mockTypeOrmRepo.findAndCount.mockResolvedValue([
+        [mockTransactionEntity],
+        1,
+      ]);
 
       await transactionRepository.findAll({
         page: 1,
@@ -229,7 +264,10 @@ describe('TransactionRepository (Integration)', () => {
     it('should calculate pages correctly', async () => {
       mockTypeOrmRepo.findAndCount.mockResolvedValue([[], 25]);
 
-      const result = await transactionRepository.findAll({ page: 1, limit: 10 });
+      const result = await transactionRepository.findAll({
+        page: 1,
+        limit: 10,
+      });
 
       expect(result.pages).toBe(3);
     });
@@ -237,7 +275,11 @@ describe('TransactionRepository (Integration)', () => {
 
   describe('updateStatus', () => {
     it('should update transaction status', async () => {
-      const updatedEntity = { ...mockTransactionEntity, status: 'failed' as const, failureReason: 'Timeout' };
+      const updatedEntity = {
+        ...mockTransactionEntity,
+        status: 'failed' as const,
+        failureReason: 'Timeout',
+      };
       mockTypeOrmRepo.update.mockResolvedValue({ affected: 1 } as any);
       mockTypeOrmRepo.findOneOrFail.mockResolvedValue(updatedEntity);
 

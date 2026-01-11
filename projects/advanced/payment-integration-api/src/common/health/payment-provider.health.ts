@@ -24,12 +24,16 @@ export class PaymentProviderHealthIndicator extends HealthIndicator {
     try {
       if (provider === 'stripe') {
         isHealthy = await this.checkStripeHealth();
-        message = isHealthy ? 'Stripe API is reachable' : 'Stripe API is unreachable';
+        message = isHealthy
+          ? 'Stripe API is reachable'
+          : 'Stripe API is unreachable';
       } else if (provider === 'paystack') {
         isHealthy = await this.checkPaystackHealth();
-        message = isHealthy ? 'Paystack API is reachable' : 'Paystack API is unreachable';
+        message = isHealthy
+          ? 'Paystack API is reachable'
+          : 'Paystack API is unreachable';
       } else {
-        message = `Unknown provider: ${provider}`;
+        message = `Unknown provider: ${provider as string}`;
       }
 
       const result = this.getStatus(key, isHealthy, {

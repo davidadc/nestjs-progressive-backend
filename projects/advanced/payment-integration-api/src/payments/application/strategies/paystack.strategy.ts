@@ -87,7 +87,9 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
     this.baseUrl = this.config.paystack.baseUrl || 'https://api.paystack.co';
   }
 
-  async createPaymentIntent(input: CreatePaymentIntentInput): Promise<PaymentIntentResult> {
+  async createPaymentIntent(
+    input: CreatePaymentIntentInput,
+  ): Promise<PaymentIntentResult> {
     try {
       const reference = this.generateReference(input.orderId);
 
@@ -112,10 +114,10 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as { message?: string };
         throw new PaymentProviderException(
           'paystack',
-          errorData.message || 'Failed to initialize transaction',
+          errorData.message ?? 'Failed to initialize transaction',
         );
       }
 
@@ -144,18 +146,21 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
 
   async confirmPayment(externalId: string): Promise<PaymentConfirmationResult> {
     try {
-      const response = await fetch(`${this.baseUrl}/transaction/verify/${externalId}`, {
-        method: 'GET',
-        headers: {
-          Authorization: `Bearer ${this.secretKey}`,
+      const response = await fetch(
+        `${this.baseUrl}/transaction/verify/${externalId}`,
+        {
+          method: 'GET',
+          headers: {
+            Authorization: `Bearer ${this.secretKey}`,
+          },
         },
-      });
+      );
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as { message?: string };
         throw new PaymentProviderException(
           'paystack',
-          errorData.message || 'Failed to verify transaction',
+          errorData.message ?? 'Failed to verify transaction',
         );
       }
 
@@ -171,7 +176,9 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
 
       return {
         status: 'failed',
-        failureReason: result.data.gateway_response || `Payment status: ${result.data.status}`,
+        failureReason:
+          result.data.gateway_response ||
+          `Payment status: ${result.data.status}`,
       };
     } catch (error) {
       if (error instanceof PaymentProviderException) {
@@ -205,10 +212,10 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
       });
 
       if (!response.ok) {
-        const errorData = await response.json();
+        const errorData = (await response.json()) as { message?: string };
         throw new PaymentProviderException(
           'paystack',
-          errorData.message || 'Failed to create refund',
+          errorData.message ?? 'Failed to create refund',
         );
       }
 
@@ -240,9 +247,13 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
     }
   }
 
-  validateWebhookSignature(payload: string | Buffer, signature: string): boolean {
+  validateWebhookSignature(
+    payload: string | Buffer,
+    signature: string,
+  ): boolean {
     try {
-      const payloadString = typeof payload === 'string' ? payload : payload.toString('utf8');
+      const payloadString =
+        typeof payload === 'string' ? payload : payload.toString('utf8');
       const hash = crypto
         .createHmac('sha512', this.webhookSecret)
         .update(payloadString)
@@ -254,12 +265,19 @@ export class PaystackPaymentStrategy implements IPaymentStrategy {
     }
   }
 
-  parseWebhookEvent(payload: string | Buffer, signature: string): PaystackWebhookEvent {
+  parseWebhookEvent(
+    payload: string | Buffer,
+    signature: string,
+  ): PaystackWebhookEvent {
     if (!this.validateWebhookSignature(payload, signature)) {
-      throw new PaymentProviderException('paystack', 'Invalid webhook signature');
+      throw new PaymentProviderException(
+        'paystack',
+        'Invalid webhook signature',
+      );
     }
 
-    const payloadString = typeof payload === 'string' ? payload : payload.toString('utf8');
+    const payloadString =
+      typeof payload === 'string' ? payload : payload.toString('utf8');
     return JSON.parse(payloadString) as PaystackWebhookEvent;
   }
 

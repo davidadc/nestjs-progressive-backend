@@ -36,10 +36,11 @@ export class PaymentRepository implements IPaymentRepository {
     return entity ? PaymentMapper.toDomain(entity) : null;
   }
 
-  async findByUserId(userId: string): Promise<Payment[]> {
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  findByUserId(userId: string): Promise<Payment[]> {
     // This would require a join with orders table
     // For now, we return empty array - should be implemented with proper order integration
-    return [];
+    return Promise.resolve([]);
   }
 
   async existsByOrderId(orderId: string): Promise<boolean> {

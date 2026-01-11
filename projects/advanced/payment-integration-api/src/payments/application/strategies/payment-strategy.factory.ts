@@ -23,7 +23,9 @@ export class PaymentStrategyFactory {
       case 'paystack':
         return this.paystackStrategy;
       default:
-        throw new Error(`Unknown payment provider: ${selectedProvider}`);
+        throw new Error(
+          `Unknown payment provider: ${selectedProvider as string}`,
+        );
     }
   }
 

@@ -93,7 +93,9 @@ describe('Payment Aggregate', () => {
 
       expect(payment.status.value).toBe('processing');
       expect(payment.externalId).toBe('cs_123');
-      expect(payment.checkoutUrl).toBe('https://checkout.stripe.com/pay/cs_123');
+      expect(payment.checkoutUrl).toBe(
+        'https://checkout.stripe.com/pay/cs_123',
+      );
     });
 
     it('should emit PaymentProcessedEvent', () => {

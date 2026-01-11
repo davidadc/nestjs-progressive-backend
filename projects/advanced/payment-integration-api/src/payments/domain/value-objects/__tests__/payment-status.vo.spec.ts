@@ -26,7 +26,13 @@ describe('PaymentStatus Value Object', () => {
 
   describe('fromString', () => {
     it('should create status from valid string', () => {
-      const statuses = ['pending', 'processing', 'completed', 'failed', 'refunded'];
+      const statuses = [
+        'pending',
+        'processing',
+        'completed',
+        'failed',
+        'refunded',
+      ];
 
       statuses.forEach((status) => {
         const paymentStatus = PaymentStatus.fromString(status);
@@ -87,25 +93,29 @@ describe('PaymentStatus Value Object', () => {
   describe('state transitions', () => {
     describe('from Pending', () => {
       it('should allow transition to Processing', () => {
-        expect(PaymentStatus.Pending.canTransitionTo(PaymentStatus.Processing)).toBe(
-          true,
-        );
+        expect(
+          PaymentStatus.Pending.canTransitionTo(PaymentStatus.Processing),
+        ).toBe(true);
 
-        const result = PaymentStatus.Pending.transitionTo(PaymentStatus.Processing);
+        const result = PaymentStatus.Pending.transitionTo(
+          PaymentStatus.Processing,
+        );
         expect(result.value).toBe('processing');
       });
 
       it('should allow transition to Failed', () => {
-        expect(PaymentStatus.Pending.canTransitionTo(PaymentStatus.Failed)).toBe(true);
+        expect(
+          PaymentStatus.Pending.canTransitionTo(PaymentStatus.Failed),
+        ).toBe(true);
 
         const result = PaymentStatus.Pending.transitionTo(PaymentStatus.Failed);
         expect(result.value).toBe('failed');
       });
 
       it('should not allow transition to Completed', () => {
-        expect(PaymentStatus.Pending.canTransitionTo(PaymentStatus.Completed)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Pending.canTransitionTo(PaymentStatus.Completed),
+        ).toBe(false);
 
         expect(() =>
           PaymentStatus.Pending.transitionTo(PaymentStatus.Completed),
@@ -113,9 +123,9 @@ describe('PaymentStatus Value Object', () => {
       });
 
       it('should not allow transition to Refunded', () => {
-        expect(PaymentStatus.Pending.canTransitionTo(PaymentStatus.Refunded)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Pending.canTransitionTo(PaymentStatus.Refunded),
+        ).toBe(false);
       });
     });
 
@@ -125,23 +135,27 @@ describe('PaymentStatus Value Object', () => {
           PaymentStatus.Processing.canTransitionTo(PaymentStatus.Completed),
         ).toBe(true);
 
-        const result = PaymentStatus.Processing.transitionTo(PaymentStatus.Completed);
+        const result = PaymentStatus.Processing.transitionTo(
+          PaymentStatus.Completed,
+        );
         expect(result.value).toBe('completed');
       });
 
       it('should allow transition to Failed', () => {
-        expect(PaymentStatus.Processing.canTransitionTo(PaymentStatus.Failed)).toBe(
-          true,
-        );
+        expect(
+          PaymentStatus.Processing.canTransitionTo(PaymentStatus.Failed),
+        ).toBe(true);
 
-        const result = PaymentStatus.Processing.transitionTo(PaymentStatus.Failed);
+        const result = PaymentStatus.Processing.transitionTo(
+          PaymentStatus.Failed,
+        );
         expect(result.value).toBe('failed');
       });
 
       it('should not allow transition to Pending', () => {
-        expect(PaymentStatus.Processing.canTransitionTo(PaymentStatus.Pending)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Processing.canTransitionTo(PaymentStatus.Pending),
+        ).toBe(false);
       });
 
       it('should not allow transition to Refunded', () => {
@@ -153,64 +167,66 @@ describe('PaymentStatus Value Object', () => {
 
     describe('from Completed', () => {
       it('should allow transition to Refunded', () => {
-        expect(PaymentStatus.Completed.canTransitionTo(PaymentStatus.Refunded)).toBe(
-          true,
-        );
+        expect(
+          PaymentStatus.Completed.canTransitionTo(PaymentStatus.Refunded),
+        ).toBe(true);
 
-        const result = PaymentStatus.Completed.transitionTo(PaymentStatus.Refunded);
+        const result = PaymentStatus.Completed.transitionTo(
+          PaymentStatus.Refunded,
+        );
         expect(result.value).toBe('refunded');
       });
 
       it('should not allow transition to any other state', () => {
-        expect(PaymentStatus.Completed.canTransitionTo(PaymentStatus.Pending)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Completed.canTransitionTo(PaymentStatus.Pending),
+        ).toBe(false);
         expect(
           PaymentStatus.Completed.canTransitionTo(PaymentStatus.Processing),
         ).toBe(false);
-        expect(PaymentStatus.Completed.canTransitionTo(PaymentStatus.Failed)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Completed.canTransitionTo(PaymentStatus.Failed),
+        ).toBe(false);
       });
     });
 
     describe('from Failed', () => {
       it('should allow transition to Pending (retry)', () => {
-        expect(PaymentStatus.Failed.canTransitionTo(PaymentStatus.Pending)).toBe(
-          true,
-        );
+        expect(
+          PaymentStatus.Failed.canTransitionTo(PaymentStatus.Pending),
+        ).toBe(true);
 
         const result = PaymentStatus.Failed.transitionTo(PaymentStatus.Pending);
         expect(result.value).toBe('pending');
       });
 
       it('should not allow transition to other states', () => {
-        expect(PaymentStatus.Failed.canTransitionTo(PaymentStatus.Processing)).toBe(
-          false,
-        );
-        expect(PaymentStatus.Failed.canTransitionTo(PaymentStatus.Completed)).toBe(
-          false,
-        );
-        expect(PaymentStatus.Failed.canTransitionTo(PaymentStatus.Refunded)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Failed.canTransitionTo(PaymentStatus.Processing),
+        ).toBe(false);
+        expect(
+          PaymentStatus.Failed.canTransitionTo(PaymentStatus.Completed),
+        ).toBe(false);
+        expect(
+          PaymentStatus.Failed.canTransitionTo(PaymentStatus.Refunded),
+        ).toBe(false);
       });
     });
 
     describe('from Refunded (terminal)', () => {
       it('should not allow transition to any state', () => {
-        expect(PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Pending)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Pending),
+        ).toBe(false);
         expect(
           PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Processing),
         ).toBe(false);
-        expect(PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Completed)).toBe(
-          false,
-        );
-        expect(PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Failed)).toBe(
-          false,
-        );
+        expect(
+          PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Completed),
+        ).toBe(false);
+        expect(
+          PaymentStatus.Refunded.canTransitionTo(PaymentStatus.Failed),
+        ).toBe(false);
       });
 
       it('should throw when attempting transition', () => {

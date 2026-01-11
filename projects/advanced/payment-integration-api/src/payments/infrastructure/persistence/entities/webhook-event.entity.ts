@@ -7,7 +7,12 @@ import {
   Index,
 } from 'typeorm';
 
-export type WebhookEventStatus = 'pending' | 'processed' | 'failed' | 'retrying' | 'dead_letter';
+export type WebhookEventStatus =
+  | 'pending'
+  | 'processed'
+  | 'failed'
+  | 'retrying'
+  | 'dead_letter';
 
 @Entity('webhook_events')
 @Index(['status', 'nextRetryAt'])

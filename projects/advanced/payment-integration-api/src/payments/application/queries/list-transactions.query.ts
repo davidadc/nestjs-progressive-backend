@@ -1,6 +1,9 @@
 import { IQuery, QueryHandler, IQueryHandler } from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
-import type { ITransactionRepository, FindTransactionsOptions } from '../../domain';
+import type {
+  ITransactionRepository,
+  FindTransactionsOptions,
+} from '../../domain';
 import { TRANSACTION_REPOSITORY } from '../../domain';
 import { TransactionMapper } from '../mappers';
 import { PaginatedTransactionsResponseDto } from '../dto';
@@ -16,7 +19,9 @@ export class ListTransactionsHandler implements IQueryHandler<ListTransactionsQu
     private readonly transactionRepository: ITransactionRepository,
   ) {}
 
-  async execute(query: ListTransactionsQuery): Promise<PaginatedTransactionsResponseDto> {
+  async execute(
+    query: ListTransactionsQuery,
+  ): Promise<PaginatedTransactionsResponseDto> {
     const result = await this.transactionRepository.findAll(query.options);
 
     return {

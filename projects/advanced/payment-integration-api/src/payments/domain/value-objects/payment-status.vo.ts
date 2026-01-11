@@ -1,7 +1,12 @@
 import { ValueObject } from '../../../common/domain';
 import { InvalidPaymentStateException } from '../exceptions/payment.exceptions';
 
-export type PaymentStatusValue = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
+export type PaymentStatusValue =
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'refunded';
 
 interface PaymentStatusProps {
   value: PaymentStatusValue;
@@ -18,7 +23,9 @@ const VALID_TRANSITIONS: Record<PaymentStatusValue, PaymentStatusValue[]> = {
 
 export class PaymentStatus extends ValueObject<PaymentStatusProps> {
   public static readonly Pending = new PaymentStatus({ value: 'pending' });
-  public static readonly Processing = new PaymentStatus({ value: 'processing' });
+  public static readonly Processing = new PaymentStatus({
+    value: 'processing',
+  });
   public static readonly Completed = new PaymentStatus({ value: 'completed' });
   public static readonly Failed = new PaymentStatus({ value: 'failed' });
   public static readonly Refunded = new PaymentStatus({ value: 'refunded' });
@@ -37,7 +44,9 @@ export class PaymentStatus extends ValueObject<PaymentStatusProps> {
     ];
 
     if (!validStatuses.includes(status as PaymentStatusValue)) {
-      throw new InvalidPaymentStateException(`Invalid payment status: ${status}`);
+      throw new InvalidPaymentStateException(
+        `Invalid payment status: ${status}`,
+      );
     }
 
     return new PaymentStatus({ value: status as PaymentStatusValue });

@@ -6,7 +6,7 @@ import { PaymentCompletedEvent } from '../../domain';
 export class PaymentCompletedHandler implements IEventHandler<PaymentCompletedEvent> {
   private readonly logger = new Logger(PaymentCompletedHandler.name);
 
-  async handle(event: PaymentCompletedEvent): Promise<void> {
+  handle(event: PaymentCompletedEvent): void {
     this.logger.log(
       `Payment completed: ${event.paymentId} for order ${event.orderId}`,
     );

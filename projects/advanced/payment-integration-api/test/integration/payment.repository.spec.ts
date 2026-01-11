@@ -3,7 +3,13 @@ import { getRepositoryToken } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { PaymentRepository } from '../../src/payments/infrastructure/persistence/repositories/payment.repository';
 import { PaymentEntity } from '../../src/payments/infrastructure/persistence/entities/payment.entity';
-import { Payment, PaymentId, OrderId, Money, PaymentStatus } from '../../src/payments/domain';
+import {
+  Payment,
+  PaymentId,
+  OrderId,
+  Money,
+  PaymentStatus,
+} from '../../src/payments/domain';
 
 describe('PaymentRepository (Integration)', () => {
   let paymentRepository: PaymentRepository;
@@ -50,7 +56,9 @@ describe('PaymentRepository (Integration)', () => {
     it('should return payment when found', async () => {
       mockTypeOrmRepo.findOne.mockResolvedValue(mockPaymentEntity);
 
-      const result = await paymentRepository.findById('550e8400-e29b-41d4-a716-446655440000');
+      const result = await paymentRepository.findById(
+        '550e8400-e29b-41d4-a716-446655440000',
+      );
 
       expect(result).toBeInstanceOf(Payment);
       expect(result?.id.value).toBe('550e8400-e29b-41d4-a716-446655440000');
@@ -96,7 +104,10 @@ describe('PaymentRepository (Integration)', () => {
 
   describe('findByExternalId', () => {
     it('should return payment when found by external ID', async () => {
-      const entityWithExternalId = { ...mockPaymentEntity, externalId: 'cs_123' };
+      const entityWithExternalId = {
+        ...mockPaymentEntity,
+        externalId: 'cs_123',
+      };
       mockTypeOrmRepo.findOne.mockResolvedValue(entityWithExternalId);
 
       const result = await paymentRepository.findByExternalId('cs_123');
@@ -178,7 +189,8 @@ describe('PaymentRepository (Integration)', () => {
     it('should return false when no payment exists for order', async () => {
       mockTypeOrmRepo.count.mockResolvedValue(0);
 
-      const result = await paymentRepository.existsByOrderId('nonexistent-order');
+      const result =
+        await paymentRepository.existsByOrderId('nonexistent-order');
 
       expect(result).toBe(false);
     });

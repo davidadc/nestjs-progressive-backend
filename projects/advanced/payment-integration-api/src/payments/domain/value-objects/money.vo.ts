@@ -1,7 +1,17 @@
 import { ValueObject } from '../../../common/domain';
-import { InvalidMoneyException, CurrencyMismatchException } from '../exceptions/payment.exceptions';
+import {
+  InvalidMoneyException,
+  CurrencyMismatchException,
+} from '../exceptions/payment.exceptions';
 
-const SUPPORTED_CURRENCIES = ['USD', 'EUR', 'GBP', 'NGN', 'CAD', 'AUD'] as const;
+const SUPPORTED_CURRENCIES = [
+  'USD',
+  'EUR',
+  'GBP',
+  'NGN',
+  'CAD',
+  'AUD',
+] as const;
 type SupportedCurrency = (typeof SUPPORTED_CURRENCIES)[number];
 
 interface MoneyProps {
@@ -66,7 +76,9 @@ export class Money extends ValueObject<MoneyProps> {
     }
     const result = this.amount - other.amount;
     if (result < 0) {
-      throw new InvalidMoneyException('Subtraction would result in negative amount');
+      throw new InvalidMoneyException(
+        'Subtraction would result in negative amount',
+      );
     }
     return Money.create(result, this.currency);
   }

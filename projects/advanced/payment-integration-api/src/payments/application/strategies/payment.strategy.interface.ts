@@ -32,7 +32,9 @@ export interface IPaymentStrategy {
   /**
    * Create a payment intent with the provider
    */
-  createPaymentIntent(input: CreatePaymentIntentInput): Promise<PaymentIntentResult>;
+  createPaymentIntent(
+    input: CreatePaymentIntentInput,
+  ): Promise<PaymentIntentResult>;
 
   /**
    * Confirm payment status from provider
@@ -47,7 +49,10 @@ export interface IPaymentStrategy {
   /**
    * Validate webhook signature
    */
-  validateWebhookSignature(payload: string | Buffer, signature: string): boolean;
+  validateWebhookSignature(
+    payload: string | Buffer,
+    signature: string,
+  ): boolean;
 
   /**
    * Parse webhook event

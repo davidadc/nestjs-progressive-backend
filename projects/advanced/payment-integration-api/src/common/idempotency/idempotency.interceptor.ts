@@ -31,7 +31,10 @@ export class IdempotencyInterceptor implements NestInterceptor {
     private readonly reflector: Reflector,
   ) {}
 
-  async intercept(context: ExecutionContext, next: CallHandler): Promise<Observable<any>> {
+  async intercept(
+    context: ExecutionContext,
+    next: CallHandler,
+  ): Promise<Observable<unknown>> {
     const idempotentConfig = this.reflector.get<{ ttlMs: number }>(
       IDEMPOTENT_KEY,
       context.getHandler(),
@@ -50,7 +53,8 @@ export class IdempotencyInterceptor implements NestInterceptor {
     }
 
     const requestHash = this.hashRequest(request);
-    const existingKey = await this.idempotencyRepository.findByKey(idempotencyKey);
+    const existingKey =
+      await this.idempotencyRepository.findByKey(idempotencyKey);
 
     if (existingKey) {
       // Check if request hash matches
@@ -72,7 +76,9 @@ export class IdempotencyInterceptor implements NestInterceptor {
         }
         return of(JSON.parse(existingKey.response));
       } else if (existingKey.status === 'processing') {
-        throw new ConflictException('A request with this idempotency key is already in progress');
+        throw new ConflictException(
+          'A request with this idempotency key is already in progress',
+        );
       }
     }
 
@@ -86,15 +92,15 @@ export class IdempotencyInterceptor implements NestInterceptor {
     });
 
     return next.handle().pipe(
-      tap(async (data) => {
-        await this.idempotencyRepository.update(newKey.id, {
+      tap((data) => {
+        void this.idempotencyRepository.update(newKey.id, {
           status: 'completed',
           response: JSON.stringify(data),
           statusCode: response.statusCode,
         });
       }),
-      catchError(async (error) => {
-        await this.idempotencyRepository.update(newKey.id, {
+      catchError((error: Error) => {
+        void this.idempotencyRepository.update(newKey.id, {
           status: 'failed',
         });
         throw error;
@@ -106,7 +112,7 @@ export class IdempotencyInterceptor implements NestInterceptor {
     const payload = JSON.stringify({
       method: request.method,
       path: request.path,
-      body: request.body,
+      body: request.body as unknown,
     });
     return crypto.createHash('sha256').update(payload).digest('hex');
   }

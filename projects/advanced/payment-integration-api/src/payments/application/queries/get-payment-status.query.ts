@@ -20,7 +20,9 @@ export class GetPaymentStatusHandler implements IQueryHandler<GetPaymentStatusQu
     const payment = await this.paymentRepository.findByOrderId(query.orderId);
 
     if (!payment) {
-      throw new PaymentNotFoundException(`No payment found for order: ${query.orderId}`);
+      throw new PaymentNotFoundException(
+        `No payment found for order: ${query.orderId}`,
+      );
     }
 
     return PaymentMapper.toDto(payment);

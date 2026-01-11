@@ -8,7 +8,12 @@ import {
 } from 'typeorm';
 import { TransactionEntity } from './transaction.entity';
 
-export type PaymentStatus = 'pending' | 'processing' | 'completed' | 'failed' | 'refunded';
+export type PaymentStatus =
+  | 'pending'
+  | 'processing'
+  | 'completed'
+  | 'failed'
+  | 'refunded';
 export type PaymentProvider = 'stripe' | 'paystack';
 
 @Entity('payments')

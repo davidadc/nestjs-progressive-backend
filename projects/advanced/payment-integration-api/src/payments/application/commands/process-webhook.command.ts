@@ -1,12 +1,13 @@
-import { ICommand, CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import {
+  ICommand,
+  CommandHandler,
+  ICommandHandler,
+  EventBus,
+} from '@nestjs/cqrs';
 import { Inject, Logger } from '@nestjs/common';
 import Stripe from 'stripe';
 import type { IPaymentRepository, ITransactionRepository } from '../../domain';
-import {
-  PAYMENT_REPOSITORY,
-  TRANSACTION_REPOSITORY,
-  PaymentNotFoundException,
-} from '../../domain';
+import { PAYMENT_REPOSITORY, TRANSACTION_REPOSITORY } from '../../domain';
 import type { IPaymentStrategy } from '../strategies/payment.strategy.interface';
 import { PAYMENT_STRATEGY } from '../strategies/payment.strategy.interface';
 
@@ -31,7 +32,9 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
     private readonly eventBus: EventBus,
   ) {}
 
-  async execute(command: ProcessWebhookCommand): Promise<{ received: boolean }> {
+  async execute(
+    command: ProcessWebhookCommand,
+  ): Promise<{ received: boolean }> {
     // Parse and validate webhook
     const event = this.paymentStrategy.parseWebhookEvent(
       command.payload,
@@ -42,15 +45,15 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
 
     switch (event.type) {
       case 'checkout.session.completed':
-        await this.handleCheckoutCompleted(event.data.object as Stripe.Checkout.Session);
+        await this.handleCheckoutCompleted(event.data.object);
         break;
 
       case 'checkout.session.expired':
-        await this.handleCheckoutExpired(event.data.object as Stripe.Checkout.Session);
+        await this.handleCheckoutExpired(event.data.object);
         break;
 
       case 'payment_intent.payment_failed':
-        await this.handlePaymentFailed(event.data.object as Stripe.PaymentIntent);
+        await this.handlePaymentFailed(event.data.object);
         break;
 
       default:
@@ -60,7 +63,9 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
     return { received: true };
   }
 
-  private async handleCheckoutCompleted(session: Stripe.Checkout.Session): Promise<void> {
+  private async handleCheckoutCompleted(
+    session: Stripe.Checkout.Session,
+  ): Promise<void> {
     const payment = await this.paymentRepository.findByExternalId(session.id);
 
     if (!payment) {
@@ -97,7 +102,9 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
     this.logger.log(`Payment ${payment.id.value} completed successfully`);
   }
 
-  private async handleCheckoutExpired(session: Stripe.Checkout.Session): Promise<void> {
+  private async handleCheckoutExpired(
+    session: Stripe.Checkout.Session,
+  ): Promise<void> {
     const payment = await this.paymentRepository.findByExternalId(session.id);
 
     if (!payment) {
@@ -133,11 +140,15 @@ export class ProcessWebhookHandler implements ICommandHandler<ProcessWebhookComm
     this.logger.log(`Payment ${payment.id.value} failed: session expired`);
   }
 
-  private async handlePaymentFailed(paymentIntent: Stripe.PaymentIntent): Promise<void> {
+  private async handlePaymentFailed(
+    paymentIntent: Stripe.PaymentIntent,
+  ): Promise<void> {
     // Find payment by payment intent metadata or other means
     const orderId = paymentIntent.metadata?.orderId;
     if (!orderId) {
-      this.logger.warn(`No orderId in payment intent metadata: ${paymentIntent.id}`);
+      this.logger.warn(
+        `No orderId in payment intent metadata: ${paymentIntent.id}`,
+      );
       return;
     }
 

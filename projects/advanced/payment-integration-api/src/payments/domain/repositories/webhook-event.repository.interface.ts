@@ -1,6 +1,11 @@
 export const WEBHOOK_EVENT_REPOSITORY = Symbol('WEBHOOK_EVENT_REPOSITORY');
 
-export type WebhookEventStatus = 'pending' | 'processed' | 'failed' | 'retrying' | 'dead_letter';
+export type WebhookEventStatus =
+  | 'pending'
+  | 'processed'
+  | 'failed'
+  | 'retrying'
+  | 'dead_letter';
 
 export interface WebhookEventData {
   id?: string;
@@ -33,7 +38,10 @@ export interface IWebhookEventRepository {
   /**
    * Find by external event ID and provider
    */
-  findByExternalId(provider: string, externalEventId: string): Promise<WebhookEventData | null>;
+  findByExternalId(
+    provider: string,
+    externalEventId: string,
+  ): Promise<WebhookEventData | null>;
 
   /**
    * Find events ready for retry
@@ -62,7 +70,11 @@ export interface IWebhookEventRepository {
   /**
    * Schedule retry for an event
    */
-  scheduleRetry(id: string, nextRetryAt: Date, error: string): Promise<WebhookEventData | null>;
+  scheduleRetry(
+    id: string,
+    nextRetryAt: Date,
+    error: string,
+  ): Promise<WebhookEventData | null>;
 
   /**
    * Move event to dead letter queue

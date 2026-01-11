@@ -9,7 +9,7 @@ import {
 import { Request, Response } from 'express';
 import { randomUUID } from 'crypto';
 import { ProblemDetails } from './problem-details';
-import { ProblemDetailsException, ProblemDetailsFactory } from './problem-details.factory';
+import { ProblemDetailsException } from './problem-details.factory';
 import {
   PaymentDomainException,
   PaymentNotFoundException,

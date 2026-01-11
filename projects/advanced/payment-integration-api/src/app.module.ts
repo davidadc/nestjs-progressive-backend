@@ -35,7 +35,8 @@ import { HealthModule } from './common/health';
         password: configService.get('database.password'),
         database: configService.get('database.database'),
         entities: [
-          __dirname + '/**/infrastructure/persistence/entities/*.entity{.ts,.js}',
+          __dirname +
+            '/**/infrastructure/persistence/entities/*.entity{.ts,.js}',
           __dirname + '/common/**/*.entity{.ts,.js}',
         ],
         synchronize: false, // Use migrations

@@ -49,7 +49,9 @@ export class TransactionRepository implements ITransactionRepository {
     return entities.map((e) => TransactionMapper.toRecord(e));
   }
 
-  async findAll(options: FindTransactionsOptions): Promise<PaginatedTransactions> {
+  async findAll(
+    options: FindTransactionsOptions,
+  ): Promise<PaginatedTransactions> {
     const page = options.page ?? 1;
     const limit = options.limit ?? 20;
     const skip = (page - 1) * limit;

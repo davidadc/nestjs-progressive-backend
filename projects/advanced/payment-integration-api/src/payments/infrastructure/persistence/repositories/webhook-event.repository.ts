@@ -108,7 +108,10 @@ export class WebhookEventRepository implements IWebhookEventRepository {
     return this.findById(id);
   }
 
-  async moveToDeadLetter(id: string, error: string): Promise<WebhookEventData | null> {
+  async moveToDeadLetter(
+    id: string,
+    error: string,
+  ): Promise<WebhookEventData | null> {
     await this.repository.update(id, {
       status: 'dead_letter',
       lastError: error,

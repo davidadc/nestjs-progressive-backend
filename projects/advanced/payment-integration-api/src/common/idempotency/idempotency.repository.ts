@@ -8,7 +8,10 @@ export const IDEMPOTENCY_REPOSITORY = Symbol('IDEMPOTENCY_REPOSITORY');
 export interface IIdempotencyRepository {
   findByKey(key: string): Promise<IdempotencyKeyEntity | null>;
   create(data: Partial<IdempotencyKeyEntity>): Promise<IdempotencyKeyEntity>;
-  update(id: string, data: Partial<IdempotencyKeyEntity>): Promise<IdempotencyKeyEntity | null>;
+  update(
+    id: string,
+    data: Partial<IdempotencyKeyEntity>,
+  ): Promise<IdempotencyKeyEntity | null>;
   deleteExpired(): Promise<number>;
 }
 
@@ -23,7 +26,9 @@ export class IdempotencyRepository implements IIdempotencyRepository {
     return this.repository.findOne({ where: { key } });
   }
 
-  async create(data: Partial<IdempotencyKeyEntity>): Promise<IdempotencyKeyEntity> {
+  async create(
+    data: Partial<IdempotencyKeyEntity>,
+  ): Promise<IdempotencyKeyEntity> {
     const entity = this.repository.create(data);
     return this.repository.save(entity);
   }

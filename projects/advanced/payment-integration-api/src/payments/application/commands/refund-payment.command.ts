@@ -1,4 +1,9 @@
-import { ICommand, CommandHandler, ICommandHandler, EventBus } from '@nestjs/cqrs';
+import {
+  ICommand,
+  CommandHandler,
+  ICommandHandler,
+  EventBus,
+} from '@nestjs/cqrs';
 import { Inject } from '@nestjs/common';
 import type { IPaymentRepository, ITransactionRepository } from '../../domain';
 import {

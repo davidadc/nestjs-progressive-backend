@@ -74,7 +74,10 @@ export class AddIdempotencyKeys1736604000000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropIndex('idempotency_keys', 'IDX_idempotency_keys_expires_at');
+    await queryRunner.dropIndex(
+      'idempotency_keys',
+      'IDX_idempotency_keys_expires_at',
+    );
     await queryRunner.dropIndex('idempotency_keys', 'IDX_idempotency_keys_key');
     await queryRunner.dropTable('idempotency_keys');
   }

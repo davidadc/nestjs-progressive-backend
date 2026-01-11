@@ -107,8 +107,14 @@ export class AddWebhookEvents1736600400000 implements MigrationInterface {
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {
-    await queryRunner.dropIndex('webhook_events', 'IDX_webhook_events_provider_external_id');
-    await queryRunner.dropIndex('webhook_events', 'IDX_webhook_events_status_next_retry');
+    await queryRunner.dropIndex(
+      'webhook_events',
+      'IDX_webhook_events_provider_external_id',
+    );
+    await queryRunner.dropIndex(
+      'webhook_events',
+      'IDX_webhook_events_status_next_retry',
+    );
     await queryRunner.dropTable('webhook_events');
   }
 }

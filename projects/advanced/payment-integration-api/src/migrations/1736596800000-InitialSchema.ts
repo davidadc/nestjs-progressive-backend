@@ -83,13 +83,27 @@ export class InitialSchema1736596800000 implements MigrationInterface {
     `);
 
     // Create indexes
-    await queryRunner.query(`CREATE INDEX "IDX_orders_userId" ON "orders" ("userId")`);
-    await queryRunner.query(`CREATE INDEX "IDX_orders_status" ON "orders" ("status")`);
-    await queryRunner.query(`CREATE INDEX "IDX_payments_orderId" ON "payments" ("orderId")`);
-    await queryRunner.query(`CREATE INDEX "IDX_payments_status" ON "payments" ("status")`);
-    await queryRunner.query(`CREATE INDEX "IDX_payments_externalId" ON "payments" ("externalId")`);
-    await queryRunner.query(`CREATE INDEX "IDX_transactions_paymentId" ON "transactions" ("paymentId")`);
-    await queryRunner.query(`CREATE INDEX "IDX_transactions_status" ON "transactions" ("status")`);
+    await queryRunner.query(
+      `CREATE INDEX "IDX_orders_userId" ON "orders" ("userId")`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_orders_status" ON "orders" ("status")`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_payments_orderId" ON "payments" ("orderId")`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_payments_status" ON "payments" ("status")`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_payments_externalId" ON "payments" ("externalId")`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_transactions_paymentId" ON "transactions" ("paymentId")`,
+    );
+    await queryRunner.query(
+      `CREATE INDEX "IDX_transactions_status" ON "transactions" ("status")`,
+    );
   }
 
   public async down(queryRunner: QueryRunner): Promise<void> {

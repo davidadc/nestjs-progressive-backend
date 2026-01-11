@@ -4,10 +4,14 @@ import {
   Column,
   CreateDateColumn,
   UpdateDateColumn,
-  OneToMany,
 } from 'typeorm';
 
-export type OrderStatus = 'pending' | 'paid' | 'failed' | 'refunded' | 'cancelled';
+export type OrderStatus =
+  | 'pending'
+  | 'paid'
+  | 'failed'
+  | 'refunded'
+  | 'cancelled';
 
 @Entity('orders')
 export class OrderEntity {

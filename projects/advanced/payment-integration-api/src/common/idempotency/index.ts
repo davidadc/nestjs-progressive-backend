@@ -4,5 +4,9 @@ export {
   IdempotencyRepository,
   type IIdempotencyRepository,
 } from './idempotency.repository';
-export { IdempotencyInterceptor, Idempotent, IDEMPOTENT_KEY } from './idempotency.interceptor';
+export {
+  IdempotencyInterceptor,
+  Idempotent,
+  IDEMPOTENT_KEY,
+} from './idempotency.interceptor';
 export { IdempotencyService } from './idempotency.service';

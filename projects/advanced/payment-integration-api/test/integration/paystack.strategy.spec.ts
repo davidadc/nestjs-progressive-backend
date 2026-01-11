@@ -45,7 +45,9 @@ describe('PaystackPaymentStrategy (Integration)', () => {
       ],
     }).compile();
 
-    paystackStrategy = module.get<PaystackPaymentStrategy>(PaystackPaymentStrategy);
+    paystackStrategy = module.get<PaystackPaymentStrategy>(
+      PaystackPaymentStrategy,
+    );
   });
 
   describe('createPaymentIntent', () => {
@@ -181,9 +183,9 @@ describe('PaystackPaymentStrategy (Integration)', () => {
         json: async () => ({ message: 'Transaction not found' }),
       });
 
-      await expect(paystackStrategy.confirmPayment('invalid_ref')).rejects.toThrow(
-        PaymentProviderException,
-      );
+      await expect(
+        paystackStrategy.confirmPayment('invalid_ref'),
+      ).rejects.toThrow(PaymentProviderException);
     });
   });
 
@@ -239,7 +241,10 @@ describe('PaystackPaymentStrategy (Integration)', () => {
         json: async () => mockResponse,
       });
 
-      const result = await paystackStrategy.refund('PAY_order-123_ref', Money.create(50, 'NGN'));
+      const result = await paystackStrategy.refund(
+        'PAY_order-123_ref',
+        Money.create(50, 'NGN'),
+      );
 
       expect(result.refundId).toBe('789');
       expect(result.status).toBe('pending');
@@ -247,7 +252,10 @@ describe('PaystackPaymentStrategy (Integration)', () => {
         'https://api.paystack.co/refund',
         expect.objectContaining({
           method: 'POST',
-          body: JSON.stringify({ transaction: 'PAY_order-123_ref', amount: 5000 }),
+          body: JSON.stringify({
+            transaction: 'PAY_order-123_ref',
+            amount: 5000,
+          }),
         }),
       );
     });
@@ -281,7 +289,9 @@ describe('PaystackPaymentStrategy (Integration)', () => {
         json: async () => ({ message: 'Refund failed' }),
       });
 
-      await expect(paystackStrategy.refund('invalid_ref')).rejects.toThrow(PaymentProviderException);
+      await expect(paystackStrategy.refund('invalid_ref')).rejects.toThrow(
+        PaymentProviderException,
+      );
     });
   });
 
@@ -293,7 +303,10 @@ describe('PaystackPaymentStrategy (Integration)', () => {
         .update(payload)
         .digest('hex');
 
-      const result = paystackStrategy.validateWebhookSignature(payload, validSignature);
+      const result = paystackStrategy.validateWebhookSignature(
+        payload,
+        validSignature,
+      );
 
       expect(result).toBe(true);
     });
@@ -302,20 +315,29 @@ describe('PaystackPaymentStrategy (Integration)', () => {
       const payload = JSON.stringify({ event: 'charge.success', data: {} });
       const invalidSignature = 'invalid_signature_here';
 
-      const result = paystackStrategy.validateWebhookSignature(payload, invalidSignature);
+      const result = paystackStrategy.validateWebhookSignature(
+        payload,
+        invalidSignature,
+      );
 
       expect(result).toBe(false);
     });
 
     it('should handle Buffer payload', () => {
-      const payloadString = JSON.stringify({ event: 'charge.success', data: {} });
+      const payloadString = JSON.stringify({
+        event: 'charge.success',
+        data: {},
+      });
       const payload = Buffer.from(payloadString);
       const validSignature = crypto
         .createHmac('sha512', 'whsec_test_123456789')
         .update(payloadString)
         .digest('hex');
 
-      const result = paystackStrategy.validateWebhookSignature(payload, validSignature);
+      const result = paystackStrategy.validateWebhookSignature(
+        payload,
+        validSignature,
+      );
 
       expect(result).toBe(true);
     });
@@ -341,7 +363,10 @@ describe('PaystackPaymentStrategy (Integration)', () => {
         .update(payload)
         .digest('hex');
 
-      const result = paystackStrategy.parseWebhookEvent(payload, validSignature);
+      const result = paystackStrategy.parseWebhookEvent(
+        payload,
+        validSignature,
+      );
 
       expect(result).toEqual(mockEvent);
     });
@@ -349,9 +374,9 @@ describe('PaystackPaymentStrategy (Integration)', () => {
     it('should throw on invalid webhook signature', () => {
       const payload = JSON.stringify({ event: 'charge.success', data: {} });
 
-      expect(() => paystackStrategy.parseWebhookEvent(payload, 'invalid_sig')).toThrow(
-        PaymentProviderException,
-      );
+      expect(() =>
+        paystackStrategy.parseWebhookEvent(payload, 'invalid_sig'),
+      ).toThrow(PaymentProviderException);
     });
   });
 });

@@ -13,7 +13,11 @@ export class ProblemDetailsFactory {
   /**
    * Generic not found error
    */
-  static notFound(resource: string, identifier: string, instance?: string): ProblemDetailsException {
+  static notFound(
+    resource: string,
+    identifier: string,
+    instance?: string,
+  ): ProblemDetailsException {
     const problemDetails: ProblemDetails = {
       type: `${BASE_TYPE_URL}/not-found`,
       title: 'Not Found',
@@ -75,7 +79,10 @@ export class ProblemDetailsFactory {
   /**
    * Payment already processed error
    */
-  static paymentAlreadyProcessed(paymentId: string, instance?: string): ProblemDetailsException {
+  static paymentAlreadyProcessed(
+    paymentId: string,
+    instance?: string,
+  ): ProblemDetailsException {
     const problemDetails: ProblemDetails = {
       type: `${BASE_TYPE_URL}/payment-already-processed`,
       title: 'Payment Already Processed',
@@ -116,7 +123,10 @@ export class ProblemDetailsFactory {
   /**
    * Unauthorized error
    */
-  static unauthorized(reason: string, instance?: string): ProblemDetailsException {
+  static unauthorized(
+    reason: string,
+    instance?: string,
+  ): ProblemDetailsException {
     const problemDetails: ProblemDetails = {
       type: `${BASE_TYPE_URL}/unauthorized`,
       title: 'Unauthorized',
@@ -146,7 +156,11 @@ export class ProblemDetailsFactory {
   /**
    * Invalid input error
    */
-  static invalidInput(field: string, reason: string, instance?: string): ProblemDetailsException {
+  static invalidInput(
+    field: string,
+    reason: string,
+    instance?: string,
+  ): ProblemDetailsException {
     const problemDetails: ProblemDetails = {
       type: `${BASE_TYPE_URL}/invalid-input`,
       title: 'Invalid Input',
@@ -187,7 +201,10 @@ export class ProblemDetailsFactory {
   /**
    * Internal server error
    */
-  static internalError(instance?: string, traceId?: string): ProblemDetailsException {
+  static internalError(
+    instance?: string,
+    traceId?: string,
+  ): ProblemDetailsException {
     const problemDetails: ProblemDetails = {
       type: `${BASE_TYPE_URL}/internal-server-error`,
       title: 'Internal Server Error',

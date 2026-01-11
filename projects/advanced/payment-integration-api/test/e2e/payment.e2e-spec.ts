@@ -123,7 +123,9 @@ describe('Payment API (E2E)', () => {
       mockQueryBus.execute.mockResolvedValue(paymentResponse);
 
       const response = await request(app.getHttpServer())
-        .get('/api/v1/orders/a716e29b-41d4-550e-8400-446655440123/payment-status')
+        .get(
+          '/api/v1/orders/a716e29b-41d4-550e-8400-446655440123/payment-status',
+        )
         .expect(200);
 
       expect(response.body).toHaveProperty('success', true);
@@ -158,7 +160,10 @@ describe('Payment API (E2E)', () => {
         .expect(200);
 
       expect(response.body).toHaveProperty('success', true);
-      expect(response.body.data).toHaveProperty('id', '550e8400-e29b-41d4-a716-446655440000');
+      expect(response.body.data).toHaveProperty(
+        'id',
+        '550e8400-e29b-41d4-a716-446655440000',
+      );
       expect(mockQueryBus.execute).toHaveBeenCalled();
     });
 
@@ -299,7 +304,9 @@ describe('Payment API (E2E)', () => {
       expect(response.body).toHaveProperty('traceId');
 
       // Verify content type
-      expect(response.headers['content-type']).toContain('application/problem+json');
+      expect(response.headers['content-type']).toContain(
+        'application/problem+json',
+      );
     });
 
     it('should include traceId for error tracking', async () => {

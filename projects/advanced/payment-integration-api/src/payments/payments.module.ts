@@ -8,7 +8,11 @@ import type { ConfigType } from '@nestjs/config';
 import paymentConfig from '../config/payment.config';
 
 // Domain
-import { PAYMENT_REPOSITORY, TRANSACTION_REPOSITORY, WEBHOOK_EVENT_REPOSITORY } from './domain';
+import {
+  PAYMENT_REPOSITORY,
+  TRANSACTION_REPOSITORY,
+  WEBHOOK_EVENT_REPOSITORY,
+} from './domain';
 
 // Application - Commands
 import {
@@ -57,7 +61,10 @@ import {
 } from './infrastructure/persistence/repositories';
 
 // Infrastructure - Controllers
-import { PaymentController, WebhookController } from './infrastructure/controllers';
+import {
+  PaymentController,
+  WebhookController,
+} from './infrastructure/controllers';
 
 const CommandHandlers = [
   InitiatePaymentHandler,
@@ -81,7 +88,11 @@ const EventHandlers = [
   imports: [
     CqrsModule,
     ScheduleModule.forRoot(),
-    TypeOrmModule.forFeature([PaymentEntity, TransactionEntity, WebhookEventEntity]),
+    TypeOrmModule.forFeature([
+      PaymentEntity,
+      TransactionEntity,
+      WebhookEventEntity,
+    ]),
   ],
   controllers: [PaymentController, WebhookController],
   providers: [
@@ -118,7 +129,11 @@ const EventHandlers = [
             return stripeStrategy;
         }
       },
-      inject: [paymentConfig.KEY, StripePaymentStrategy, PaystackPaymentStrategy],
+      inject: [
+        paymentConfig.KEY,
+        StripePaymentStrategy,
+        PaystackPaymentStrategy,
+      ],
     },
     // Services
     WebhookRetryService,

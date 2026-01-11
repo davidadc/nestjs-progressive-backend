@@ -106,7 +106,9 @@ describe('WebhookRetryService (Integration)', () => {
       const result = await webhookRetryService.processEvent(mockEvent);
 
       expect(result).toBe(true);
-      expect(mockWebhookEventRepository.markAsProcessed).toHaveBeenCalledWith(mockEvent.id);
+      expect(mockWebhookEventRepository.markAsProcessed).toHaveBeenCalledWith(
+        mockEvent.id,
+      );
     });
 
     it('should schedule retry on failure', async () => {
@@ -188,7 +190,9 @@ describe('WebhookRetryService (Integration)', () => {
   describe('processRetryQueue', () => {
     it('should process events from retry queue', async () => {
       const retryingEvent = { ...mockEvent, status: 'retrying' as const };
-      mockWebhookEventRepository.findEventsForRetry.mockResolvedValue([retryingEvent]);
+      mockWebhookEventRepository.findEventsForRetry.mockResolvedValue([
+        retryingEvent,
+      ]);
       mockCommandBus.execute.mockResolvedValue({ received: true });
       mockWebhookEventRepository.markAsProcessed.mockResolvedValue({
         ...retryingEvent,
@@ -214,7 +218,9 @@ describe('WebhookRetryService (Integration)', () => {
   describe('getDeadLetterEvents', () => {
     it('should return dead letter events', async () => {
       const deadLetterEvent = { ...mockEvent, status: 'dead_letter' as const };
-      mockWebhookEventRepository.findDeadLetterEvents.mockResolvedValue([deadLetterEvent]);
+      mockWebhookEventRepository.findDeadLetterEvents.mockResolvedValue([
+        deadLetterEvent,
+      ]);
 
       const result = await webhookRetryService.getDeadLetterEvents();
 
@@ -227,14 +233,19 @@ describe('WebhookRetryService (Integration)', () => {
     it('should retry a dead letter event', async () => {
       const deadLetterEvent = { ...mockEvent, status: 'dead_letter' as const };
       mockWebhookEventRepository.findById.mockResolvedValue(deadLetterEvent);
-      mockWebhookEventRepository.save.mockResolvedValue({ ...deadLetterEvent, status: 'pending' });
+      mockWebhookEventRepository.save.mockResolvedValue({
+        ...deadLetterEvent,
+        status: 'pending',
+      });
       mockCommandBus.execute.mockResolvedValue({ received: true });
       mockWebhookEventRepository.markAsProcessed.mockResolvedValue({
         ...deadLetterEvent,
         status: 'processed',
       });
 
-      const result = await webhookRetryService.retryDeadLetterEvent(deadLetterEvent.id!);
+      const result = await webhookRetryService.retryDeadLetterEvent(
+        deadLetterEvent.id!,
+      );
 
       expect(result).toBe(true);
     });
@@ -242,7 +253,8 @@ describe('WebhookRetryService (Integration)', () => {
     it('should return false for non-existent event', async () => {
       mockWebhookEventRepository.findById.mockResolvedValue(null);
 
-      const result = await webhookRetryService.retryDeadLetterEvent('non-existent-id');
+      const result =
+        await webhookRetryService.retryDeadLetterEvent('non-existent-id');
 
       expect(result).toBe(false);
     });
@@ -250,7 +262,9 @@ describe('WebhookRetryService (Integration)', () => {
     it('should return false for non-dead-letter event', async () => {
       mockWebhookEventRepository.findById.mockResolvedValue(mockEvent);
 
-      const result = await webhookRetryService.retryDeadLetterEvent(mockEvent.id!);
+      const result = await webhookRetryService.retryDeadLetterEvent(
+        mockEvent.id!,
+      );
 
       expect(result).toBe(false);
     });

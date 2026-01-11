@@ -77,7 +77,10 @@ export class PaymentProviderException extends PaymentDomainException {
     reason: string,
     public readonly providerError?: unknown,
   ) {
-    super(`Payment provider error (${provider}): ${reason}`, 'PAYMENT_PROVIDER_ERROR');
+    super(
+      `Payment provider error (${provider}): ${reason}`,
+      'PAYMENT_PROVIDER_ERROR',
+    );
   }
 }
 
@@ -86,7 +89,10 @@ export class PaymentProviderException extends PaymentDomainException {
  */
 export class PaymentAlreadyProcessedException extends PaymentDomainException {
   constructor(paymentId: string) {
-    super(`Payment ${paymentId} has already been processed`, 'PAYMENT_ALREADY_PROCESSED');
+    super(
+      `Payment ${paymentId} has already been processed`,
+      'PAYMENT_ALREADY_PROCESSED',
+    );
   }
 }
 

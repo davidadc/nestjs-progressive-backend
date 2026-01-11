@@ -78,7 +78,9 @@ describe('StripePaymentStrategy (Integration)', () => {
       });
 
       expect(result.externalId).toBe('cs_test_123');
-      expect(result.checkoutUrl).toBe('https://checkout.stripe.com/pay/cs_test_123');
+      expect(result.checkoutUrl).toBe(
+        'https://checkout.stripe.com/pay/cs_test_123',
+      );
       expect(result.status).toBe('processing');
       expect(mockStripe.checkout.sessions.create).toHaveBeenCalledWith(
         expect.objectContaining({
@@ -143,12 +145,16 @@ describe('StripePaymentStrategy (Integration)', () => {
         payment_status: 'paid',
       };
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession as any);
+      mockStripe.checkout.sessions.retrieve.mockResolvedValue(
+        mockSession as any,
+      );
 
       const result = await stripeStrategy.confirmPayment('cs_test_123');
 
       expect(result.status).toBe('succeeded');
-      expect(mockStripe.checkout.sessions.retrieve).toHaveBeenCalledWith('cs_test_123');
+      expect(mockStripe.checkout.sessions.retrieve).toHaveBeenCalledWith(
+        'cs_test_123',
+      );
     });
 
     it('should return failed for unpaid session', async () => {
@@ -157,7 +163,9 @@ describe('StripePaymentStrategy (Integration)', () => {
         payment_status: 'unpaid',
       };
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession as any);
+      mockStripe.checkout.sessions.retrieve.mockResolvedValue(
+        mockSession as any,
+      );
 
       const result = await stripeStrategy.confirmPayment('cs_test_123');
 
@@ -173,9 +181,9 @@ describe('StripePaymentStrategy (Integration)', () => {
 
       mockStripe.checkout.sessions.retrieve.mockRejectedValue(stripeError);
 
-      await expect(stripeStrategy.confirmPayment('invalid_session')).rejects.toThrow(
-        PaymentProviderException,
-      );
+      await expect(
+        stripeStrategy.confirmPayment('invalid_session'),
+      ).rejects.toThrow(PaymentProviderException);
     });
   });
 
@@ -192,7 +200,9 @@ describe('StripePaymentStrategy (Integration)', () => {
         failure_reason: null,
       };
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession as any);
+      mockStripe.checkout.sessions.retrieve.mockResolvedValue(
+        mockSession as any,
+      );
       mockStripe.refunds.create.mockResolvedValue(mockRefund as any);
 
       const result = await stripeStrategy.refund('cs_test_123');
@@ -215,7 +225,9 @@ describe('StripePaymentStrategy (Integration)', () => {
         status: 'succeeded',
       };
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession as any);
+      mockStripe.checkout.sessions.retrieve.mockResolvedValue(
+        mockSession as any,
+      );
       mockStripe.refunds.create.mockResolvedValue(mockRefund as any);
 
       await stripeStrategy.refund('cs_test_123', Money.create(25, 'USD'));
@@ -232,7 +244,9 @@ describe('StripePaymentStrategy (Integration)', () => {
         payment_intent: null,
       };
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession as any);
+      mockStripe.checkout.sessions.retrieve.mockResolvedValue(
+        mockSession as any,
+      );
 
       await expect(stripeStrategy.refund('cs_test_123')).rejects.toThrow(
         PaymentProviderException,
@@ -250,7 +264,9 @@ describe('StripePaymentStrategy (Integration)', () => {
         status: 'pending',
       };
 
-      mockStripe.checkout.sessions.retrieve.mockResolvedValue(mockSession as any);
+      mockStripe.checkout.sessions.retrieve.mockResolvedValue(
+        mockSession as any,
+      );
       mockStripe.refunds.create.mockResolvedValue(mockRefund as any);
 
       const result = await stripeStrategy.refund('cs_test_123');
