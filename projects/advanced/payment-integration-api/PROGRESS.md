@@ -316,6 +316,56 @@ Before marking a phase as complete, verify it aligns with `ARCHITECTURE.md`:
 - [x] Skip rate limiting on health endpoints
 - [x] Swagger documentation for health endpoints
 
+### Phase 17: Unit & Integration Tests for Enhanced Features ✅
+
+> Testing coverage for Phases 12-16 features.
+
+- [x] Paystack Strategy Tests (15 tests):
+  - [x] Payment initialization (success/failure)
+  - [x] Payment verification (success/failure)
+  - [x] Refund processing (full/partial)
+  - [x] Webhook signature validation (valid/invalid)
+  - [x] Error handling and provider exceptions
+- [x] Webhook Retry Service Tests (14 tests):
+  - [x] Event storage and retrieval
+  - [x] Retry scheduling with exponential backoff
+  - [x] Max retry attempts enforcement
+  - [x] Dead letter queue handling
+  - [x] Concurrent retry processing
+- [x] Idempotency Interceptor Tests (11 tests):
+  - [x] First request processing and storage
+  - [x] Duplicate request detection and cached response
+  - [x] Payload hash mismatch detection
+  - [x] Key expiration handling
+  - [x] Concurrent request handling
+- [x] Rate Limiting Tests (13 tests):
+  - [x] Global rate limit enforcement
+  - [x] Per-endpoint stricter limits
+  - [x] Rate limit headers in response
+  - [x] Throttle decorator behavior
+- [x] Health Check Tests (15 tests):
+  - [x] Healthy response when all services up
+  - [x] Degraded response when provider unreachable
+  - [x] Liveness probe always returns healthy
+  - [x] Readiness probe checks database
+
+### Phase 18: E2E Tests for Enhanced Features ✅
+
+> End-to-end tests for Phases 12-16 features.
+
+- [x] Health Check E2E Tests (5 tests):
+  - [x] GET /health returns status
+  - [x] GET /health/ready checks database
+  - [x] GET /health/live always returns ok
+- [x] Idempotency E2E Tests (4 tests):
+  - [x] Payment initiation with Idempotency-Key header
+  - [x] Duplicate request returns cached response
+  - [x] Different payload with same key returns error
+  - [x] Request without key works normally
+- [x] Rate Limiting E2E Tests (2 tests):
+  - [x] Rate limiting behavior verification
+  - [x] Transaction endpoint response
+
 ---
 
 ## Endpoints
@@ -525,17 +575,24 @@ open http://localhost:3000/docs
 ## Test Coverage
 
 ```
-142 tests passing (7 test suites)
+221 tests passing (13 test suites)
 
-Unit Tests (6 suites, 126 tests):
+Unit Tests (3 suites, 39 tests):
 - Payment Aggregate: state transitions, events, lifecycle
 - Money Value Object: creation, operations, validation
 - PaymentStatus Value Object: transitions, state checks
-- PaymentRepository Integration: CRUD operations with mocked TypeORM
-- TransactionRepository Integration: CRUD operations with mocked TypeORM
-- StripePaymentStrategy Integration: Stripe SDK mocking
 
-E2E Tests (1 suite, 16 tests):
+Integration Tests (8 suites, 155 tests):
+- PaymentRepository: CRUD operations with mocked TypeORM
+- TransactionRepository: CRUD operations with mocked TypeORM
+- StripePaymentStrategy: Stripe SDK mocking
+- PaystackStrategy: Paystack API mocking (15 tests)
+- WebhookRetryService: retry logic with exponential backoff (14 tests)
+- IdempotencyInterceptor: request deduplication (11 tests)
+- RateLimiting: throttle behavior (13 tests)
+- HealthCheck: provider health indicators (15 tests)
+
+E2E Tests (2 suites, 27 tests):
 - Payment initiation and validation
 - Payment status and retrieval
 - Refund operations
@@ -543,6 +600,9 @@ E2E Tests (1 suite, 16 tests):
 - Webhook signature validation
 - RFC 7807 error format verification
 - TraceId header propagation
+- Health check endpoints (5 tests)
+- Idempotency behavior (4 tests)
+- Rate limiting behavior (2 tests)
 ```
 
 ---
@@ -594,5 +654,6 @@ E2E Tests (1 suite, 16 tests):
 **Started:** 2026-01-11
 **Core Phases Completed:** 2026-01-11 ✅
 **Enhancement Phases Completed:** 2026-01-11 ✅
+**Testing Phases Completed:** 2026-01-11 ✅
 **Architecture Compliance:** 100% (Target: ≥80%) ✅
-**Status:** All phases complete (Phases 1-16)
+**Status:** All phases complete (Phases 1-18)

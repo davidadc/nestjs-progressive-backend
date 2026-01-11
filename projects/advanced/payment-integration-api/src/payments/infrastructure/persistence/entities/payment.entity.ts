@@ -44,13 +44,13 @@ export class PaymentEntity {
   })
   provider: PaymentProvider;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   externalId: string | null;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   checkoutUrl: string | null;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   failureReason: string | null;
 
   @OneToMany(() => TransactionEntity, (transaction) => transaction.payment, {
@@ -64,6 +64,6 @@ export class PaymentEntity {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @Column({ nullable: true })
+  @Column('timestamp', { nullable: true })
   completedAt: Date | null;
 }

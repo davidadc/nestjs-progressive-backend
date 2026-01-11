@@ -42,10 +42,10 @@ export class TransactionEntity {
   })
   status: TransactionStatus;
 
-  @Column({ nullable: true })
+  @Column('varchar', { nullable: true })
   externalId: string | null;
 
-  @Column({ nullable: true })
+  @Column('text', { nullable: true })
   failureReason: string | null;
 
   @Column('jsonb', { nullable: true })
