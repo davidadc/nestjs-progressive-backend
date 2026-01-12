@@ -33,7 +33,7 @@ Collection of 16 progressive NestJS backend projects, from Beginner to Expert le
 | --------------------------------- | ------ | --------- | --- |
 | **Social Media Backend**          | ✅     | 10+       | ✅  |
 | **Payment Integration API**       | ✅     | 5         | ✅  |
-| **Real-time Notification System** | ⬜     | 5         | ✅  |
+| **Real-time Notification System** | ✅     | 5         | ✅  |
 | **Admin Dashboard API**           | ⬜     | 10+       | ✅  |
 
 ### Expert Level
@@ -319,7 +319,7 @@ docker-compose up -d
 
 - [x] Social Media Backend
 - [x] Payment Integration API
-- [ ] Real-time Notification System
+- [x] Real-time Notification System
 - [ ] Admin Dashboard API
 
 ### Phase 4: Expert Level
@@ -528,6 +528,6 @@ MIT - Free for educational and personal use
 
 ---
 
-**Last updated:** 2026-01-11 (Payment Integration API completed)
+**Last updated:** 2026-01-12 (Real-time Notification System completed)
 **Maintainer:** David
 **Contributions:** Welcome
